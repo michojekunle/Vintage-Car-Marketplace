@@ -1,4 +1,6 @@
-import { Bell, Car, Plus, Menu, Home, LogOut } from "lucide-react";
+"use client";
+
+import { Bell, Car, Plus, Menu, Home, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,19 +13,36 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { ReactNode } from "react";
+import {
+  ConnectButton,
+  useAccountModal,
+  useConnectModal,
+} from "@rainbow-me/rainbowkit";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { config } from "../wagmi";
+import { injected } from "wagmi/connectors";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const { openConnectModal } = useConnectModal();
+  const { openAccountModal } = useAccountModal();
+  const { disconnect } = useDisconnect();
+  const { connect } = useConnect();
+  const { isConnected } = useAccount();
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
       <div className="hidden w-64 bg-white dark:bg-gray-800 shadow-md lg:block">
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-center h-16 border-b border-r dark:border-gray-700 gap-2">
-            <Car className="h-8 w-8 text-amber-600" />
-            <h1 className="text-2xl font-bold text-amber-600 dark:text-amber-400">
-              VintageChain
-            </h1>
-          </div>
+          <Link href="/">
+            <div className="flex items-center justify-center h-16 border-b border-r dark:border-gray-700 gap-2">
+              <Car className="h-8 w-8 text-amber-600" />
+              <h1 className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+                VintageChain
+              </h1>
+            </div>
+          </Link>
           <nav className="flex-1 overflow-y-auto">
             <ul className="p-4 space-y-2">
               <li>
@@ -55,20 +74,29 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               </li>
             </ul>
           </nav>
-          <div className="p-4 border-t dark:border-gray-700">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold">
-                WA
+          <div className="p-4 border-t">
+            {isConnected ? (
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={openAccountModal ? () => openAccountModal() : () => {}}
+              >
+                {/* <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold"> */}
+                <Avatar>
+                  <AvatarImage src="" alt="@user" />
+                  <AvatarFallback className="bg-amber-500">AU</AvatarFallback>
+                </Avatar>
+                {/* </div> */}
+
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Connected Wallet
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{}</p>
+                </div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                  Connected Wallet
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  0x1234...5678
-                </p>
-              </div>
-            </div>
+            ) : (
+              "No wallet connected"
+            )}
           </div>
         </div>
       </div>
@@ -94,34 +122,48 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5 text-gray-500 dark:text-gray-400" />
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <img
-                    alt="User avatar"
-                    className="rounded-full"
-                    height="32"
-                    src="/placeholder.svg?height=32&width=32"
-                    style={{
-                      aspectRatio: "32/32",
-                      objectFit: "cover",
-                    }}
-                    width="32"
-                  />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Disconnect</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {isConnected ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <Avatar>
+                      <AvatarImage src="" alt="@user" />
+                      <AvatarFallback className="bg-amber-500">
+                        AU
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="sr-only">Toggle user menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href="/your-cars">Your cars</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/add-new-car">Add new car</Link>
+                  </DropdownMenuItem>
+                  {!isConnected ? (
+                    <DropdownMenuItem
+                      onClick={
+                        openConnectModal ? () => openConnectModal() : () => {}
+                      }
+                    >
+                      <LogIn className="mr-2 h-4 w-4" />
+                      <span>Connect</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem onClick={() => disconnect()}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Disconnect</span>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <ConnectButton />
+            )}
           </div>
         </header>
 
