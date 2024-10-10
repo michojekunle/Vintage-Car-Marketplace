@@ -1,6 +1,7 @@
+import React from 'react'
 import { Cta, FeaturedCars, Features, Hero, SearchCar } from "@/components";
 
-export default function Home() {
+const page = () => {
   return (
     <div className="w-screen">
       <Hero />
@@ -11,3 +12,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default page
