@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +29,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* <Navbar /> */}
         {children}
+        <footer className="bg-gray-800 text-white py-8">
+          <div className="container mx-auto text-center">
+            <p>&copy; 2024 VintageNFTCars. All rights reserved.</p>
+          </div>
+        </footer>
       </body>
     </html>
   );
