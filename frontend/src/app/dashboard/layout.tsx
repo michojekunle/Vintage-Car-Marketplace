@@ -18,8 +18,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Sidebar */}
       <div className="hidden w-64 bg-white dark:bg-gray-800 shadow-md lg:block">
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-center h-16 border-b dark:border-gray-700">
-            <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+          <div className="flex items-center justify-center h-16 border-b border-r dark:border-gray-700 gap-2">
+            <Car className="h-8 w-8 text-amber-600" />
+            <h1 className="text-2xl font-bold text-amber-600 dark:text-amber-400">
               VintageChain
             </h1>
           </div>
@@ -28,7 +29,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <li>
                 <Link
                   href="/dashboard"
-                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900"
+                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
                 >
                   <Home className="w-5 h-5 mr-3" />
                   Dashboard
@@ -37,7 +38,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <li>
                 <Link
                   href="/dashboard/your-cars"
-                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900"
+                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
                 >
                   <Car className="w-5 h-5 mr-3" />
                   Your Cars
@@ -46,7 +47,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <li>
                 <Link
                   href="/dashboard/add-new-car"
-                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900"
+                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
                 >
                   <Plus className="w-5 h-5 mr-3" />
                   Add New Car
@@ -56,7 +57,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </nav>
           <div className="p-4 border-t dark:border-gray-700">
             <div className="flex items-center">
-              <div className="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold">
                 WA
               </div>
               <div className="ml-3">
@@ -75,7 +76,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow-md">
+        <header className="flex items-center justify-between h-16 px-4 bg-white dark:bg-gray-800 shadow-md">
           <div className="flex items-center">
             <Button variant="ghost" size="icon" className="lg:hidden mr-2">
               <Menu className="h-6 w-6" />

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -53,7 +55,7 @@ export default function AddNewCar() {
               <div
                 key={step}
                 className={`flex-1 text-center ${
-                  index <= currentStep ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400"
+                  index <= currentStep ? "text-amber-600 dark:text-amber-400" : "text-gray-400"
                 }`}
               >
                 {step}
@@ -63,7 +65,7 @@ export default function AddNewCar() {
           <div className="relative">
             <div className="absolute left-0 top-1/2 h-0.5 w-full bg-gray-200 dark:bg-gray-700"></div>
             <div
-              className="absolute left-0 top-1/2 h-0.5 bg-indigo-600 dark:bg-indigo-400 transition-all duration-500"
+              className="absolute left-0 top-1/2 h-0.5 bg-amber-600 dark:bg-amber-400 transition-all duration-500"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             ></div>
             <div className="relative flex justify-between">
@@ -72,7 +74,7 @@ export default function AddNewCar() {
                   key={index}
                   className={`w-6 h-6 rounded-full ${
                     index <= currentStep
-                      ? "bg-indigo-600 dark:bg-indigo-400"
+                      ? "bg-amber-600 dark:bg-amber-400"
                       : "bg-gray-200 dark:bg-gray-700"
                   }`}
                 ></div>
