@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Icon } from "@iconify/react";
+import { Search, X } from "lucide-react";
 
 export const SearchInput: FC<ISearchInput> = ({
   placeholder,
@@ -11,12 +11,12 @@ export const SearchInput: FC<ISearchInput> = ({
 }) => {
   return (
     <div className="relative w-full py-2 px-4 flex items-center gap-2 rounded-2xl border border-border">
-      <Icon icon="ph:magnifying-glass" className="w-5 h-5 text-primary" />
+      <Search className="w-5 h-5 text-primary" />
       <input
         placeholder={placeholder}
         onChange={handleSearch}
         value={value}
-        className="border-none w-full text-base py-2 leading-[19.2px] placeholder:text-base placeholder:text-text-body-50% text-text-body bg-transparent focus:outline-none"
+        className="border-none w-full text-base py-2 leading-[19.2px] placeholder:text-base placeholder:text-text-body-50 text-text-body bg-transparent focus:outline-none"
       />
       <div className="absolute right-3 flex">
         {value && (
@@ -25,7 +25,7 @@ export const SearchInput: FC<ISearchInput> = ({
             className="cursor-pointer"
             onClick={deleteSearchValue}
           >
-            <Icon icon="ph:x" className="w-4 h-4 text-primary-actions" />
+            <X className="w-4 h-4 text-primary" />
             <span className="hidden">close</span>
           </button>
         )}

@@ -16,3 +16,5 @@ export const navItems = [
     href: "/mechanics",
   },
 ];
+
+export const filterOptions = ["All", "Make", "Year", "Model"];

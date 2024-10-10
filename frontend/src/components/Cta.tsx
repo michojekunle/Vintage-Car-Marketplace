@@ -1,4 +1,4 @@
-import Button from "./common/Button";
+import { Button } from "./ui/button";
 
 export const Cta = () => {
   return (
@@ -8,7 +8,9 @@ export const Cta = () => {
         Start your journey in the world of blockchain-powered vintage cars
         today!
       </p>
-      <Button label="Get Started" variant="secondary" />
+      <Button className="border-2 border-white  bg-transparent font-semibold">
+        Get Started
+      </Button>
     </section>
   );
 };

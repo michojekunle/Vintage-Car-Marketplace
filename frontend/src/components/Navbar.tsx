@@ -1,9 +1,9 @@
 "use client";
 
-import { navItems } from "@/utils/constants";
+import { navItems } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Button from "./common/Button";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center gap-2 py-3 px-5 text-white">
       <div className="flex text-3xl font-black  p-1 rounded-md">
-        <div className="text-secondary">Vintage</div>
+        <div className="text-secondary-action">Vintage</div>
         <div className="text-white">NFTCars</div>
       </div>
 
@@ -33,7 +33,9 @@ const Navbar = () => {
         })}
       </div>
 
-      <Button label="Connect Wallet" variant="secondary" />
+      <Button className="border-2 border-white  bg-transparent font-semibold">
+        Connect Wallet
+      </Button>
     </div>
   );
 };

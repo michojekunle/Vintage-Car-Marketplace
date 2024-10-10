@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react";
+import { Car, Hammer, Wrench } from "lucide-react";
 
 export const Features = () => {
   return (
@@ -9,26 +9,17 @@ export const Features = () => {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-text-body">
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <Icon
-              icon="ph:car-profile-fill"
-              className="mx-auto mb-4 text-primary-80% text-5xl"
-            />
+            <Car className="mx-auto mb-4 text-primary-80" size={48} />
             <h4 className="text-xl font-bold mb-2">NFT Ownership</h4>
             <p>Secure and verifiable ownership through blockchain technology</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <Icon
-              icon="hugeicons:auction"
-              className="mx-auto mb-4 text-primary-80% text-5xl"
-            />
+            <Hammer className="mx-auto mb-4 text-primary-80" size={48} />
             <h4 className="text-xl font-bold mb-2">Auctions</h4>
             <p>Participate in exciting timed auctions for rare vintage cars</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <Icon
-              icon="fluent-mdl2:repair"
-              className="mx-auto mb-4 text-primary-80% text-5xl"
-            />
+            <Wrench className="mx-auto mb-4 text-primary-80" size={48} />
             <h4 className="text-xl font-bold mb-2">Mechanic Services</h4>
             <p>Book trusted mechanics for maintenance and repairs</p>
           </div>
