@@ -3,7 +3,7 @@
 import { navItems } from "@/utils/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Button from "./Button";
+import Button from "./common/Button";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -33,9 +33,7 @@ const Navbar = () => {
         })}
       </div>
 
-      <Button className="bg-blue-100 rounded-2xl p-2 border-2 font-medium border-[#1c2657]  text-[#1c2657]">
-        Connect Wallet
-      </Button>
+      <Button label="Connect Wallet" variant="secondary" />
     </div>
   );
 };

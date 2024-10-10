@@ -1,4 +1,4 @@
-import Button from "./Button";
+import Button from "./common/Button";
 
 export const Cta = () => {
   return (
@@ -8,9 +8,7 @@ export const Cta = () => {
         Start your journey in the world of blockchain-powered vintage cars
         today!
       </p>
-      <Button className="bg-white text-[#1c2657] px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-100">
-        Get Started
-      </Button>
+      <Button label="Get Started" variant="secondary" />
     </section>
   );
 };

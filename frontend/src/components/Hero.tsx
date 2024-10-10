@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Navbar from "./Navbar";
+import Button from "./common/Button";
 
 export function Hero() {
   return (
@@ -13,12 +14,8 @@ export function Hero() {
           Buy, sell, and maintain classic cars with blockchain technology
         </p>
         <div className="space-x-4">
-          <button className="bg-white text-[#1c2657] px-6 py-2 rounded-full font-bold hover:bg-blue-100">
-            Explore Cars
-          </button>
-          <button className="bg-transparent border-2 border-white text-white px-6 py-2 rounded-full font-bold hover:bg-white hover:text-[#1c2657]">
-            List Your Car
-          </button>
+          <Button label="Explore Cars" />
+          <Button label="List Your Car" variant="secondary" />
         </div>
       </div>
       <Image
