@@ -28,6 +28,7 @@ export function Hero() {
         height={500}
         alt="vintage"
         className="absolute -bottom-[13%] right-[22%] -z-10"
+        priority
       />
     </div>
   );
