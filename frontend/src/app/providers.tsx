@@ -16,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <RainbowKitProvider
           modalSize="compact"
           theme={lightTheme({
-            accentColor: "#4CAF50",
+            accentColor: "#8598f7",
             accentColorForeground: "white",
             borderRadius: "small",
             fontStack: "system",
