@@ -30,12 +30,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* <Navbar /> */}
-        {children}
-        <footer className="bg-gray-800 text-white py-8">
-          <div className="container mx-auto text-center">
-            <p>&copy; 2024 VintageNFTCars. All rights reserved.</p>
-          </div>
-        </footer>
+        <div className="min-h-screen flex flex-col">
+          {children}
+          <footer className="bg-gray-800 text-white py-8 mt-auto">
+            <div className="container mx-auto text-center">
+              <p>&copy; 2024 VintageNFTCars. All rights reserved.</p>
+            </div>
+          </footer>
+        </div>
       </body>
     </html>
   );

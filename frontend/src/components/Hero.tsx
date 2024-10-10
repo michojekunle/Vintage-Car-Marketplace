@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 export function Hero() {
   return (
-    <div className="relative bg-primary-action text-white h-[80vh] m-10 rounded-lg z-0">
+    <div className="relative bg-primary-action text-white h-[90vh] m-10 rounded-lg z-0">
       <Navbar />
       <div className="text-center mt-[5rem]">
         <h2 className="text-5xl font-bold mb-4">

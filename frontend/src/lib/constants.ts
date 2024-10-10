@@ -22,6 +22,7 @@ export const filterOptions = ["All", "Make", "Year", "Model"];
 export const featuredCars = [
   {
     id: 1,
+    listed: "Listed",
     name: "Classic Mustang",
     make: "Ford",
     model: "Mustang",
@@ -33,6 +34,7 @@ export const featuredCars = [
   },
   {
     id: 2,
+    listed: "Sold",
     name: "Vintage Beetle",
     make: "Volkswagen",
     model: "Beetle",
@@ -44,6 +46,7 @@ export const featuredCars = [
   },
   {
     id: 3,
+    listed: "Listed",
     name: "Retro Corvette",
     make: "Chevrolet",
     model: "Corvette",
@@ -55,6 +58,7 @@ export const featuredCars = [
   },
   {
     id: 4,
+    listed: "Sold",
     name: "Classic Mini",
     make: "Austin",
     model: "Mini",
