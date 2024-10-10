@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center gap-2 py-3 px-5 text-white">
       <div className="flex text-3xl font-black  p-1 rounded-md">
-        <div className="text-[#8598f7]">Vintage</div>
+        <div className="text-secondary">Vintage</div>
         <div className="text-white">NFTCars</div>
       </div>
 

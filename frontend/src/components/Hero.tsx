@@ -4,7 +4,7 @@ import Button from "./common/Button";
 
 export function Hero() {
   return (
-    <div className="relative bg-[#1c2657] text-white h-[80vh] m-10 rounded-lg z-0">
+    <div className="relative bg-primary text-white h-[80vh] m-10 rounded-lg z-0">
       <Navbar />
       <div className="text-center mt-[5rem]">
         <h2 className="text-5xl font-bold mb-4">
@@ -23,7 +23,7 @@ export function Hero() {
         width={800}
         height={500}
         alt="vintage"
-        className="absolute -bottom-[10%] right-[22%] -z-10"
+        className="absolute -bottom-[13%] right-[22%] -z-10"
       />
     </div>
   );

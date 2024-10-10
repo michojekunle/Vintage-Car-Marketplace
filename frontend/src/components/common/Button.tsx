@@ -4,9 +4,9 @@ import React, { ButtonHTMLAttributes } from "react";
 import { Icon } from "@iconify/react";
 
 const buttonVariants = {
-  primary: "bg-white text-[#1c2657] hover:bg-blue-100 text-center",
+  primary: "bg-white text-primary hover:bg-blue-100 text-center",
   secondary:
-    "bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1c2657] text-center",
+    "bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary text-center",
 };
 
 export const sizeVariants = {
