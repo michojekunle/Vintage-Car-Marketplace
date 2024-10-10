@@ -27,8 +27,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { disconnect } = useDisconnect();
-  const { connect } = useConnect();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
@@ -89,9 +88,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
                 <div className="ml-3">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    Connected Wallet
+                    Connected Account
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{address ? `${address.slice(0, 8)}...${address.slice(-7)}` : ""}</p>
                 </div>
               </div>
             ) : (
@@ -139,10 +138,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Link href="/your-cars">Your cars</Link>
+                    <Link href="/dashboard/your-cars">Your cars</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/add-new-car">Add new car</Link>
+                    <Link href="/dashboard/add-new-car">Add new car</Link>
                   </DropdownMenuItem>
                   {!isConnected ? (
                     <DropdownMenuItem
