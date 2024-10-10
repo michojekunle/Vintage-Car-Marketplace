@@ -4,7 +4,7 @@ import "@nomicfoundation/hardhat-toolbox";
 const LISK_PRIVATE_KEY = vars.get("LISK_PRIVATE_KEY");
 
 export default {
-  solidity: "0.8.24",
+  solidity: "0.8.27",
   networks: {
     // for testnet
     "lisk-sepolia": {
