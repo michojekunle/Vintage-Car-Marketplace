@@ -4,7 +4,6 @@ import { featuredCars } from "@/lib/constants";
 import React from "react";
 import { CarCard } from "../../components/CarCard";
 import { useRouter } from "next/navigation";
-import FilterCar from "@/components/FilterCar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Dashboard() {
@@ -12,7 +11,7 @@ export default function Dashboard() {
   const sortedCars = featuredCars.toSorted((a, b) => b.reviews - a.reviews);
 
   const handleClick = (id: number) => {
-    router.push(`/car-details`);
+    router.push(`/car-details?id=${id}`);
   };
 
   return (

@@ -152,7 +152,7 @@ export default function AddNewCar() {
                 <RadioGroup
                   name="condition"
                   value={formData.condition}
-                  onValueChange={(value: any) => setFormData((prev) => ({ ...prev, condition: value }))}
+                  onValueChange={(value: string) => setFormData((prev) => ({ ...prev, condition: value }))}
                 >
                   <div className="flex items-center space-x-2 py-2">
                     <RadioGroupItem value="excellent" id="excellent" />

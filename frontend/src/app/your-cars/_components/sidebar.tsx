@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { Car, Plus, Home} from "lucide-react";
+import { Car, Plus} from "lucide-react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 
