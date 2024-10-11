@@ -17,6 +17,14 @@ export const navItems = [
   },
 ];
 
+export const addCarSteps = [
+	{ id: 1, name: "Vehicle Details" },
+	{ id: 2, name: "Verification" },
+	{ id: 3, name: "Images Upload" },
+	{ id: 4, name: "Confirmation" },
+];
+
+
 export const filterOptions = ["All", "Make", "Year", "Model"];
 
 export const featuredCars = [
