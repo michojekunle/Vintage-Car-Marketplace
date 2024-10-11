@@ -54,7 +54,13 @@ export const CarCard = ({
       </div>
       <p className="text-primary-action font-bold">{price} ETH</p>
     </div>
-    <p className="absolute px-2 bg-gray-100 rounded-md right-2 top-2 text-sm">
+    <p
+      className={`absolute px-2 rounded-md right-2 top-2 text-sm font-semibold ${
+        listed === "Listed"
+          ? "bg-green-100 text-green-800"
+          : "bg-red-100 text-red-800"
+      }`}
+    >
       {listed}
     </p>
   </button>

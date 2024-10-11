@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { SearchInput } from "./SearchInput";
 import {
   DropdownMenu,
@@ -11,14 +11,23 @@ import {
 import { ChevronDown } from "lucide-react";
 import { makeOptions, modelOptions } from "@/lib/constants";
 
-export default function FilterCar() {
-  const [selectedMake, setSelectedMake] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
-
+export default function FilterCar({
+  searchTerm,
+  setSearchTerm,
+  selectedMake,
+  setSelectedMake,
+  selectedModel,
+  setSelectedModel,
+}: IFilterCar) {
   return (
     <div className="flex flex-col md:flex-row gap-1 items-center md:space-x-4">
       <div className="w-full md:w-4/5">
-        <SearchInput placeholder="Search..." handleSearch={() => {}} />
+        <SearchInput
+          placeholder="Search..."
+          value={searchTerm}
+          handleSearch={(e) => setSearchTerm(e.target.value)}
+          deleteSearchValue={() => setSearchTerm("")}
+        />
       </div>
 
       <div className="w-full flex items-center gap-2 md:w-1/5">

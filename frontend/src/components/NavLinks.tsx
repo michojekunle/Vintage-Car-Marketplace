@@ -18,7 +18,7 @@ const NavLinks = ({ isMobile = false, setOpen }: INavLinks) => {
           <Link
             href={href}
             key={name}
-            className={`text-amber-800 hover:text-amber-600 transition-colors font-medium text-md leading-[21px] ${
+            className={`text-amber-900 hover:text-amber-600 transition-colors font-medium text-md leading-[21px] ${
               active ? "opacity-1 font-bold" : "opacity-70"
             }`}
             onClick={() => isMobile && setOpen && setOpen(false)}

@@ -13,7 +13,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex justify-between items-center gap-2 py-3 px-2 lg:px-5 text-white bg-amber-50 bg-opacity-90 backdrop-blur-sm  sticky top-0 z-50">
+    <div className="flex justify-between items-center gap-2 py-3 px-2 lg:px-5 text-white bg-amber-50 bg-opacity-90 backdrop-blur-sm  sticky top-0 z-50 shadow-md shadow-secondary-action">
       <div className="flex items-center space-x-4">
         <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
           <Car className="h-8 w-8 text-amber-600" />
@@ -43,7 +43,7 @@ const Navbar = () => {
           </SheetTrigger>
           <SheetContent
             side="right"
-            className="w-[250px] sm:w-[300px] bg-gray-900"
+            className="w-[250px] sm:w-[300px] bg-amber-100"
           >
             <div className="flex flex-col gap-y-4 py-4">
               <NavLinks isMobile={true} setOpen={setOpen} />

@@ -42,7 +42,7 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="absolute -bottom-[5%] md:bottom-[8%] right-0 md:right-[22%]  -z-10"
+        className="absolute bottom-[2%] md:bottom-[8%] right-0 md:right-[22%]  -z-10"
       >
         <Image
           src="/car-amber.png"

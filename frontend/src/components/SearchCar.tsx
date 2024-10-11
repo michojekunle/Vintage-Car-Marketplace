@@ -1,7 +1,14 @@
 "use client";
 import FilterCar from "./FilterCar";
 
-export const SearchCar = () => {
+export const SearchCar = ({
+  searchTerm,
+  setSearchTerm,
+  selectedMake,
+  setSelectedMake,
+  selectedModel,
+  setSelectedModel,
+}: IFilterCar) => {
   return (
     <div className="flex justify-center">
       <div className="w-full md:w-3/5 bg-white my-5 lg:my-10 mx-3 lg:mx-20 p-6 rounded-lg shadow-md ">
@@ -13,7 +20,14 @@ export const SearchCar = () => {
           unique NFT. These digital assets provide proof of ownership and a
           detailed history of each vehicle.
         </p>
-        <FilterCar />
+        <FilterCar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedMake={selectedMake}
+          setSelectedMake={setSelectedMake}
+          selectedModel={selectedModel}
+          setSelectedModel={setSelectedModel}
+        />
       </div>
     </div>
   );
