@@ -1,6 +1,5 @@
 import React from "react";
 import { Cta, FeaturedCars, Features, Hero, SearchCar } from "@/components";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const page = () => {
   return (

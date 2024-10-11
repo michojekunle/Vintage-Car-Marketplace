@@ -18,9 +18,7 @@ import {
   useAccountModal,
   useConnectModal,
 } from "@rainbow-me/rainbowkit";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { config } from "../wagmi";
-import { injected } from "wagmi/connectors";
+import { useAccount, useDisconnect } from "wagmi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
 
 const cars = [
   { id: 1, name: "Tesla Model S", year: 2022, status: "Verified" },
@@ -19,9 +20,11 @@ export default function YourCars() {
               <CardTitle>{car.name}</CardTitle>
             </CardHeader>
             <CardContent>
-              <img
+              <Image
                 src={`/placeholder.svg?height=200&width=400`}
                 alt={car.name}
+                width={200}
+                height={200}
                 className="w-full h-48 object-cover rounded-md mb-4"
               />
               <p className="text-sm text-gray-500 dark:text-gray-400">Year: {car.year}</p>
