@@ -38,6 +38,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
              nftContract.getApproved(tokenId) == address(this),
             "Marketplace not approved"
         );
+        require(nftContract.ownerOf(tokenId) == msg.sender, "Not the owner");
         require(price > 0, "Price must be greater than zero");
 
         listings[tokenId] = Listing({
