@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { Car, Plus, Home} from "lucide-react";
+import { Car, Plus} from "lucide-react";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 
 
 const WalletConnection = dynamic(() => import("./wallet-connection"), {
@@ -21,6 +22,7 @@ const WalletConnection = dynamic(() => import("./wallet-connection"), {
 });
 
 const Sidebar = () => {
+	const pathname = usePathname()
 	return (
 		<div className="hidden w-64 bg-white dark:bg-gray-800 shadow-md lg:block">
 			<div className="flex flex-col h-full">
@@ -34,19 +36,19 @@ const Sidebar = () => {
 				</Link>
 				<nav className="flex-1 overflow-y-auto">
 					<ul className="p-4 space-y-2">
-						<li>
+						{/* <li>
 							<Link
 								href="/dashboard"
-								className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
+								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === 'your-cars' ? 'bg-amber-100': ''}`}
 							>
 								<Home className="w-5 h-5 mr-3" />
 								Dashboard
 							</Link>
-						</li>
+						</li> */}
 						<li>
 							<Link
-								href="/dashboard/your-cars"
-								className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
+								href="/your-cars"
+								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === '/your-cars' ? 'bg-amber-100': ''}`}
 							>
 								<Car className="w-5 h-5 mr-3" />
 								Your Cars
@@ -54,8 +56,8 @@ const Sidebar = () => {
 						</li>
 						<li>
 							<Link
-								href="/dashboard/add-new-car"
-								className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
+								href="/your-cars/add-new-car"
+								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === '/your-cars/add-new-car' ? 'bg-amber-100': ''}`}
 							>
 								<Plus className="w-5 h-5 mr-3" />
 								Add New Car
