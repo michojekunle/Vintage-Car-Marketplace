@@ -11,7 +11,7 @@ export const SearchCar = ({
 }: IFilterCar) => {
   return (
     <div className="flex justify-center">
-      <div className="w-full md:w-3/5 bg-white my-5 lg:my-10 mx-3 lg:mx-20 p-6 rounded-lg shadow-md ">
+      <div className="w-full md:w-3/5  my-5 lg:my-10 mx-3 lg:mx-20  ">
         <h3 className="text-lg lg:text-2xl font-bold mb-4 text-text-header text-center">
           NFT Marketplace
         </h3>

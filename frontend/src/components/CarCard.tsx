@@ -15,15 +15,15 @@ export const CarCard = ({
 }: ICarCard) => (
   <button
     type="button"
-    className="relative bg-white rounded-lg shadow-md shadow-amber-100 overflow-hidden cursor-pointer hover:shadow-amber-600 transition-shadow duration-300 flex flex-col justify-between text-left"
+    className="relative bg-white border border-neutral-100 rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-amber-600 transition-shadow duration-300 flex flex-col justify-between text-left"
     onClick={onClick}
   >
     <Image
       src={image}
       alt={name}
       width={300}
-      height={250}
-      className="flex justify-center w-full min-h-[250px] max-h-[250px] object-cover"
+      height={200}
+      className="flex justify-center w-full min-h-[200px] max-h-[200px] object-cover"
       priority
     />
     <div className="p-4">
@@ -55,7 +55,7 @@ export const CarCard = ({
       <p className="text-primary-action font-bold">{price} ETH</p>
     </div>
     <p
-      className={`absolute px-2 rounded-md right-2 top-2 text-sm font-semibold ${
+      className={`absolute py-1 px-2 rounded-md right-2 top-2 text-xs font-semibold ${
         listed === "Listed"
           ? "bg-green-100 text-green-800"
           : "bg-red-100 text-red-800"

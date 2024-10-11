@@ -8,18 +8,19 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NavLinks from "./NavLinks";
+import Link from "next/link";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="flex justify-between items-center gap-2 py-3 px-2 lg:px-5 text-white bg-amber-50 bg-opacity-90 backdrop-blur-sm  sticky top-0 z-50 shadow-md shadow-secondary-action">
-      <div className="flex items-center space-x-4">
+      <Link href="/" className="flex items-center space-x-4">
         <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
           <Car className="h-8 w-8 text-amber-600" />
         </motion.div>
         <h1 className="text-2xl font-bold text-amber-800">VintageChain</h1>
-      </div>
+      </Link>
 
       <div className="hidden lg:block">
         <NavLinks isMobile={false} />

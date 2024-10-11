@@ -16,7 +16,7 @@ import CountdownTimer from "./CountdownTimer";
 const MotionCard = motion(Card);
 const LiveAuction = () => {
   return (
-    <section className="py-12 mx-2">
+    <section id="auctions" className="py-12 mx-2">
       <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
         Live Auction
       </h3>
@@ -27,11 +27,11 @@ const LiveAuction = () => {
         wars for the most sought-after vehicles.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-2 md:px-10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-2 md:px-10">
         {liveAuctions.map((auction, index) => (
           <MotionCard
             key={index}
-            className="bg-white border-amber-400 shadow-md shadow-amber-100 hover:shadow-amber-600"
+            className="relative bg-white border border-neutral-100 rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-amber-600 transition-shadow duration-300 flex flex-col justify-between text-left"
             whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.3 }}
           >

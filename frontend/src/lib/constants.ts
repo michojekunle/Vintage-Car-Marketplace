@@ -7,15 +7,15 @@ export const navItems = [
   },
   {
     name: "Marketplace",
-    href: "/marketplace",
+    href: "#marketplace",
   },
   {
     name: "Auctions",
-    href: "/auctions",
+    href: "#auctions",
   },
   {
     name: "Mechanics",
-    href: "/mechanics",
+    href: "#mechanic-verification",
   },
 ];
 
