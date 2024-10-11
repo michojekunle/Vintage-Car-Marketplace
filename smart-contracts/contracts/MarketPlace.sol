@@ -1,15 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-//import "./NFTContract.sol"; //import our nft contract
+//import "./VintageCarNFT.sol"; //import our nft contract
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract NFTMarketplace is Ownable, ReentrancyGuard {
+contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     struct Listing {
+        uint256 tokenId;
         address seller;
         uint256 price;
+        bool isActive;
     }
+
 
     //we'll reference the nft contract first, sth like
     //NFTContract public nftContract; 
