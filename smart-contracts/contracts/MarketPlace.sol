@@ -17,10 +17,11 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     //we'll reference the nft contract first, sth like
  //VintageCarNFT public nftContract;
     mapping(uint256 => Listing) public listings;
-    mapping(address => uint256) public proceeds
+    mapping(address => uint256) public proceeds;
 
+        event Listed(uint256 indexed tokenId, address indexed seller, uint256 price);
+        event Cancelled(uint256 indexed tokenId);
 
-    event NFTListed(address indexed seller, uint256 indexed tokenId, uint256 price);
 
 
    constructor(VintageCarNFT _nftContract) Ownable(msg.sender) {
@@ -30,16 +31,29 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
 
 
     function listNFT(uint256 tokenId, uint256 price) external nonReentrant {
-        require(nftContract.ownerOf(tokenId) == msg.sender, "Not the owner");
-        require(price > 0, "Price must be greater than 0");
+        require(nftContract.exists(tokenId), "NFT does not exist");
+        require(nftContract.isApprovedForAll(msg.sender, address(this)), "Marketplace not approved");
+        require(price > 0, "Price must be greater than zero");
 
-        require(
-            nftContract.isApprovedForAll(msg.sender, address(this)) || 
-            nftContract.getApproved(tokenId) == address(this),
-            "Marketplace not approved"
-        );
+        listings[tokenId] = Listing({
+            tokenId: tokenId,
+            seller: msg.sender,
+            price: price,
+            isActive: true
+        });
 
-        listings[tokenId] = Listing(msg.sender, price);
-        emit NFTListed(msg.sender, tokenId, price);
+        emit Listed(tokenId, msg.sender, price);
     }
+
+     function cancelNFT(uint256 tokenId) external nonReentrant {
+        Listing memory listing = listings[tokenId];
+        require(listing.seller == msg.sender, "Not the seller");
+        require(listing.isActive, "NFT is not listed");
+
+        listing.isActive = false;
+        listings[tokenId] = listing;
+
+        emit Cancelled(tokenId);
+    }
+
 }
