@@ -15,18 +15,18 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
 
 
     //we'll reference the nft contract first, sth like
-    //NFTContract public nftContract; 
-    uint256 public marketplaceFee = 2;
+ //VintageCarNFT public nftContract;
     mapping(uint256 => Listing) public listings;
-    mapping(address => uint256) public proceeds;
+    mapping(address => uint256) public proceeds
 
 
     event NFTListed(address indexed seller, uint256 indexed tokenId, uint256 price);
 
 
-    constructor(NFTContract _nftContract) Ownable(msg.sender) {
-        nftContract = _nftContract;
-    }
+   constructor(VintageCarNFT _nftContract) Ownable(msg.sender) {
+    nftContract = VintageCarNFT(_nftContract);
+}
+
 
 
     function listNFT(uint256 tokenId, uint256 price) external nonReentrant {
