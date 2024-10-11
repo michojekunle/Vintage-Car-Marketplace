@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Check, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const CarDetails = () => {
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     // Simulate data fetching or loading delay
@@ -16,7 +18,7 @@ const CarDetails = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+        <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
       </div>
     )
   }
@@ -29,10 +31,11 @@ const CarDetails = () => {
         <div className="mb-4">
           <Button
             variant="ghost"
-            className="text-indigo-600 hover:underline flex items-center gap-2"
+            className="text-primary-action hover:underline flex items-center gap-2"
+            onClick={() => router.back()}
           >
             <ArrowLeft className="w-5 h-5" />
-            Back to Marketplace
+            Back to Dashboard
           </Button>
         </div>
 
@@ -77,14 +80,14 @@ const CarDetails = () => {
                 <p className="text-lg font-semibold text-gray-700">
                   Buyout Price: $30,000
                 </p>
-                <Button className="w-full bg-indigo-600 text-white">
+                <Button className="w-full bg-primary-action text-white">
                   Buy Now
                 </Button>
                 <div className="border-t border-gray-200 pt-2">
                   <p className="text-lg font-semibold text-gray-700">
                     Auction Ends In: 2 days 14 hrs
                   </p>
-                  <Button className="w-full bg-yellow-500 text-white">
+                  <Button className="w-full bg-amber-500 text-white">
                     Place a Bid
                   </Button>
                 </div>
@@ -114,7 +117,7 @@ const CarDetails = () => {
               Book a certified mechanic for repair or maintenance services
               directly through our platform.
             </p>
-            <Button className="mt-4 bg-indigo-600 text-white">
+            <Button className="mt-4 bg-primary-action text-white">
               Book a Mechanic
             </Button>
           </div>
