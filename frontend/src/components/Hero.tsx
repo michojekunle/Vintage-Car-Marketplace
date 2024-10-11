@@ -4,13 +4,13 @@ import { Button } from "./ui/button";
 
 export function Hero() {
   return (
-    <div className="relative bg-primary-action text-white h-[90vh] m-10 rounded-lg z-0">
+    <div className="relative bg-primary-action text-white h-[90vh] lg:m-10 lg:rounded-lg z-0">
       <Navbar />
-      <div className="text-center mt-[5rem]">
-        <h2 className="text-5xl font-bold mb-4">
+      <div className="text-center mt-10 lg:mt-[5rem] p-3">
+        <h2 className="text-3xl lg:text-5xl font-bold mb-4">
           Revolutionizing Vintage Car Ownership
         </h2>
-        <p className="text-2xl mb-8">
+        <p className="text-xl md:text-2xl mb-8">
           Buy, sell, and maintain classic cars with blockchain technology
         </p>
         <div className="space-x-4">
@@ -27,7 +27,7 @@ export function Hero() {
         width={800}
         height={500}
         alt="vintage"
-        className="absolute -bottom-[13%] right-[22%] -z-10"
+        className="absolute -bottom-[5%] md:-bottom-[12%] right-0 md:right-[22%]  -z-10"
         priority
       />
     </div>

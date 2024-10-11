@@ -17,3 +17,8 @@ interface ICarCard {
   price: number;
   onClick?: () => void;
 }
+
+interface INavLinks {
+  isMobile: boolean;
+  setOpen?: (open: boolean) => void;
+}
