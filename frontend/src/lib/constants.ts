@@ -1,3 +1,5 @@
+import { Car, Hammer, Wrench } from "lucide-react";
+
 export const navItems = [
   {
     name: "Home",
@@ -91,5 +93,25 @@ export const liveAuctions = [
     currentBid: "120 ETH",
     timeLeft: "4h 30m",
     image: "/mini.png",
+  },
+];
+
+export const features = [
+  {
+    icon: Car,
+    title: "NFT Ownership",
+    description:
+      "List your vintage cars as NFTs, Secure and verifiable ownership through VintageChain",
+  },
+  {
+    icon: Hammer,
+    title: "Auctions",
+    description: "Participate in exciting timed auctions for rare vintage cars",
+  },
+  {
+    icon: Wrench,
+    title: "Mechanic Services",
+    description:
+      "Offer your expertise, get verified, and connect with classic car owners for maintenance and restoration services.",
   },
 ];

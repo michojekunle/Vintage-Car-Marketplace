@@ -7,11 +7,24 @@ import { Button } from "./ui/button";
 export function Hero() {
   return (
     <div className="relative bg-amber-900 text-white h-[100vh] z-0 ">
-      <div className="text-center p-3 pt-20">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.5,
+            },
+          },
+        }}
+        className="text-center p-3 pt-20"
+      >
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6 }}
           className="text-5xl md:text-6xl font-bold mb-6 text-amber-100"
         >
           Discover, Collect, and Trade
@@ -28,20 +41,16 @@ export function Hero() {
           <br className="hidden md:block" />
           classic cars as NFTs
         </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
+        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
           <Button className="border-2 border-white  bg-transparent hover:bg-white hover:text-amber-800">
             Explore Now
           </Button>
         </motion.div>
-      </div>
+      </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        initial={{ y: 0 }}
+        animate={{ y: [-20, 0] }}
+        transition={{ duration: 1, repeat: Infinity, repeatType: "mirror" }}
         className="absolute bottom-[2%] md:bottom-[8%] right-0 md:right-[22%]  -z-10"
       >
         <Image

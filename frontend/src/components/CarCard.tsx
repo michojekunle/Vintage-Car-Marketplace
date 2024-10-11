@@ -15,7 +15,7 @@ export const CarCard = ({
 }: ICarCard) => (
   <button
     type="button"
-    className="relative bg-white rounded-lg shadow-md shadow-amber-100 overflow-hidden cursor-pointer hover:shadow-amber-600 transition-shadow duration-300 flex flex-col justify-between text-left border border-amber-800"
+    className="relative bg-white rounded-lg shadow-md shadow-amber-100 overflow-hidden cursor-pointer hover:shadow-amber-600 transition-shadow duration-300 flex flex-col justify-between text-left"
     onClick={onClick}
   >
     <Image
