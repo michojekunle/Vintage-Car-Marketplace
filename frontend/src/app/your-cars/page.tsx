@@ -22,11 +22,11 @@ export default function Dashboard() {
           <h2 className="font-bold text-[34px]">Welcome, Roheemah</h2>
           <p className="text-md font-medium">Platinum User</p>
         </div>
-        <div>
+        {/* <div>
           <button className="text-white rounded-xl p-3 bg-primary-action font-bold" onClick={() => {router.push("/dashboard/add-new-car")}}>
             List New Car
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="container mx-auto mt-20">
         <Tabs defaultValue="bought" className="text-2xl font-bold text-left mb-6">

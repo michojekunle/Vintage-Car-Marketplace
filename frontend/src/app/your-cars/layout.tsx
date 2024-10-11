@@ -20,12 +20,14 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { disconnect } = useDisconnect();
   const { isConnected, address } = useAccount();
+  const pathname = usePathname();
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
@@ -42,7 +44,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </Link>
           <nav className="flex-1 overflow-y-auto">
             <ul className="p-4 space-y-2">
-              <li>
+              {/* <li>
                 <Link
                   href="/dashboard"
                   className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
@@ -50,11 +52,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   <Home className="w-5 h-5 mr-3" />
                   Dashboard
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
-                  href="/dashboard/your-cars"
-                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
+                  href="/your-cars"
+                  className={`flex ${pathname === "/your-cars" ? 'bg-amber-100': ''} items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900`}
                 >
                   <Car className="w-5 h-5 mr-3" />
                   Your Cars
@@ -62,8 +64,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               </li>
               <li>
                 <Link
-                  href="/dashboard/add-new-car"
-                  className="flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900"
+                  href="/your-cars/add-new-car"
+                  className={`flex ${pathname === "/your-cars/add-new-car" ? 'bg-amber-100': ''} items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900`}
                 >
                   <Plus className="w-5 h-5 mr-3" />
                   Add New Car
@@ -107,7 +109,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <Menu className="h-6 w-6" />
             </Button>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-              Dashboard
+              Your Cars
             </h2>
           </div>
           <div className="flex items-center space-x-4">
@@ -136,7 +138,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Link href="/dashboard/your-cars">Your cars</Link>
+                    <Link href="/dashboard/your-cars" className="">Your cars</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link href="/dashboard/add-new-car">Add new car</Link>
