@@ -4,7 +4,6 @@ import AddCarForm from "./_components/add-car-form";
 
 const AddCar = () => {
 
-
 	return <AddCarForm />;
 };
 

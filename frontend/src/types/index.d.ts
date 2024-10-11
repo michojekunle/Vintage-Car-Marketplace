@@ -27,3 +27,21 @@ interface IAddCarValues {
   engineCondition: string;
   exteriorCondition: string;
 }
+
+type FieldProp =
+	| "make"
+	| "model"
+	| "year"
+	| "vin"
+	| "description"
+	| "engineCondition"
+	| "exteriorCondition";
+
+type VehicleOptionsProp = { label: string; value: string };
+
+interface IComboboxForm {
+	field: ControllerRenderProps<IAddCarValues, FieldProp>;
+	options: VehicleOptionsProp[];
+	fieldName: string;
+	form: UseFormReturn<IAddCarValues, undefined>;
+}

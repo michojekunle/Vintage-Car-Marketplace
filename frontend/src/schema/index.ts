@@ -12,7 +12,7 @@ export const AddCarSchema = z.object({
 			message: "Year must be between 1886 and current year",
 		}
 	),
-	vin: z.string().length(17, "VIN must be exactly 17 characters"),
+	vin: z.string().min(6, "VIN must be at least 6 characters"),
     description: z.string().min(20, "Description too short"),
     engineCondition: z.string().min(1, "Condition is required"),
     exteriorCondition: z.string().min(1, "Condition is required")

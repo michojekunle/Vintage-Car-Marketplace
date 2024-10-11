@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import {
 	FormControl,
@@ -16,6 +16,25 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { ComboboxForm } from "./combobox-form";
+
+export async function fetchJSONP(url: string): Promise<any> {
+	try {
+		const response = await fetch(url);
+		const text = await response.text();
+
+		const jsonStr = text.match(/\?+\((.*)\)/)?.[1];
+
+		if (!jsonStr) {
+			throw new Error("Invalid JSONP response");
+		}
+
+		return JSON.parse(jsonStr);
+	} catch (error) {
+		console.error("Error fetching JSONP:", error);
+		throw error;
+	}
+}
 
 const conditionOptions = ["Excellent", "Good", "Fair", "Poor", "Terrible"];
 const VehicleDetailsStep = ({
@@ -23,50 +42,145 @@ const VehicleDetailsStep = ({
 }: {
 	form: UseFormReturn<IAddCarValues, undefined>;
 }) => {
+	const [yearOptions, setYearOptions] = useState<VehicleOptionsProp[]>([]);
+	const [makeOptions, setMakeOptions] = useState<VehicleOptionsProp[]>([]);
+	const [modelOptions, setModelOptions] = useState<VehicleOptionsProp[]>([]);
+
+	const yearValue = form.watch("year");
+	const makeValue = form.watch("make");
+	const modelValue = form.watch("model");
+
+	useEffect(() => {
+		async function fetchYear() {
+			try {
+				const response = await fetch("/api/car-years");
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				const data = await response.json();
+
+				const yearsOption = [];
+
+				for (let i = data.Years.min_year; i <= data.Years.max_year; i++) {
+					yearsOption.push({ label: i.toString(), value: i.toString() });
+				}
+
+				// console.log(yearsOption);
+				setYearOptions(yearsOption);
+			} catch (err) {
+				console.log("Failed to fetch car makes");
+			}
+		}
+
+		fetchYear();
+	}, []);
+
+	useEffect(() => {
+		async function fetchMakes() {
+			if (!yearValue) return;
+			try {
+				const response = await fetch(`/api/car-makes/?year=${yearValue}`);
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				const data = await response.json();
+
+				const makesOption = [];
+
+				for (let i = 0; i < data.Makes.length; i++) {
+					makesOption.push({
+						label: data.Makes[i].make_display,
+						value: data.Makes[i].make_id,
+					});
+				}
+
+				// console.log(makesOption);
+				setMakeOptions(makesOption);
+			} catch (err) {
+				console.log("Failed to fetch car makes", err);
+			} finally {
+				form.setValue("make", "");
+			}
+		}
+
+		fetchMakes();
+	}, [yearValue]);
+
+	useEffect(() => {
+		async function fetchModel() {
+			if (!yearValue || !makeValue) return form.setValue("model", "");
+			try {
+				const response = await fetch(
+					`/api/car-models/?year=${yearValue}&make=${makeValue}`
+				);
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				const data = await response.json();
+
+				const modelsOption = [];
+
+				for (let i = 0; i < data.Models.length; i++) {
+					modelsOption.push({
+						label: data.Models[i].model_name,
+						value: data.Models[i].model_name,
+					});
+				}
+
+				// console.log(modelsOption);
+				setModelOptions(modelsOption);
+			} catch (err) {
+				console.log("Failed to fetch car makes", err);
+			} finally {
+				form.setValue("model", "");
+			}
+		}
+
+		fetchModel();
+	}, [yearValue, makeValue]);
+
 	return (
 		<div className="space-y-4">
 			<div className="grid grid-cols-2 gap-4">
 				<FormField
 					control={form.control}
-					name="make"
+					name="year"
 					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Make</FormLabel>
-							<FormControl>
-								<Input placeholder="e.g., Ford" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
+						<ComboboxForm
+							form={form}
+							field={field}
+							options={yearOptions}
+							fieldName={"Year"}
+						/>
 					)}
 				/>
 				<FormField
 					control={form.control}
-					name="model"
+					name="make"
 					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Model</FormLabel>
-							<FormControl>
-								<Input placeholder="e.g., Mustang" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
+						<ComboboxForm
+							form={form}
+							field={field}
+							options={makeOptions}
+							fieldName={"Make"}
+						/>
 					)}
 				/>
 			</div>
 			<div className="grid grid-cols-2 gap-4">
 				<FormField
 					control={form.control}
-					name="year"
+					name="model"
 					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Year</FormLabel>
-							<FormControl>
-								<Input placeholder="e.g., 1965" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
+						<ComboboxForm
+							form={form}
+							field={field}
+							options={modelOptions}
+							fieldName={"Model"}
+						/>
 					)}
 				/>
+
 				<FormField
 					control={form.control}
 					name="vin"

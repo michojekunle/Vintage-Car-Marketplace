@@ -23,7 +23,7 @@ const ButtonInput = React.forwardRef<HTMLButtonElement, ButtonInputProps>(
           onClick={onClick}
           className={cn(
             " justify-start text-left font-normal",
-            !value && "text-muted-foreground",
+            !value && "text-gray-200",
             className
           )}
           {...props}

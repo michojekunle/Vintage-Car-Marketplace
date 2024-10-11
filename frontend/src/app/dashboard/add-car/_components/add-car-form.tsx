@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -20,9 +20,13 @@ import ImagesUploadStep from "./image-upload-step";
 import ConfirmationStep from "./confirmation-step";
 import { addCarSteps } from "@/lib/constants";
 
+
+
 export default function AddCarForm() {
 	const [currentStep, setCurrentStep] = useState(1);
-	const [status, setStatus] = useState("idle"); 
+	const [status, setStatus] = useState("idle");
+
+
 
 	const form = useForm<z.infer<typeof AddCarSchema>>({
 		resolver: zodResolver(AddCarSchema),
@@ -34,6 +38,9 @@ export default function AddCarForm() {
 			description: "",
 		},
 	});
+
+
+
 
 	async function onSubmit(values: z.infer<typeof AddCarSchema>) {
 		console.log(values);

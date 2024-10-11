@@ -62,6 +62,7 @@ const ImagesUploadStep = () => {
 						input.type = "file";
 						input.multiple = true;
 						input.accept = "image/*";
+						input.max="5"; 
 						input.onchange = (e: Event) => {
 							const target = e.target as HTMLInputElement;
 							handleImageSelect(target.files);
