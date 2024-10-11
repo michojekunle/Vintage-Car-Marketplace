@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 //import "./VintageCarNFT.sol"; //import our nft contract
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -26,6 +26,8 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     event Updated(uint256 indexed tokenId, uint256 newPrice);
     event Cancelled(uint256 indexed tokenId);
     event Bought(uint256 indexed tokenId, address indexed buyer, uint256 price);
+    event Withdrawn(address indexed seller, uint256 amount);
+
 
     constructor(VintageCarNFT _nftContract) Ownable(msg.sender) {
         nftContract = VintageCarNFT(_nftContract);
@@ -80,13 +82,32 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     function buyCar(uint256 tokenId) external payable nonReentrant {
         Listing memory listing = listings[tokenId];
         require(listing.isActive, "NFT not for sale");
-        require(msg.value == listing.price, "Incorrect value sent, please send the exact price");
-
+        require(
+            msg.value == listing.price,
+            "Incorrect value sent, please send the exact price"
+        );
+        //change to inactive first
         listing.isActive = false;
         listings[tokenId] = listing;
         nftContract.safeTransferFrom(listing.seller, msg.sender, tokenId);
         proceeds[listing.seller] += msg.value;
 
         emit Bought(tokenId, msg.sender, msg.value);
+    }
+
+    function withdrawFunds() external nonReentrant {
+        uint256 amount = proceeds[msg.sender];
+        require(amount > 0, "No funds to withdraw");
+
+        proceeds[msg.sender] = 0; //reset to 0
+        payable(msg.sender).transfer(amount);
+
+        emit Withdrawn(msg.sender, amount);
+    }
+
+    function getListing(
+        uint256 tokenId
+    ) external view returns (Listing memory) {
+        return listings[tokenId];
     }
 }
