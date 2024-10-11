@@ -3,7 +3,6 @@ import { Georama } from "next/font/google";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
-import Navbar from "@/components/Navbar";
 
 const georama = Georama({
   weight: ["300", "400", "500", "700", "900"],
@@ -24,10 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${georama.className} antialiased`}>
-        <Providers>
-          <Navbar />
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

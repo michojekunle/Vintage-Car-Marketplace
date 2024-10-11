@@ -72,3 +72,7 @@ interface IFilterCar {
 interface ICountdownTimer {
   initialTime: string;
 }
+
+interface IProviders {
+  children: React.ReactNode;
+}

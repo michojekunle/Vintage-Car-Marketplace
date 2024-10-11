@@ -1,14 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Cta,
-  FeaturedCars,
-  Features,
-  Footer,
-  Hero,
-  SearchCar,
-} from "@/components";
+import { Cta, FeaturedCars, Features, Hero, SearchCar } from "@/components";
 import { featuredCars } from "@/lib/constants";
 import LiveAuction from "@/components/LiveAuction";
 import MechanicVerification from "@/components/MechanicVerification";
@@ -50,7 +43,6 @@ const Home = () => {
       <LiveAuction />
       <MechanicVerification />
       <Cta />
-      <Footer />
     </div>
   );
 };
