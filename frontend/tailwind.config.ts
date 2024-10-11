@@ -18,7 +18,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
-        "primary-action": "#78350f",
+        "primary-action": "#b45309",
         "secondary-action": "#b45309",
         "primary-80": "#2b3fa1",
         "text-body": "#525252",

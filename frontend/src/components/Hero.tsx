@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 export function Hero() {
   return (
-    <div className="relative bg-amber-900 text-white h-[100vh] z-0 ">
+    <div className="relative bg-amber-700 text-white h-[100vh] z-0 ">
       <motion.div
         initial="hidden"
         animate="visible"
