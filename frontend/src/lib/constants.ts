@@ -17,6 +17,15 @@ export const navItems = [
   },
 ];
 
+export const makeOptions = ["Ford", "Volkswagen", "Chevrolet", "Austin"];
+export const modelOptions = ["Mustang", "Beetle", "Corvette", "Mini"];
+export const addCarSteps = [
+  { id: 1, name: "Vehicle Details" },
+  { id: 2, name: "Verification" },
+  { id: 3, name: "Images Upload" },
+  { id: 4, name: "Confirmation" },
+];
+
 export const filterOptions = ["All", "Make", "Year", "Model"];
 
 export const featuredCars = [
@@ -29,7 +38,7 @@ export const featuredCars = [
     year: 1965,
     rating: 4,
     reviews: 28,
-    price: 2,
+    price: 20,
     image: "/mustang.png",
   },
   {
@@ -41,7 +50,7 @@ export const featuredCars = [
     year: 1972,
     rating: 5,
     reviews: 42,
-    price: 0.7,
+    price: 7,
     image: "/beetle.png",
   },
   {
@@ -53,7 +62,7 @@ export const featuredCars = [
     year: 1969,
     rating: 5,
     reviews: 37,
-    price: 1.5,
+    price: 15,
     image: "/corvette.png",
   },
   {
@@ -65,7 +74,22 @@ export const featuredCars = [
     year: 1967,
     rating: 4,
     reviews: 31,
-    price: 0.9,
+    price: 9,
+    image: "/mini.png",
+  },
+];
+
+export const liveAuctions = [
+  {
+    name: "1965 Classic Mustang",
+    currentBid: "75 ETH",
+    timeLeft: "2h 45m",
+    image: "/mustang.png",
+  },
+  {
+    name: "1963 Aston Martin DB5",
+    currentBid: "120 ETH",
+    timeLeft: "4h 30m",
     image: "/mini.png",
   },
 ];

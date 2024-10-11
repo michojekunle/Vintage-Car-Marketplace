@@ -44,7 +44,6 @@ export default function Landing() {
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
 
-
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,24 +55,23 @@ export default function Landing() {
       make: "Ford",
       model: "Mustang",
       year: 1965,
-      image: "/placeholder.svg?height=200&width=300&text=1965+Ford+Mustang",
+      image: "/mustang.png",
     },
     {
-      name: "1957 Chevrolet Bel Air",
+      name: "Vintage Beetle",
       price: 62,
-      make: "Chevrolet",
-      model: "Bel Air",
+      make: "Volkswagen",
+      model: "Beetle",
       year: 1957,
-      image:
-        "/placeholder.svg?height=200&width=300&text=1957+Chevrolet+Bel+Air",
+      image: "/beetle.png",
     },
     {
-      name: "1970 Dodge Challenger",
+      name: "Classic Mini",
       price: 58,
-      make: "Dodge",
-      model: "Challenger",
+      make: "Austin",
+      model: "Mini",
       year: 1970,
-      image: "/placeholder.svg?height=200&width=300&text=1970+Dodge+Challenger",
+      image: "/mini.png",
     },
     {
       name: "1963 Corvette Sting Ray",
@@ -81,8 +79,7 @@ export default function Landing() {
       make: "Chevrolet",
       model: "Corvette",
       year: 1963,
-      image:
-        "/placeholder.svg?height=200&width=300&text=1963+Corvette+Sting+Ray",
+      image: "/corvette.png",
     },
   ];
 
