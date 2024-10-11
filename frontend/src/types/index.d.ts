@@ -17,3 +17,11 @@ interface ICarCard {
   price: number;
   onClick?: () => void;
 }
+
+interface IAddCarValues {
+  make: string;
+  model: string;
+  year: string;
+  vin: string;
+  description: string;
+}
