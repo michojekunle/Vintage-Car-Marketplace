@@ -25,8 +25,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     );
     event Updated(uint256 indexed tokenId, uint256 newPrice);
     event Cancelled(uint256 indexed tokenId);
-        event Bought(uint256 indexed tokenId, address indexed buyer, uint256 price);
-
+    event Bought(uint256 indexed tokenId, address indexed buyer, uint256 price);
 
     constructor(VintageCarNFT _nftContract) Ownable(msg.sender) {
         nftContract = VintageCarNFT(_nftContract);
@@ -35,7 +34,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     function listNFT(uint256 tokenId, uint256 price) external nonReentrant {
         require(nftContract.exists(tokenId), "NFT does not exist");
         require(
-             nftContract.getApproved(tokenId) == address(this),
+            nftContract.getApproved(tokenId) == address(this),
             "Marketplace not approved"
         );
         require(nftContract.ownerOf(tokenId) == msg.sender, "Not the owner");
@@ -58,6 +57,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
         Listing memory listing = listings[tokenId];
         require(listing.seller == msg.sender, "Not the seller");
         require(listing.isActive, "NFT is not listed");
+        require(!listings[tokenId].isActive, "NFT is already listed");
         require(newPrice > 0, "Price must be greater than zero");
 
         listing.price = newPrice;
@@ -77,19 +77,16 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
         emit Cancelled(tokenId);
     }
 
-     function buyCar(uint256 tokenId) external payable nonReentrant {
+    function buyCar(uint256 tokenId) external payable nonReentrant {
         Listing memory listing = listings[tokenId];
         require(listing.isActive, "NFT not for sale");
-        require(msg.value == listing.price, "Incorrect value");
+        require(msg.value == listing.price, "Incorrect value sent, please send the exact price");
 
+        listing.isActive = false;
+        listings[tokenId] = listing;
         nftContract.safeTransferFrom(listing.seller, msg.sender, tokenId);
         proceeds[listing.seller] += msg.value;
 
-//make inactive
-        listing.isActive = false;
-        listings[tokenId] = listing;
-
         emit Bought(tokenId, msg.sender, msg.value);
     }
-
 }
