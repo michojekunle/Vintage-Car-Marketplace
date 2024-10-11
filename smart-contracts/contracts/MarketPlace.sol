@@ -2,8 +2,10 @@
 pragma solidity ^0.8.0;
 
 //import "./NFTContract.sol"; //import our nft contract
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract NFTMarketplace {
+contract NFTMarketplace is Ownable, ReentrancyGuard {
     struct Listing {
         address seller;
         uint256 price;
@@ -19,7 +21,7 @@ contract NFTMarketplace {
     event NFTListed(address indexed seller, uint256 indexed tokenId, uint256 price);
 
 
-    constructor(NFTContract _nftContract) {
+    constructor(NFTContract _nftContract) Ownable(msg.sender) {
         nftContract = _nftContract;
     }
 
