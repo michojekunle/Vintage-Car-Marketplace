@@ -18,23 +18,6 @@ import {
 } from "@/components/ui/select";
 import { ComboboxForm } from "./combobox-form";
 
-export async function fetchJSONP(url: string): Promise<any> {
-	try {
-		const response = await fetch(url);
-		const text = await response.text();
-
-		const jsonStr = text.match(/\?+\((.*)\)/)?.[1];
-
-		if (!jsonStr) {
-			throw new Error("Invalid JSONP response");
-		}
-
-		return JSON.parse(jsonStr);
-	} catch (error) {
-		console.error("Error fetching JSONP:", error);
-		throw error;
-	}
-}
 
 const conditionOptions = ["Excellent", "Good", "Fair", "Poor", "Terrible"];
 const VehicleDetailsStep = ({
@@ -48,7 +31,6 @@ const VehicleDetailsStep = ({
 
 	const yearValue = form.watch("year");
 	const makeValue = form.watch("make");
-	const modelValue = form.watch("model");
 
 	useEffect(() => {
 		async function fetchYear() {
@@ -68,7 +50,7 @@ const VehicleDetailsStep = ({
 				// console.log(yearsOption);
 				setYearOptions(yearsOption);
 			} catch (err) {
-				console.log("Failed to fetch car makes");
+				console.log("Failed to fetch car makes", err);
 			}
 		}
 

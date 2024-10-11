@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Car, Plus, Menu, Home, LogOut, LogIn } from "lucide-react";
+import { Bell, Menu, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,

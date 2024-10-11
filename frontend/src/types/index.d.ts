@@ -1,31 +1,33 @@
+declare module "wagmi";
+
 interface ISearchInput {
-  placeholder: string;
-  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-  deleteSearchValue?: () => void;
+	placeholder: string;
+	handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	value?: string;
+	deleteSearchValue?: () => void;
 }
 
 interface ICarCard {
-  image: string;
-  name: string;
-  make: string;
-  model: string;
-  listed: string;
-  year: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  onClick?: () => void;
+	image: string;
+	name: string;
+	make: string;
+	model: string;
+	listed: string;
+	year: number;
+	rating: number;
+	reviews: number;
+	price: number;
+	onClick?: () => void;
 }
 
 interface IAddCarValues {
-  make: string;
-  model: string;
-  year: string;
-  vin: string;
-  description: string;
-  engineCondition: string;
-  exteriorCondition: string;
+	make: string;
+	model: string;
+	year: string;
+	vin: string;
+	description: string;
+	engineCondition: string;
+	exteriorCondition: string;
 }
 
 type FieldProp =
