@@ -44,8 +44,8 @@ export default function AddNewCar() {
   }
 
   return (
-    <Card className="max-w-2xl mx-auto">
-      <CardHeader>
+    <Card className="max-w-2xl mx-auto py-8 px-6">
+      <CardHeader className="text-center text-2xl text-primary-action mb-6">
         <CardTitle>Add New Car - {steps[currentStep]}</CardTitle>
       </CardHeader>
       <CardContent>
@@ -90,6 +90,7 @@ export default function AddNewCar() {
                 <div>
                   <Label htmlFor="make">Make</Label>
                   <Input
+                    className="py-6"
                     id="make"
                     name="make"
                     value={formData.make}
@@ -100,8 +101,8 @@ export default function AddNewCar() {
                 <div>
                   <Label htmlFor="model">Model</Label>
                   <Input
+                    className="py-6"
                     id="model"
-                
                     name="model"
                     value={formData.model}
                     onChange={handleInputChange}
@@ -113,6 +114,7 @@ export default function AddNewCar() {
                 <div>
                   <Label htmlFor="year">Year</Label>
                   <Input
+                    className="py-6"
                     id="year"
                     name="year"
                     type="number"
@@ -124,6 +126,7 @@ export default function AddNewCar() {
                 <div>
                   <Label htmlFor="vin">VIN</Label>
                   <Input
+                    className="py-6"
                     id="vin"
                     name="vin"
                     value={formData.vin}
@@ -135,6 +138,7 @@ export default function AddNewCar() {
               <div>
                 <Label htmlFor="mileage">Mileage</Label>
                 <Input
+                  className="py-6"
                   id="mileage"
                   name="mileage"
                   type="number"
@@ -144,21 +148,21 @@ export default function AddNewCar() {
                 />
               </div>
               <div>
-                <Label>Condition</Label>
+                <Label className="mb-4">Condition</Label>
                 <RadioGroup
                   name="condition"
                   value={formData.condition}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, condition: value }))}
+                  onValueChange={(value: string) => setFormData((prev) => ({ ...prev, condition: value }))}
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 py-2">
                     <RadioGroupItem value="excellent" id="excellent" />
                     <Label htmlFor="excellent">Excellent</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 py-2">
                     <RadioGroupItem value="good" id="good" />
                     <Label htmlFor="good">Good</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 py-2">
                     <RadioGroupItem value="fair" id="fair" />
                     <Label htmlFor="fair">Fair</Label>
                   </div>
@@ -192,7 +196,7 @@ export default function AddNewCar() {
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-center items-center gap-6">
         <Button onClick={handlePrevious} disabled={currentStep === 0}>
           Previous
         </Button>

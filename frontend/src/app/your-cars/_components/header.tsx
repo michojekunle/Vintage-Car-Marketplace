@@ -35,7 +35,7 @@ const DashboardHeader = () => {
 					<Menu className="h-6 w-6" />
 				</Button>
 				<h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-					Dashboard
+					Your Cars
 				</h2>
 			</div>
 			<div className="flex items-center space-x-4">
