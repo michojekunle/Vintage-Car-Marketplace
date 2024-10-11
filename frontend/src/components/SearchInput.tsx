@@ -10,7 +10,7 @@ export const SearchInput: FC<ISearchInput> = ({
   deleteSearchValue,
 }) => {
   return (
-    <div className="relative w-full py-2 px-4 flex items-center gap-2 rounded-2xl border-2 border-[#000]">
+    <div className="relative w-full py-2 px-4 flex items-center gap-2 border-2">
       <Search className="w-5 h-5 text-primary" />
       <input
         placeholder={placeholder}

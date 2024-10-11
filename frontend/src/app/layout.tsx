@@ -23,10 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${georama.className} antialiased`}>
-        <Providers>
-          {/* <Navbar /> */}
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
