@@ -3,7 +3,8 @@
 import { navItems } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
+// import { Button } from "./ui/button";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -32,10 +33,9 @@ const Navbar = () => {
           );
         })}
       </div>
-
-      <Button className="border-2 border-white  bg-transparent font-semibold">
-        Connect Wallet
-      </Button>
+      <div className="">
+        <ConnectButton showBalance={false} chainStatus="name" />
+      </div>
     </div>
   );
 };

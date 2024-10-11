@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Georama } from "next/font/google";
 import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import { Providers } from "./providers";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const georama = Georama({
+  weight: ["300", "400", "500", "700", "900"],
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -26,18 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* <Navbar /> */}
-        <div className="min-h-screen flex flex-col">
+      <body className={`${georama.className} antialiased`}>
+        <Providers>
+          {/* <Navbar /> */}
           {children}
-          <footer className="bg-gray-800 text-white py-8 mt-auto">
-            <div className="container mx-auto text-center">
-              <p>&copy; 2024 VintageNFTCars. All rights reserved.</p>
-            </div>
-          </footer>
-        </div>
+        </Providers>
       </body>
     </html>
   );

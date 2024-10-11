@@ -1,25 +1,24 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { AiOutlineCheck } from 'react-icons/ai';
-import { HiArrowLeft } from "react-icons/hi";
-import React, { useState, useEffect } from "react";
-import { ClipLoader } from "react-spinners";
+"use client"
+
+import React, { useState, useEffect } from "react"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft, Check, Loader2 } from "lucide-react"
 
 const CarDetails = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Simulate data fetching or loading delay
-    setTimeout(() => setLoading(false), 1500);
-  }, []);
+    setTimeout(() => setLoading(false), 1500)
+  }, [])
 
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <ClipLoader size={50} color="#4f46e5" />
+        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
       </div>
-    );
+    )
   }
 
   return (
@@ -32,7 +31,7 @@ const CarDetails = () => {
             variant="ghost"
             className="text-indigo-600 hover:underline flex items-center gap-2"
           >
-            <HiArrowLeft size={20} />
+            <ArrowLeft className="w-5 h-5" />
             Back to Marketplace
           </Button>
         </div>
@@ -66,13 +65,12 @@ const CarDetails = () => {
                 </p>
                 <p className="flex items-center gap-1">
                   <strong>Condition:</strong> Excellent
-                  <AiOutlineCheck className="text-green-500" size={10} />
+                  <Check className="text-green-500 w-4 h-4" />
                 </p>
                 <p>
                   <strong>Service History:</strong> Up-to-date
                 </p>
               </div>
-
 
               {/* Auction or Buyout Options */}
               <div className="space-y-2">
@@ -123,7 +121,7 @@ const CarDetails = () => {
         </section>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default CarDetails;
+export default CarDetails
