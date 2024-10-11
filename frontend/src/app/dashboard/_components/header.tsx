@@ -67,10 +67,10 @@ const DashboardHeader = () => {
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<Link href="/dashboard/your-cars">Your cars</Link>
+								<Link href="/dashboard">Your cars</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<Link href="/dashboard/add-new-car">Add new car</Link>
+								<Link href="/dashboard/add-car">Add car</Link>
 							</DropdownMenuItem>
 							{!isConnected ? (
 								<DropdownMenuItem
