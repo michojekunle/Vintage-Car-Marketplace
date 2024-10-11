@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+//import "./NFTContract.sol"; //import our nft contract
 
 contract NFTMarketplace {
     struct Listing {
@@ -9,7 +9,8 @@ contract NFTMarketplace {
         uint256 price;
     }
 
-    //we'll reference the nft contract first, sth like IERC721 public immutable nftContract;
+    //we'll reference the nft contract first, sth like
+    //NFTContract public nftContract; 
     uint256 public marketplaceFee = 2;
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256) public proceeds;
@@ -18,7 +19,7 @@ contract NFTMarketplace {
     event NFTListed(address indexed seller, uint256 indexed tokenId, uint256 price);
 
 
-    constructor(IERC721 _nftContract) {
+    constructor(NFTContract _nftContract) {
         nftContract = _nftContract;
     }
 
