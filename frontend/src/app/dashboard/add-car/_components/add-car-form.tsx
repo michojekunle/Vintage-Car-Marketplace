@@ -20,10 +20,9 @@ import ImagesUploadStep from "./image-upload-step";
 import ConfirmationStep from "./confirmation-step";
 import { addCarSteps } from "@/lib/constants";
 
-
 export default function AddCarForm() {
 	const [currentStep, setCurrentStep] = useState(1);
-	const [status, setStatus] = useState("idle"); // idle, loading, success, error
+	const [status, setStatus] = useState("idle"); 
 
 	const form = useForm<z.infer<typeof AddCarSchema>>({
 		resolver: zodResolver(AddCarSchema),
@@ -32,7 +31,7 @@ export default function AddCarForm() {
 			model: "",
 			year: "",
 			vin: "",
-            description: ""
+			description: "",
 		},
 	});
 
@@ -40,7 +39,6 @@ export default function AddCarForm() {
 		console.log(values);
 		setStatus("loading");
 		try {
-
 			// Simulate contract call
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 			setStatus("success");
@@ -59,22 +57,41 @@ export default function AddCarForm() {
 					List your classic automobile on our marketplace
 				</p>
 			</div>
-
 			<div className="mb-8">
-				<div className="flex items-center justify-between">
+				<div className="relative flex items-center justify-between">
+					<div className="absolute left-0 top-4 transform -translate-y-1/2 h-1 bg-gray-200 transition-all w-full" />
+					<div
+						className="absolute left-0 top-4 transform -translate-y-1/2 h-1 bg-amber-600 dark:bg-amber-400 transition-all"
+						style={{
+							width: `${((currentStep - 1) / (addCarSteps.length - 1)) * 100}%`,
+						}}
+					/>
+
+					{/* Steps */}
 					{addCarSteps.map((step) => (
-						<div key={step.id} className="flex flex-col items-center">
+						<div
+							key={step.id}
+							className="relative flex flex-col items-center z-10"
+						>
 							<div
-								className={`w-8 h-8 rounded-full flex items-center justify-center border-2 
+								className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all
                 ${
 									currentStep >= step.id
-										? "bg-blue-500 border-blue-500 text-white"
-										: "border-gray-300 text-gray-300"
+										? "border-amber-600 dark:border-amber-400 bg-amber-600 dark:bg-amber-400 text-white"
+										: "border-gray-300 bg-white text-gray-300"
 								}`}
 							>
 								{step.id}
 							</div>
-							<div className="mt-2 text-sm">{step.name}</div>
+							<div
+								className={`mt-2 text-sm transition-all ${
+									currentStep >= step.id
+										? "text-amber-600 dark:text-amber-400"
+										: "text-gray-500"
+								}`}
+							>
+								{step.name}
+							</div>
 						</div>
 					))}
 				</div>
@@ -82,7 +99,9 @@ export default function AddCarForm() {
 
 			<Card>
 				<CardHeader>
-					<CardTitle>{addCarSteps.find((s) => s.id === currentStep)?.name}</CardTitle>
+					<CardTitle>
+						{addCarSteps.find((s) => s.id === currentStep)?.name}
+					</CardTitle>
 					<CardDescription>
 						{currentStep === 1 && "Enter your vehicle's details"}
 						{currentStep === 2 && "Verifying ownership..."}
@@ -119,7 +138,7 @@ export default function AddCarForm() {
 									}
 									disabled={currentStep === 4}
 								>
-									{currentStep === 3 ? "Finish" : "Next"}
+									{currentStep === 4 ? "Finish" : "Next"}
 								</Button>
 							)}
 						</CardFooter>

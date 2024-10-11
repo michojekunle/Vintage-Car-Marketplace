@@ -24,4 +24,6 @@ interface IAddCarValues {
   year: string;
   vin: string;
   description: string;
+  engineCondition: string;
+  exteriorCondition: string;
 }

@@ -29,6 +29,18 @@ const ConfirmationStep = ({
 						<p className="text-sm text-gray-500">VIN</p>
 						<p className="font-medium">{formData.vin}</p>
 					</div>
+					<div>
+						<p className="text-sm text-gray-500">Exterior Condition</p>
+						<p className="font-medium">{formData.exteriorCondition}</p>
+					</div>
+					<div>
+						<p className="text-sm text-gray-500">Interior Condition</p>
+						<p className="font-medium">{formData.engineCondition}</p>
+					</div>
+					<div className="col-span-2">
+						<p className="text-sm text-gray-500">Description</p>
+						<p className="font-medium">{formData.description}</p>
+					</div>
 				</div>
 			</div>
 			<div className="mt-4">

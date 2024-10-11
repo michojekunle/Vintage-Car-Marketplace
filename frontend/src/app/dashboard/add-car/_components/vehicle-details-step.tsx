@@ -1,5 +1,5 @@
 import React from "react";
-import {  UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import {
 	FormControl,
 	FormField,
@@ -9,7 +9,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
+const conditionOptions = ["Excellent", "Good", "Fair", "Poor", "Terrible"];
 const VehicleDetailsStep = ({
 	form,
 }: {
@@ -73,6 +81,58 @@ const VehicleDetailsStep = ({
 					)}
 				/>
 			</div>
+			<div className="grid grid-cols-2 gap-4">
+				<FormField
+					control={form.control}
+					name="exteriorCondition"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Exterior Condition</FormLabel>
+							<Select onValueChange={field.onChange} defaultValue={field.value}>
+								<FormControl>
+									<SelectTrigger>
+										<SelectValue placeholder="Select exterior condition " />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									{conditionOptions.map((condition) => (
+										<SelectItem value={condition} key={condition}>
+											{condition}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="engineCondition"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Engine Condition</FormLabel>
+							<Select onValueChange={field.onChange} defaultValue={field.value}>
+								<FormControl>
+									<SelectTrigger>
+										<SelectValue placeholder="Select engine condition " />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									{conditionOptions.map((condition) => (
+										<SelectItem value={condition} key={condition}>
+											{condition}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</div>
 			<div className="">
 				<FormField
 					control={form.control}
@@ -87,7 +147,6 @@ const VehicleDetailsStep = ({
 						</FormItem>
 					)}
 				/>
-				
 			</div>
 		</div>
 	);

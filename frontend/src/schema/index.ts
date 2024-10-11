@@ -13,5 +13,7 @@ export const AddCarSchema = z.object({
 		}
 	),
 	vin: z.string().length(17, "VIN must be exactly 17 characters"),
-    description: z.string().min(20, "Description too short")
+    description: z.string().min(20, "Description too short"),
+    engineCondition: z.string().min(1, "Condition is required"),
+    exteriorCondition: z.string().min(1, "Condition is required")
 });

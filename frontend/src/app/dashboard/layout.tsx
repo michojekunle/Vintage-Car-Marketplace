@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { openAccountModal } = useAccountModal();
   const { disconnect } = useDisconnect();
   const { isConnected, address } = useAccount();
-
+ 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
