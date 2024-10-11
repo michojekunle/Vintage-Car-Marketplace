@@ -14,6 +14,10 @@ contract NFTMarketplace {
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256) public proceeds;
 
+
+    event NFTListed(address indexed seller, uint256 indexed tokenId, uint256 price);
+
+
     constructor(IERC721 _nftContract) {
         nftContract = _nftContract;
     }
@@ -30,6 +34,6 @@ contract NFTMarketplace {
         );
 
         listings[tokenId] = Listing(msg.sender, price);
-    
+        emit NFTListed(msg.sender, tokenId, price);
     }
 }
