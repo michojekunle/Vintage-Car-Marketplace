@@ -1,9 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { Cta, FeaturedCars, Features, Hero, SearchCar } from "@/components";
+import {
+  Cta,
+  FeaturedCars,
+  Features,
+  Footer,
+  Hero,
+  SearchCar,
+} from "@/components";
 import { featuredCars } from "@/lib/constants";
 import LiveAuction from "@/components/LiveAuction";
+import MechanicVerification from "@/components/MechanicVerification";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,12 +48,9 @@ const Home = () => {
         setPriceRange={setPriceRange}
       />
       <LiveAuction />
+      <MechanicVerification />
       <Cta />
-      <footer className=" bg-amber-50 bg-opacity-90 backdrop-blur-sm text-secondary-action py-8">
-        <div className="container mx-auto text-center">
-          <p>&copy; 2024 VintageNFTCars. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

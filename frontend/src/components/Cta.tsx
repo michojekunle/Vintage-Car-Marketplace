@@ -24,7 +24,7 @@ export const Cta = () => {
           <Input
             type="email"
             placeholder="Enter your email"
-            className="text-lg py-6"
+            className="text-lg py-6 text-neutral-700"
           />
           <Button
             type="submit"
