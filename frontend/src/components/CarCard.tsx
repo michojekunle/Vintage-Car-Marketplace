@@ -10,11 +10,12 @@ export const CarCard = ({
   rating,
   reviews,
   price,
+  listed,
   onClick,
 }: ICarCard) => (
   <button
     type="button"
-    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between text-left"
+    className="relative bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between text-left"
     onClick={onClick}
   >
     <Image
@@ -47,5 +48,6 @@ export const CarCard = ({
       </div>
       <p className="text-primary-action font-bold">{price} ETH</p>
     </div>
+    <p className="absolute px-2 bg-gray-100 rounded-md left-2 top-2 text-sm">{listed}</p>
   </button>
 );
