@@ -11,12 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
 import {
   Select,
@@ -35,9 +32,10 @@ import {
   Gavel,
   ShieldCheck,
 } from "lucide-react";
-import { ConnectButton, useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import Link from "next/link";
+import Image from "next/image";
 
 const MotionCard = motion(Card);
 
@@ -347,9 +345,11 @@ export default function Landing() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <img
+                  <Image
                     src={car.image}
                     alt={car.name}
+                    width={200}
+                    height={300}
                     className="w-full h-48 object-cover rounded-md mb-4"
                   />
                   <p className="text-amber-700 mb-2">Year: {car.year}</p>
@@ -408,9 +408,11 @@ export default function Landing() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <img
+                  <Image
                     src={auction.image}
                     alt={auction.name}
+                    width={200}
+                    height={300}
                     className="w-full h-64 object-cover rounded-md mb-6"
                   />
                   <div className="flex justify-between items-center mb-4">

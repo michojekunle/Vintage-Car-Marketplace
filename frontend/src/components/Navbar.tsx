@@ -3,7 +3,7 @@
 import { navItems } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
+// import { Button } from "./ui/button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Navbar = () => {

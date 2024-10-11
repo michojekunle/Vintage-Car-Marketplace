@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import FilterCar from "./FilterCar";
 
 export const SearchCar = () => {
-  const [selectedFilter, setSelectedFilter] = useState("");
+  // const [selectedFilter, setSelectedFilter] = useState("");
 
   return (
     <div className="flex justify-center">

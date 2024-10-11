@@ -4,7 +4,7 @@ import { featuredCars } from "@/lib/constants";
 import React from "react";
 import { CarCard } from "../../components/CarCard";
 import { useRouter } from "next/navigation";
-import { SearchCar } from "@/components";
+// import { SearchCar } from "@/components";
 import FilterCar from "@/components/FilterCar";
 
 export default function Dashboard() {
