@@ -11,30 +11,19 @@ export default function Dashboard() {
   const sortedCars = featuredCars.toSorted((a, b) => b.reviews - a.reviews);
 
   const handleClick = (id: number) => {
-    router.push(`/car-details?id=${id}`);
+    router.push(`/your-cars/${id}`);
   };
 
   return (
-    <div className="py-12">
-      <div className="flex items-center justify-between container mx-auto">
-        <div>
-          <h2 className="font-bold text-[34px]">Welcome, Roheemah</h2>
-          <p className="text-md font-medium">Platinum User</p>
-        </div>
-        {/* <div>
-          <button className="text-white rounded-xl p-3 bg-primary-action font-bold" onClick={() => {router.push("/dashboard/add-new-car")}}>
-            List New Car
-          </button>
-        </div> */}
-      </div>
-      <div className="container mx-auto mt-20">
-        <Tabs defaultValue="bought" className="text-2xl font-bold text-left mb-6">
-          <TabsList className="grid w-[50%] grid-cols-2 mb-10 mx-auto">
-            <TabsTrigger className="text-2xl font-bold text-left mb-6" value="bought">Cars Bought</TabsTrigger>
-            <TabsTrigger className="text-2xl font-bold text-left mb-6" value="listed">Cars Listed</TabsTrigger>
+    <div className="mt-8">
+      <div className="container">
+        <Tabs defaultValue="bought" className="text-md font-bold text-left mb-6">
+          <TabsList className="grid w-[25%] grid-cols-2 mb-10">
+            <TabsTrigger className="text-md font-bold text-left mb-6" value="bought">Cars Bought</TabsTrigger>
+            <TabsTrigger className="text-md font-bold text-left mb-6" value="listed">Cars Listed</TabsTrigger>
           </TabsList>
           <TabsContent value="bought">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
               {featuredCars.map((car) => (
                 <CarCard
                   key={car.id}
