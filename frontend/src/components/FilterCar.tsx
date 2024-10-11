@@ -9,10 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { filterOptions } from "@/lib/constants";
+import { makeOptions, modelOptions } from "@/lib/constants";
 
 export default function FilterCar() {
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const [selectedMake, setSelectedMake] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
 
   return (
     <div className="flex flex-col md:flex-row gap-1 items-center md:space-x-4">
@@ -20,19 +21,36 @@ export default function FilterCar() {
         <SearchInput placeholder="Search..." handleSearch={() => {}} />
       </div>
 
-      <div className="w-full md:w-1/5">
+      <div className="w-full flex items-center gap-2 md:w-1/5">
         <DropdownMenu>
-          <DropdownMenuTrigger className="focus:border-none outline-none text-white rounded-xl p-3 bg-primary-action w-full flex items-center justify-between">
-            {selectedFilter || "Filter by"}
+          <DropdownMenuTrigger className="focus:border-none outline-amber-700 text-amber-800 p-3  w-full flex items-center justify-between border border-amber-700">
+            {selectedMake || "Make"}
             <ChevronDown className="h-4 w-4 ml-2" />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {filterOptions.map((option, index) => (
+            {makeOptions.map((option, index) => (
               <React.Fragment key={option}>
-                <DropdownMenuItem onSelect={() => setSelectedFilter(option)}>
+                <DropdownMenuItem onSelect={() => setSelectedMake(option)}>
                   {option}
                 </DropdownMenuItem>
-                {index < filterOptions.length - 1 && <DropdownMenuSeparator />}
+                {index < makeOptions.length - 1 && <DropdownMenuSeparator />}
+              </React.Fragment>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger className="focus:border-none outline-amber-700 text-amber-800 p-3  w-full flex items-center justify-between border border-amber-700">
+            {selectedModel || "Model"}
+            <ChevronDown className="h-4 w-4 ml-2" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {modelOptions.map((option, index) => (
+              <React.Fragment key={option}>
+                <DropdownMenuItem onSelect={() => setSelectedModel(option)}>
+                  {option}
+                </DropdownMenuItem>
+                {index < modelOptions.length - 1 && <DropdownMenuSeparator />}
               </React.Fragment>
             ))}
           </DropdownMenuContent>

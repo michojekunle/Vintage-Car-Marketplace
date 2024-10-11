@@ -17,7 +17,8 @@ export const navItems = [
   },
 ];
 
-export const filterOptions = ["All", "Make", "Year", "Model"];
+export const makeOptions = ["Ford", "Volkswagen", "Chevrolet", "Austin"];
+export const modelOptions = ["Mustang", "Beetle", "Corvette", "Mini"];
 
 export const featuredCars = [
   {
