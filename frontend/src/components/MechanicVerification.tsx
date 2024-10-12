@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import {
   Card,
@@ -10,9 +12,8 @@ import {
 import { ShieldCheck } from "lucide-react";
 import { Button } from "./ui/button";
 
-const MotionCard = motion(Card);
-
-const MechanicVerification = () => {
+export const MechanicVerification = () => {
+  const MotionCard = motion(Card);
   return (
     <section
       id="mechanic-verification"
@@ -67,5 +68,3 @@ const MechanicVerification = () => {
     </section>
   );
 };
-
-export default MechanicVerification;

@@ -27,7 +27,7 @@ export const CarCard = ({
       alt={name}
       width={300}
       height={200}
-      className="flex justify-center w-full min-h-[200px] max-h-[200px] object-cover"
+      className="flex justify-center w-full min-h-[200px] max-h-[200px] object-contain bg-[#fbf8ed]"
       priority
     />
     <div className="p-4">

@@ -1,10 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { Cta, FeaturedCars, Features, Hero, SearchCar } from "@/components";
+import {
+  Cta,
+  FeaturedCars,
+  Features,
+  Hero,
+  SearchCar,
+  MechanicVerification,
+  UserRoles,
+  LiveAuction,
+} from "@/components";
 import { featuredCars } from "@/lib/constants";
-import LiveAuction from "@/components/LiveAuction";
-import MechanicVerification from "@/components/MechanicVerification";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,6 +48,7 @@ const Home = () => {
         setPriceRange={setPriceRange}
       />
       <LiveAuction />
+      <UserRoles />
       <MechanicVerification />
       <Cta />
     </div>

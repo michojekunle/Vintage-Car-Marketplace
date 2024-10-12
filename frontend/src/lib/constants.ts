@@ -1,4 +1,4 @@
-import { Car, Hammer, Wrench } from "lucide-react";
+import { Car, Hammer, Users, Wrench } from "lucide-react";
 
 export const navItems = [
   {
@@ -114,6 +114,27 @@ export const features = [
     icon: Wrench,
     title: "Mechanic Services",
     description:
+      "Connect with expertise for maintenance and restoration services.",
+  },
+];
+
+export const userRoles = [
+  {
+    title: "Buyers",
+    description:
+      "Browse and purchase classic cars as NFTs, participate in auctions, and schedule maintenance services.",
+    icon: Users,
+  },
+  {
+    title: "Sellers",
+    description:
+      "List your vintage cars as NFTs, set prices or create auctions, and reach a global market of enthusiasts.",
+    icon: Car,
+  },
+  {
+    title: "Mechanics",
+    description:
       "Offer your expertise, get verified, and connect with classic car owners for maintenance and restoration services.",
+    icon: Wrench,
   },
 ];
