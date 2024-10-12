@@ -24,7 +24,7 @@ const Home = () => {
   });
 
   return (
-    <div className="w-screen">
+    <div className="w-screen overflow-x-hidden">
       <Hero />
       <Features />
       <SearchCar
