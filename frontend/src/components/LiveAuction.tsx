@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import {
@@ -13,8 +15,8 @@ import Image from "next/image";
 import { liveAuctions } from "@/lib/constants";
 import CountdownTimer from "./CountdownTimer";
 
-const MotionCard = motion(Card);
-const LiveAuction = () => {
+export const LiveAuction = () => {
+  const MotionCard = motion(Card);
   return (
     <section id="auctions" className="py-12 px-4 sm:px-10 md:px-16">
       <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
@@ -72,5 +74,3 @@ const LiveAuction = () => {
     </section>
   );
 };
-
-export default LiveAuction;

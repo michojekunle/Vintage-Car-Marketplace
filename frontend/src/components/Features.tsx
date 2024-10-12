@@ -15,7 +15,7 @@ export const Features = () => {
             whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.3 }}
             key={feature.title}
-            className="bg-white p-6 rounded-lg shadow-sm shadow-secondary-action text-center"
+            className="bg-white p-4 rounded-lg shadow-sm shadow-secondary-action text-center overflow-hidden"
           >
             <feature.icon
               className="mx-auto mb-4 text-secondary-action"
