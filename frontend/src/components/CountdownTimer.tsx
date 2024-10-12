@@ -37,8 +37,8 @@ const CountdownTimer = ({ initialTime }: ICountdownTimer) => {
   };
 
   return (
-    <Badge variant="outline" className="text-lg bg-amber-700 text-white">
-      <Clock className="h-5 w-5 mr-2" />
+    <Badge variant="destructive" className="text-white text-sm">
+      <Clock className="h-4 w-4 mr-2" />
       {formatTime(timeLeft)}
     </Badge>
   );

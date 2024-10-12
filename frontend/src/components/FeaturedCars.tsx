@@ -18,7 +18,7 @@ export const FeaturedCars = ({
   };
 
   return (
-    <section id="marketplace" className="mx-2">
+    <section id="marketplace" className="mx-2 px-4 sm:px-10 md:px-16">
       <div className="container mx-auto">
         <div className="mb-12 max-w-md mx-auto">
           <div className="pt-6">

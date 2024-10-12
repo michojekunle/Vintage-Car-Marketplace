@@ -47,7 +47,7 @@ const Sidebar = () => {
 						</li> */}
 						<li>
 							<Link
-								href="/your-cars"
+								href="/dashboard"
 								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === '/your-cars' ? 'bg-amber-100': ''}`}
 							>
 								<Car className="w-5 h-5 mr-3" />
@@ -56,11 +56,11 @@ const Sidebar = () => {
 						</li>
 						<li>
 							<Link
-								href="/your-cars/add-new-car"
+								href="/dashboard/add-car"
 								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === '/your-cars/add-new-car' ? 'bg-amber-100': ''}`}
 							>
 								<Plus className="w-5 h-5 mr-3" />
-								Add New Car
+								Add Car
 							</Link>
 						</li>
 					</ul>

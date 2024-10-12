@@ -2,8 +2,8 @@ import { Car, Hammer, Wrench } from "lucide-react";
 
 export const navItems = [
   {
-    name: "Home",
-    href: "/",
+    name: "Dashboard",
+    href: "/dashboard",
   },
   {
     name: "Marketplace",
@@ -83,12 +83,14 @@ export const featuredCars = [
 
 export const liveAuctions = [
   {
+    id: 1,
     name: "1965 Classic Mustang",
     currentBid: "75 ETH",
     timeLeft: "2h 45m",
     image: "/mustang.png",
   },
   {
+    id: 2,
     name: "1963 Aston Martin DB5",
     currentBid: "120 ETH",
     timeLeft: "4h 30m",

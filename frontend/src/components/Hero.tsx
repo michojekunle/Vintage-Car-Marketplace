@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -28,7 +29,7 @@ export function Hero() {
           className="text-5xl md:text-6xl font-bold mb-6 text-amber-100"
         >
           Discover, Collect, and Trade
-          <br />
+          <br className="hidden md:block" />
           Vintage Cars as NFTs
         </motion.h2>
         <motion.p
@@ -42,9 +43,11 @@ export function Hero() {
           classic cars as NFTs
         </motion.p>
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-          <Button className="border-2 border-white  bg-transparent hover:bg-white hover:text-amber-800">
-            Explore Now
-          </Button>
+          <Link href="#marketplace">
+            <Button className="border-2 border-white  bg-transparent hover:bg-white hover:text-amber-800">
+              Explore Now
+            </Button>
+          </Link>
         </motion.div>
       </motion.div>
       <motion.div

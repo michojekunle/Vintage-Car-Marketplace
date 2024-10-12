@@ -1,6 +1,9 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { Card } from "./ui/card";
 
+const MotionCard = motion(Card);
 export const CarCard = ({
   image,
   name,
@@ -13,10 +16,11 @@ export const CarCard = ({
   listed,
   onClick,
 }: ICarCard) => (
-  <button
-    type="button"
+  <MotionCard
     className="relative bg-white border border-neutral-100 rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-amber-600 transition-shadow duration-300 flex flex-col justify-between text-left"
     onClick={onClick}
+    whileHover={{ scale: 1.03 }}
+    transition={{ duration: 0.3 }}
   >
     <Image
       src={image}
@@ -63,5 +67,5 @@ export const CarCard = ({
     >
       {listed}
     </p>
-  </button>
+  </MotionCard>
 );
