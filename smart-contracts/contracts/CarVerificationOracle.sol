@@ -21,26 +21,19 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
 
     event VerificationRequested(bytes32 indexed requestId, string indexed vin, address indexed requester);
     event VerificationFulfilled(bytes32 indexed requestId, string indexed vin, bool isVerified);
-    event VerificationTimedOut(bytes32 indexed requestId, string indexed vin);
-    event BatchVerificationRequested(bytes32[] requestIds, string[] vins, address indexed requester);
 
     bytes32 public latestRequestId;
     mapping(bytes32 => CarDetails) public verifications;
-    mapping(address => uint256) public lastRequestTimestamp;
+    mapping(bytes32 => bytes) private rawResponses;
     uint64 public subscriptionId;
     bytes32 public donId;
-    uint256 public constant REQUEST_COOLDOWN = 10 minutes;
-    uint256 public constant VERIFICATION_TIMEOUT = 1 hours;
 
-    error RateLimitExceeded(address requester, uint256 cooldownEnd);
     error InvalidVIN(string vin);
     error VerificationNotFound(bytes32 requestId);
-    error VerificationTimedOutError(bytes32 requestId);
-    error BatchSizeMismatch();
 
     constructor(address router) FunctionsClient(router) ConfirmedOwner(msg.sender) {
-        subscriptionId = 3637; 
-        donId = 0x66756e2d657468657265756d2d7365706f6c69612d3100000000000000000000;
+        subscriptionId = 201; 
+        donId = 0x66756e2d626173652d7365706f6c69612d310000000000000000000000000000;
     }
 
     function requestCarValidation(
@@ -51,11 +44,6 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         string memory source
     ) public whenNotPaused returns (bytes32) {
         if (bytes(vin).length != 17) revert InvalidVIN(vin);
-        if (block.timestamp - lastRequestTimestamp[msg.sender] < REQUEST_COOLDOWN) {
-            revert RateLimitExceeded(msg.sender, lastRequestTimestamp[msg.sender] + REQUEST_COOLDOWN);
-        }
-
-        lastRequestTimestamp[msg.sender] = block.timestamp;
 
         FunctionsRequest.Request memory req;
         req.initializeRequestForInlineJavaScript(source);
@@ -89,38 +77,27 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         if (err.length > 0) {
             emit VerificationFulfilled(requestId, verifications[requestId].vin, false);
         } else {
-            bool isVerified = abi.decode(response, (bool));
-            verifications[requestId].isVerified = isVerified;
-            verifications[requestId].verificationTimestamp = block.timestamp;
-            emit VerificationFulfilled(requestId, verifications[requestId].vin, isVerified);
+            rawResponses[requestId] = response;
+            emit VerificationFulfilled(requestId, verifications[requestId].vin, true);
         }
     }
 
-    function getVerificationResult(bytes32 requestId) public view returns (bool isVerified, uint256 timestamp) {
-        CarDetails memory carDetails = verifications[requestId];
-        if (bytes(carDetails.vin).length == 0) revert VerificationNotFound(requestId);
-        if (block.timestamp - carDetails.verificationTimestamp > VERIFICATION_TIMEOUT) {
-            revert VerificationTimedOutError(requestId);
-        }
-        return (carDetails.isVerified, carDetails.verificationTimestamp);
+    function getRawResponseBytes(bytes32 requestId) public view returns (bytes memory) {
+        return rawResponses[requestId];
+    }
+
+    function doesRequestExist(bytes32 requestId) public view returns (bool) {
+        return rawResponses[requestId].length > 0;
+    }
+
+    function isResponseReceived(bytes32 requestId) public view returns (bool) {
+        return rawResponses[requestId].length > 0;
     }
 
     function getCarDetails(bytes32 requestId) public view returns (CarDetails memory) {
         CarDetails memory carDetails = verifications[requestId];
         if (bytes(carDetails.vin).length == 0) revert VerificationNotFound(requestId);
         return carDetails;
-    }
-
-    function checkAndTimeoutVerifications(bytes32[] memory requestIds) public {
-        for (uint256 i = 0; i < requestIds.length; i++) {
-            CarDetails storage carDetails = verifications[requestIds[i]];
-            if (bytes(carDetails.vin).length > 0 && 
-                !carDetails.isVerified && 
-                block.timestamp - carDetails.verificationTimestamp > VERIFICATION_TIMEOUT) {
-                emit VerificationTimedOut(requestIds[i], carDetails.vin);
-                delete verifications[requestIds[i]];
-            }
-        }
     }
 
     function updateSubscriptionId(uint64 newSubscriptionId) public onlyOwner {
