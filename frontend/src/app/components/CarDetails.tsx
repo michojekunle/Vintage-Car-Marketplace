@@ -1,51 +1,43 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check, Loader2, Verified } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft, Check, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const CarDetails = () => {
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
     useEffect(() => {
         // Simulate data fetching or loading delay
         setTimeout(() => setLoading(false), 1500);
     }, []);
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <Loader2 className="w-12 h-12 text-primary-action animate-spin" />
-            </div>
-        );
-    }
-
+  if (loading) {
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="min-h-screen bg-gray-200"
-        >
-            {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 py-8">
-                {/* Back to Marketplace */}
-                <motion.div
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
-                    className="mb-6"
-                >
-                    <Button
-                        variant="ghost"
-                        className="text-primary-action flex items-center gap-2"
-                    >
-                        <ArrowLeft className="w-5 h-5 font-bold" />
-                        Back to Marketplace
-                    </Button>
-                </motion.div>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Back to Marketplace */}
+        <div className="mb-4">
+          <Button
+            variant="ghost"
+            className="text-primary-action hover:underline flex items-center gap-2"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Dashboard
+          </Button>
+        </div>
 
                 {/* Car Details Section */}
                 <motion.div
@@ -100,49 +92,26 @@ const CarDetails = () => {
                                 </p>
                             </div>
 
-                            {/* Auction or Buyout Options */}
-                            <div className="space-y-4">
-                                <motion.p
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.8, duration: 0.5 }}
-                                    className="text-lg font-semibold text-gray-700"
-                                >
-                                    Buyout Price: $30,000
-                                </motion.p>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.9, duration: 0.5 }}
-                                >
-                                    <Button className="w-full bg-primary-action text-white font-bold">
-                                        Buy Now
-                                    </Button>
-                                </motion.div>
-
-                                <div className="border-t border-gray-200 pt-4">
-                                    <motion.p
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 1, duration: 0.5 }}
-                                        className="text-lg font-semibold text-gray-700"
-                                    >
-                                        Auction Ends In: 2 days 14 hrs
-                                    </motion.p>
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 1.1, duration: 0.5 }}
-                                    >
-                                        <Button className="w-full bg-yellow-500 text-white font-bold">
-                                            Place a Bid
-                                        </Button>
-                                    </motion.div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </motion.div>
+              {/* Auction or Buyout Options */}
+              <div className="space-y-2">
+                <p className="text-lg font-semibold text-gray-700">
+                  Buyout Price: $30,000
+                </p>
+                <Button className="w-full bg-primary-action text-white">
+                  Buy Now
+                </Button>
+                <div className="border-t border-gray-200 pt-2">
+                  <p className="text-lg font-semibold text-gray-700">
+                    Auction Ends In: 2 days 14 hrs
+                  </p>
+                  <Button className="w-full bg-amber-500 text-white">
+                    Place a Bid
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
                 {/* Car Service History and Mechanic Services */}
                 <section className="mt-12">
@@ -168,33 +137,22 @@ const CarDetails = () => {
                         </ul>
                     </motion.div>
 
-                    <motion.h3
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.4, duration: 0.5 }}
-                        className="text-3xl font-bold text-gray-800 mt-12 mb-6"
-                    >
-                        Available Mechanic Services
-                    </motion.h3>
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.5, duration: 0.5 }}
-                        className="bg-white shadow-lg rounded-xl p-6"
-                    >
-                        <p className="text-gray-700">
-                            Book a certified mechanic for repair or maintenance services
-                            directly through our platform.
-                        </p>
-                        <Button className="mt-4 bg-primary-action text-white font-bold">
-                            Book a Mechanic
-                        </Button>
-                    </motion.div>
-                </section>
-            </main>
-        </motion.div>
-    );
-};
+          <h3 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+            Available Mechanic Services
+          </h3>
+          <div className="bg-white shadow-md rounded-lg p-4">
+            <p className="text-gray-700">
+              Book a certified mechanic for repair or maintenance services
+              directly through our platform.
+            </p>
+            <Button className="mt-4 bg-primary-action text-white">
+              Book a Mechanic
+            </Button>
+          </div>
+        </section>
+      </main>
+    </div>
+  )
+}
 
 export default CarDetails;
