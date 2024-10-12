@@ -1,78 +1,97 @@
 declare module "wagmi";
 
 interface ISearchInput {
-  placeholder: string;
-  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-  deleteSearchValue?: () => void;
+	placeholder: string;
+	handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	value?: string;
+	deleteSearchValue?: () => void;
 }
 
 interface ICarCard {
-  id: number;
-  image: string;
-  name: string;
-  make: string;
-  model: string;
-  listed: string;
-  year: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  onClick?: () => void;
+	id: number;
+	image: string;
+	name: string;
+	make: string;
+	model: string;
+	listed: string;
+	year: number;
+	rating: number;
+	reviews: number;
+	price: number;
+	onClick?: () => void;
 }
 
 interface IAddCarValues {
-  make: string;
-  model: string;
-  year: string;
-  vin: string;
-  description: string;
-  engineCondition: string;
-  exteriorCondition: string;
+	make: string;
+	model: string;
+	year: string;
+	vin: string;
+	description: string;
+	engineCondition: string;
+	exteriorCondition: string;
 }
 
 type FieldProp =
-  | "make"
-  | "model"
-  | "year"
-  | "vin"
-  | "description"
-  | "engineCondition"
-  | "exteriorCondition";
+	| "make"
+	| "model"
+	| "year"
+	| "vin"
+	| "description"
+	| "engineCondition"
+	| "exteriorCondition";
 
 type VehicleOptionsProp = { label: string; value: string };
 
 interface IComboboxForm {
-  field: ControllerRenderProps<IAddCarValues, FieldProp>;
-  options: VehicleOptionsProp[];
-  fieldName: string;
-  form: UseFormReturn<IAddCarValues, undefined>;
+	field: ControllerRenderProps<IAddCarValues, FieldProp>;
+	options: VehicleOptionsProp[];
+	fieldName: string;
+	form: UseFormReturn<IAddCarValues, undefined>;
 }
 
 interface INavLinks {
-  isMobile: boolean;
-  setOpen?: (open: boolean) => void;
+	isMobile: boolean;
+	setOpen?: (open: boolean) => void;
 }
 
 interface IFeatured {
-  cars: ICarCard[];
-  priceRange: number[];
-  setPriceRange: (priceRange: number[]) => void;
+	cars: ICarCard[];
+	priceRange: number[];
+	setPriceRange: (priceRange: number[]) => void;
 }
 
 interface IFilterCar {
-  searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
-  selectedMake: string;
-  setSelectedMake: (selectedMake: string) => void;
-  selectedModel: string;
-  setSelectedModel: (selectedModel: string) => void;
+	searchTerm: string;
+	setSearchTerm: (searchTerm: string) => void;
+	selectedMake: string;
+	setSelectedMake: (selectedMake: string) => void;
+	selectedModel: string;
+	setSelectedModel: (selectedModel: string) => void;
 }
 
 interface ICountdownTimer {
-  initialTime: string;
+	initialTime: string;
 }
 
 interface IProviders {
-  children: React.ReactNode;
+	children: React.ReactNode;
+}
+
+interface IListCarDialog {
+	isDialogOpen: boolean;
+	onSubmit: (values: any) => void;
+	setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	form: UseFormReturn<
+		{
+			listingType: "normalSale" | "auction";
+			enableBuyout: boolean;
+			durationUnit: "minutes" | "hours" | "days";
+			salePrice?: string | undefined;
+			buyoutPrice?: string | undefined;
+			startingPrice?: string | undefined;
+			duration?: string | undefined;
+		},
+		any,
+		undefined
+	>;
 }
