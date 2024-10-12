@@ -3,7 +3,7 @@ const hre = require("hardhat");
 async function main() {
   const CarVerificationOracle = await hre.ethers.getContractFactory("CarVerificationOracle");
   
-  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
+  const routerAddress = "0xf9B8fc078197181C841c296C876945aaa425B278";
   
   const carVerificationOracle = await CarVerificationOracle.deploy(routerAddress);
 
