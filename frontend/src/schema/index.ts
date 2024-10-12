@@ -26,4 +26,4 @@ export const listingFormSchema = z.object({
 	startingPrice: z.string().optional(),
 	duration: z.string().optional(),
 	durationUnit: z.enum(["minutes", "hours", "days"]).default("hours"),
-});
+}); 

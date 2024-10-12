@@ -76,22 +76,19 @@ interface ICountdownTimer {
 interface IProviders {
 	children: React.ReactNode;
 }
+type ListCarFormValues = {
+	listingType: "normalSale" | "auction";
+	enableBuyout: boolean;
+	durationUnit: "minutes" | "hours" | "days";
+	salePrice?: string;
+	buyoutPrice?: string;
+	startingPrice?: string;
+	duration?: string;
+};
 
 interface IListCarDialog {
 	isDialogOpen: boolean;
-	onSubmit: (values: any) => void;
+	onSubmit: (values: ListCarFormValues) => void;
 	setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	form: UseFormReturn<
-		{
-			listingType: "normalSale" | "auction";
-			enableBuyout: boolean;
-			durationUnit: "minutes" | "hours" | "days";
-			salePrice?: string | undefined;
-			buyoutPrice?: string | undefined;
-			startingPrice?: string | undefined;
-			duration?: string | undefined;
-		},
-		any,
-		undefined
-	>;
+	form: UseFormReturn<ListCarFormValues, undefined>;
 }

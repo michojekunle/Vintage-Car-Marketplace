@@ -41,11 +41,11 @@ const ListCarDialog = ({
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline">
-					<Car className="mr-2 h-4 w-4" /> List Vehicle
+			<Button className="w-full bg-amber-500 text-white">
+			<Car className="mr-2 h-4 w-4" /> List Vehicle
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="max-h-[98%] overflow-hidden px-0">
+			<DialogContent className="max-h-[98%]  overflow-hidden px-0 border-amber-900">
 				<DialogHeader className="px-6">
 					<DialogTitle>List Your Vehicle</DialogTitle>
 					<DialogDescription>

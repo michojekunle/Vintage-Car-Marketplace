@@ -1,7 +1,5 @@
 import { Car } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,8 +16,8 @@ const UnlistCarDialog = ({ handleUnlist }: { handleUnlist: () => void }) => {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
-				<Button variant="destructive">
-					<Car className="mr-2 h-4 w-4" /> Unlist Vehicle
+			<Button variant={"destructive"} className="w-full ">
+			<Car className="mr-2 h-4 w-4" /> Unlist Vehicle
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
