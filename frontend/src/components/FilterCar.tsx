@@ -32,7 +32,7 @@ export default function FilterCar({
 
       <div className="w-full flex items-center gap-2 md:w-1/5">
         <DropdownMenu>
-          <DropdownMenuTrigger className="focus:border-none outline-amber-700 text-amber-800 p-3  w-full flex items-center justify-between border border-amber-700">
+          <DropdownMenuTrigger className="focus:border focus:border-amber-700 outline-amber-700 text-amber-800 p-3  w-full flex items-center justify-between border border-amber-700 rounded-full">
             {selectedMake || "Make"}
             <ChevronDown className="h-4 w-4 ml-2" />
           </DropdownMenuTrigger>
@@ -49,7 +49,7 @@ export default function FilterCar({
         </DropdownMenu>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="focus:border-none outline-amber-700 text-amber-800 p-3  w-full flex items-center justify-between border border-amber-700">
+          <DropdownMenuTrigger className="focus:border focus:border-amber-700 outline-amber-700 text-amber-800 p-3  w-full flex items-center justify-between border border-amber-700 rounded-full">
             {selectedModel || "Model"}
             <ChevronDown className="h-4 w-4 ml-2" />
           </DropdownMenuTrigger>
