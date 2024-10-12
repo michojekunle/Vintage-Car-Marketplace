@@ -27,7 +27,7 @@ const LiveAuction = () => {
         wars for the most sought-after vehicles.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-2 md:px-10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-2 md:px-10">
         {liveAuctions.map((auction) => (
           <MotionCard
             key={auction.id}
@@ -41,13 +41,14 @@ const LiveAuction = () => {
                 <CountdownTimer initialTime={auction.timeLeft} />
               </CardTitle>
             </CardHeader>
+
             <CardContent>
               <Image
                 src={auction.image}
                 alt={auction.name}
-                width={200}
+                width={300}
                 height={200}
-                className="w-full min-h-[200px] max-h-[200px] object-cover rounded-md mb-6"
+                className="w-full min-h-[200px] max-h-[200px] object-contain rounded-md mb-6"
               />
               <div className="flex justify-between items-center mb-2">
                 <span className="text-amber-700 font-medium text-base md:text-lg">
@@ -58,6 +59,7 @@ const LiveAuction = () => {
                 </span>
               </div>
             </CardContent>
+
             <CardFooter>
               <Button className="w-full bg-secondary-action hover:bg-amber-600 text-white text-base font-medium py-4">
                 <Gavel className="h-6 w-6 mr-2" />

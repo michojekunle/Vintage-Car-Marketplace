@@ -54,11 +54,11 @@ export function Hero() {
         initial={{ y: 0 }}
         animate={{ y: [-20, 0] }}
         transition={{ duration: 1, repeat: Infinity, repeatType: "mirror" }}
-        className="absolute bottom-[2%] md:bottom-[15%] right-0 md:right-[25%]  -z-10"
+        className="absolute bottom-[3%] md:bottom-[17%] right-0 md:right-[28%]  -z-10"
       >
         <Image
           src="/car-amber.png"
-          width={800}
+          width={700}
           height={500}
           alt="vintage"
           priority
