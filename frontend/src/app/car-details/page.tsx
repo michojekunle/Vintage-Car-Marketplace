@@ -1,5 +1,5 @@
 import React from 'react'
-import CarDetails from '../components/CarDetails'
+import CarDetails from '../../components/CarDetails'
 import { Button } from '@/components/ui/button';
 
 const page = () => {
