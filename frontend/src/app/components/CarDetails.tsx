@@ -5,7 +5,6 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Check, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion";
 
 const CarDetails = () => {
   const [loading, setLoading] = useState(true)
@@ -124,7 +123,6 @@ const CarDetails = () => {
                     >
                         Service History
                     </motion.h3>
-
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
