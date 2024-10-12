@@ -103,15 +103,18 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
         emit Bought(tokenId, msg.sender, listing.price);
     }
 
-    function withdrawFunds() external nonReentrant {
-        uint256 amount = proceeds[msg.sender];
-        require(amount > 0, "No funds to withdraw");
+  function withdrawFunds() external nonReentrant {
+    uint256 amount = proceeds[msg.sender];
+    require(amount > 0, "No funds to withdraw");
 
-        proceeds[msg.sender] = 0; //reset to 0
-        payable(msg.sender).transfer(amount);
+    proceeds[msg.sender] = 0; 
 
-        emit Withdrawn(msg.sender, amount);
-    }
+    (bool success, ) = payable(msg.sender).call{value: amount}("");
+    require(success, "Transfer failed");
+
+    emit Withdrawn(msg.sender, amount);
+}
+
 
     // market place fn
     function setMarketplaceFee(uint256 _fee) external onlyOwner {
