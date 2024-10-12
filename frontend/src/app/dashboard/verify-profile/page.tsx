@@ -59,7 +59,7 @@ export default function UserVerification() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="passport">Passport</SelectItem>
-                  <SelectItem value="driverlicense">Driver's License</SelectItem>
+                  <SelectItem value="driverlicense">Driver&apos;s License</SelectItem>
                   <SelectItem value="nationalid">National ID</SelectItem>
                 </SelectContent>
               </Select>
