@@ -35,7 +35,7 @@ const DashboardHeader = () => {
 					<Menu className="h-6 w-6" />
 				</Button>
 				<h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-					Dashboard
+					Your Cars
 				</h2>
 			</div>
 			<div className="flex items-center space-x-4">
@@ -67,10 +67,10 @@ const DashboardHeader = () => {
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<Link href="/dashboard/your-cars">Your cars</Link>
+								<Link href="/dashboard">Your cars</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<Link href="/dashboard/add-new-car">Add new car</Link>
+								<Link href="/dashboard/add-car">Add car</Link>
 							</DropdownMenuItem>
 							{!isConnected ? (
 								<DropdownMenuItem

@@ -14,11 +14,14 @@ const MotionCard = motion(Card);
 
 const MechanicVerification = () => {
   return (
-    <section id="mechanic-verification" className="mb-16">
+    <section
+      id="mechanic-verification"
+      className="mb-16 px-4 sm:px-10 md:px-16"
+    >
       <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
         Mechanic Verification
       </h3>
-      <p className="mb-8 text-center text-xl max-w-3xl mx-auto">
+      <p className="mb-8 text-center text-base md:text-xl max-w-3xl mx-auto">
         Are you a skilled mechanic specializing in classic cars? Get verified on
         VintageChain to offer your services to our community of vintage car
         enthusiasts.
@@ -31,17 +34,17 @@ const MechanicVerification = () => {
         viewport={{ once: true }}
       >
         <CardHeader>
-          <CardTitle className="text-2xl flex items-center">
-            <ShieldCheck className="h-8 w-8 mr-4 text-amber-600" />
+          <CardTitle className="text-base md:text-2xl flex items-center">
+            <ShieldCheck className="h-6 w-6 md:h-8 md:w-8 mr-4 text-amber-600" />
             Mechanic Verification Process
           </CardTitle>
-          <CardDescription className="text-lg">
+          <CardDescription className="text-sm md:text-lg">
             Complete the following steps to become a verified mechanic on
             VintageChain
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ol className="list-decimal list-inside space-y-4 text-amber-700 text-lg">
+          <ol className="list-decimal list-inside space-y-4 text-amber-700 text-base  md:text-lg">
             <li>
               Fill out the application form with your professional details
             </li>
@@ -56,7 +59,7 @@ const MechanicVerification = () => {
           </ol>
         </CardContent>
         <CardFooter>
-          <Button className="w-full bg-secondary-action hover:bg-amber-600 text-white text-lg py-6">
+          <Button className="w-full bg-secondary-action hover:bg-amber-600 text-white text-base md:text-lg py-4 md:py-6">
             Start Verification Process
           </Button>
         </CardFooter>

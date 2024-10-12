@@ -55,8 +55,7 @@ const VehicleDetailsStep = ({
 		}
 
 		fetchYear();
-	}, []);
-
+	}, [form]);
 	useEffect(() => {
 		async function fetchMakes() {
 			if (!yearValue) return;

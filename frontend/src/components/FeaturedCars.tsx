@@ -4,7 +4,6 @@ import React from "react";
 import { CarCard } from "./CarCard";
 import { useRouter } from "next/navigation";
 import { Slider } from "./ui/slider";
-import { Card, CardContent } from "./ui/card";
 
 export const FeaturedCars = ({
   cars,
@@ -19,11 +18,11 @@ export const FeaturedCars = ({
   };
 
   return (
-    <div className="mx-2">
+    <section id="marketplace" className="mx-2 px-4 sm:px-10 md:px-16">
       <div className="container mx-auto">
-        <Card className="mb-12 max-w-md mx-auto">
-          <CardContent className="pt-6">
-            <h4 className="text-lg font-semibold text-amber-800 mb-4">
+        <div className="mb-12 max-w-md mx-auto">
+          <div className="pt-6">
+            <h4 className="text-lg font-semibold text-secondary-action mb-4">
               Price Range
             </h4>
             <Slider
@@ -35,15 +34,15 @@ export const FeaturedCars = ({
               className="w-full"
             />
             <div className="flex justify-between items-center mt-4">
-              <div className="text-sm font-medium text-amber-600">
+              <div className="text-sm font-medium text-secondary-action">
                 <span className="text-2xl font-bold">{priceRange[0]}</span> ETH
               </div>
-              <div className="text-sm font-medium text-amber-600">
+              <div className="text-sm font-medium text-secondary-action">
                 <span className="text-2xl font-bold">{priceRange[1]}</span> ETH
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
         <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
           Featured Listings
         </h3>
@@ -57,6 +56,6 @@ export const FeaturedCars = ({
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

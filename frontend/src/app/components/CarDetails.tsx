@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Check, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { motion } from "framer-motion";
 
 const CarDetails = () => {
   const [loading, setLoading] = useState(true)

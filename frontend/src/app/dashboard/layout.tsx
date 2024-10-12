@@ -5,9 +5,6 @@ import Sidebar from "./_components/sidebar";
 import DashboardHeader from "./_components/header";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-
-
-
 	return (
 		<div className="flex h-screen bg-gray-100 dark:bg-gray-900">
 			{/* Sidebar */}
@@ -25,4 +22,3 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 		</div>
 	);
 }
-
