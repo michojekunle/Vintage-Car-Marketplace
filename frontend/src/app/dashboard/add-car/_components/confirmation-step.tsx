@@ -1,12 +1,12 @@
 import React from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { AddCarSchema } from "@/schema";
+import { addCarFormSchema } from "@/schema";
 
 const ConfirmationStep = ({
 	formData,
 }: {
-	formData: z.infer<typeof AddCarSchema>;
+	formData: z.infer<typeof addCarFormSchema>;
 }) => {
 	return (
 		<div className="space-y-4">
