@@ -44,7 +44,7 @@ async function main() {
             console.log(`Request sent with ID: ${requestId}`);
 
             let isProcessed = false;
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 10; i++) {
                 await new Promise(resolve => setTimeout(resolve, 30000));
 
                 try {
