@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 
 const UserCarDetail = () => {
   const [loading, setLoading] = useState(true)
-  const [isListed, setIsListed] = useState(false)
+  const [isListed, ] = useState(false)
   const router = useRouter()
 
   useEffect(() => {

@@ -11,7 +11,7 @@ export default function Dashboard() {
   const sortedCars = featuredCars.toSorted((a, b) => b.reviews - a.reviews);
 
   const handleClick = (id: number) => {
-    router.push(`/your-cars/${id}`);
+    router.push(`/dashboard/${id}`);
   };
 
   return (
