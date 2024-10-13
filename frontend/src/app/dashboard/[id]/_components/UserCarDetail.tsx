@@ -29,7 +29,6 @@ const UserCarDetail = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		// Simulate data fetching or loading delay
 		setTimeout(() => setLoading(false), 1500);
 	}, []);
 
@@ -39,8 +38,7 @@ const UserCarDetail = () => {
 	});
 
 	function onSubmit(data: ListingFormValues) {
-		console.log({ data });
-		console.log("listing...");
+	
 		if (data.listingType === "auction") {
 			if (data.enableBuyout) {
 				if (!data.buyoutPrice)

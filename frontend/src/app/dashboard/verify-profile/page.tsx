@@ -24,6 +24,7 @@ export default function UserVerification() {
 
   return (
     <div className="container mx-auto p-4 min-h-screen">
+      <FacetecApp/>
       <Card className="max-w-2xl mx-auto border-2 border-amber-900">
         <CardHeader className="bg-amber-100">
           <CardTitle className="text-2xl font-bold text-amber-900">Verify Your Profile</CardTitle>
