@@ -59,22 +59,22 @@ export default function UserVerification() {
 			}
 
 			const requestBody = { ...formattedScanData, isSuccessfullyMatched };
-			let fullname;
+			let fullName;
 			if (formattedScanData.firstName && !formattedScanData.lastName) {
-				fullname = `${formattedScanData.firstName}`;
+				fullName = `${formattedScanData.firstName}`;
 				delete requestBody.firstname;
 			} else if (!formattedScanData.firstName && formattedScanData.lastName) {
-				fullname = `${formattedScanData.lastName}`;
+				fullName = `${formattedScanData.lastName}`;
 				delete requestBody.lastName;
 			} else if (formattedScanData.firstName && formattedScanData.lastName) {
-				fullname = `${formattedScanData.firstName} ${formattedScanData.lastName}`;
+				fullName = `${formattedScanData.firstName} ${formattedScanData.lastName}`;
 				delete requestBody.firstName;
 				delete requestBody.lastName;
 			}
 
-			//remove commas from fullname
-			fullname = fullname?.replace(/,/g, "");
-			requestBody.fullName = fullname;
+			//remove commas from fullName
+			fullName = fullName?.replace(/,/g, "");
+			requestBody.fullName = fullName;
 
 			console.log(requestBody);
 
