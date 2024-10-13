@@ -21,7 +21,7 @@ import {
 } from "../../../public/core-sdk/FaceTecSDK.js/FaceTecPublicApi";
 import { useEffect } from "react";
 import { FaceTecData } from "../@types/faceTec";
-import { useFacetecDataStore } from "@/stores/useFacetecDataStore";
+import { useFacetecDataStore } from "../../../stores/useFacetecDataStore";
 import { Button } from "@/components/ui/button";
 
 type TResult = string | null;

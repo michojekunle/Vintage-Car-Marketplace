@@ -18,7 +18,6 @@ export const useFacetecDataStore = create<FacetecDataStore>((set) => ({
 	...initialState,
 	setFacetecData: (data: Partial<FaceTecData>) => {
 		set((state) => ({
-			// facetecData: {
 			...state,
 			...data,
 			// },
