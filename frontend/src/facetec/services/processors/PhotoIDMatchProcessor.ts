@@ -107,7 +107,7 @@ export class PhotoIDMatchProcessor
 		//
 		// Part 4:  Get essential data off the FaceTecSessionResult
 		//
-		var parameters = {
+		let parameters = {
 			faceScan: sessionResult.faceScan,
 			auditTrailImage: sessionResult.auditTrail[0],
 			lowQualityAuditTrailImage: sessionResult.lowQualityAuditTrail[0],
@@ -193,14 +193,14 @@ export class PhotoIDMatchProcessor
 		this.latestNetworkRequest.upload.onprogress = (
 			event: ProgressEvent
 		): void => {
-			var progress = event.loaded / event.total;
+			let progress = event.loaded / event.total;
 			faceScanResultCallback.uploadProgress(progress);
 		};
 
 		//
 		// Part 8:  Actually send the request.
 		//
-		var jsonStringToUpload = JSON.stringify(parameters);
+		let jsonStringToUpload = JSON.stringify(parameters);
 		this.latestNetworkRequest.send(jsonStringToUpload);
 
 		//
@@ -247,7 +247,7 @@ export class PhotoIDMatchProcessor
 		//
 		// Part 12:  Get essential data off the FaceTecIDScanResult
 		//
-		var parameters: any = {
+		let parameters: any = {
 			idScan: idScanResult.idScan,
 			sessionId: idScanResult.sessionId,
 			externalDatabaseRefID:
@@ -376,14 +376,14 @@ export class PhotoIDMatchProcessor
 		this.latestNetworkRequest.upload.onprogress = (
 			event: ProgressEvent
 		): void => {
-			var progress = event.loaded / event.total;
+			let progress = event.loaded / event.total;
 			idScanResultCallback.uploadProgress(progress);
 		};
 
 		//
 		// Part 16:  Actually send the request.
 		//
-		var jsonStringToUpload = JSON.stringify(parameters);
+		let jsonStringToUpload = JSON.stringify(parameters);
 		this.latestNetworkRequest.send(jsonStringToUpload);
 	};
 
