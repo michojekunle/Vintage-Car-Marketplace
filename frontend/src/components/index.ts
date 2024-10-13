@@ -8,3 +8,4 @@ export { Footer } from "./Footer";
 export { UserRoles } from "./UserRoles";
 export { MechanicVerification } from "./MechanicVerification";
 export { LiveAuction } from "./LiveAuction";
+export { TopMechanics } from "./TopMechanics";
