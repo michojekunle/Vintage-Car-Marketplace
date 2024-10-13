@@ -1,26 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { CloudUpload, CheckCircle, AlertCircle } from "lucide-react";
 import FacetecApp from "@/facetec/Facetec";
 import { useFacetecDataStore } from "@/store/useFacetecDataStore";
 import axios from "axios";
@@ -41,11 +21,9 @@ export default function UserVerification() {
 		(state) => state.isCompletelyDone
 	);
 
-
 	useEffect(() => {
-
 		const verifyDetails = async () => {
-			if (!isCompletelyDone) return setVerificationStatus("failed");
+			if (!isCompletelyDone) return;
 			if (!formattedScanData.idNumber || !isSuccessfullyMatched) {
 				toast({
 					title: "Please complete the FaceTec scan first",

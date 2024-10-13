@@ -100,10 +100,10 @@ export function FaceTecInitializer() {
 	return null;
 }
 
-export function FaceTecButton({ paraInnerText }: { paraInnerText: string }) {
-	// console.log(paraInnerText)
+export function FaceTecButton({
+}) {
 	const setFacetecData = useFacetecDataStore((state) => state.setFacetecData);
-	console.log(processor?.isSuccess());
+	// console.log(processor?.isSuccess());
 	const handlePhotoIDMatch = () => {
 		initializeResultObjects();
 		fadeOutMainUIAndPrepareForSession();
@@ -122,7 +122,6 @@ export function FaceTecButton({ paraInnerText }: { paraInnerText: string }) {
 	return (
 		<Button
 			size={"lg"}
-			disabled={paraInnerText === "Loading..." || paraInnerText === undefined}
 			// className="bg-gray-600 p-4 rounded-md text-white"
 			onClick={handlePhotoIDMatch}
 		>

@@ -5,6 +5,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
 	const { isSuccessfullyMatched, idNumber, fullName, ...others } =
 		await req.json();
 	console.log({ isSuccessfullyMatched, idNumber, fullName, others });
+
+	if (!fullName || !idNumber || !isSuccessfullyMatched) {
+		return new NextResponse(JSON.stringify({ error: "Invalid request" }), {
+			status: 400,
+		});
+	}
 	const fullNameSplitted = fullName.split(" ");
 	console.log({ fullNameSplitted });
 	// check if name exist in dummy data
@@ -20,21 +26,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 	console.log({ foundUser });
 
-	let isNameAvailabe: boolean = false;
-	fullNameSplitted.forEach((name: string, index: number) => {
-		console.log({ name, isNameAvailabe, index });
-		if (foundUser?.fullName.toLowerCase().includes(name.toLowerCase())) {
-			isNameAvailabe = true;
-		}
-		isNameAvailabe = false;
-	});
+	const isNameAvailable = fullNameSplitted.every((namePart: string) =>
+		foundUser.fullName.toLowerCase().includes(namePart.toLowerCase())
+	);
 
-	console.log(req.body);
+	// console.log(req.body);
 
 	try {
-		if (!isSuccessfullyMatched || !isNameAvailabe) {
+		if (!isSuccessfullyMatched || !isNameAvailable) {
 			return new NextResponse(JSON.stringify({ error: "Failed to verify" }), {
-				status: 500,
+				status: 400,
 			});
 		}
 		return NextResponse.json({ message: "successfully verified" });
