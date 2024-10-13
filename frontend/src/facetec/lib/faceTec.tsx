@@ -103,33 +103,36 @@ export function FaceTecButton() {
 	// const { updateFaceTecData } = useFaceTecData();
 	const setFacetecData = useFacetecDataStore((state) => state.setFacetecData);
 
-	console.log(processor?.isSuccess())
-  
-	const handlePhotoIDMatch = () => {
-	  initializeResultObjects();
-	  fadeOutMainUIAndPrepareForSession();
-  
-	  getSessionToken((token: string) => {
-		identifier = "browser_sample_app_" + generateUUId();
-  
-		processor = new PhotoIDMatchProcessor(token, {
-		  getLatestEnrollmentIdentifier,
-		  onComplete: createOnCompleteHandler(setFacetecData),
-		  clearLatestEnrollmentIdentifier,
-		});
-	  });
-	};
-  
-	return (
-	  <button className="bg-gray-600 p-4 rounded-md text-white" onClick={handlePhotoIDMatch}>
-		Start Photo ID Match
-	  </button>   
-	);
-  }
+	console.log(processor?.isSuccess());
 
-  /**
-   * 
-   */
+	const handlePhotoIDMatch = () => {
+		initializeResultObjects();
+		fadeOutMainUIAndPrepareForSession();
+
+		getSessionToken((token: string) => {
+			identifier = "browser_sample_app_" + generateUUId();
+
+			processor = new PhotoIDMatchProcessor(token, {
+				getLatestEnrollmentIdentifier,
+				onComplete: createOnCompleteHandler(setFacetecData),
+				clearLatestEnrollmentIdentifier,
+			});
+		});
+	};
+
+	return (
+		<button
+			className="bg-gray-600 p-4 rounded-md text-white"
+			onClick={handlePhotoIDMatch}
+		>
+			Start Photo ID Match
+		</button>
+	);
+}
+
+/**
+ *
+ */
 
 function initializeResultObjects(): void {
 	IDScanResult = null;
@@ -154,61 +157,62 @@ function initializeResultObjects(): void {
 // Show the final result with the Session Review Screen.
 // let onComplete: OnComplete;
 
-export function createOnCompleteHandler(updateFaceTecData: (data: Partial<FaceTecData>) => void) {
-    return function onComplete(
-      sessionResult: FaceTecSessionResult | null,
-      idScanResult: FaceTecIDScanResult | null,
-      latestNetworkResponseStatus: number,
-      latestDocumentData: any
-    ): void {
-      // Update global variables as in your original code
-      latestIDScanResult = idScanResult;
-    //   latestSessionResult = sessionResult;
-      
-      // Update context
-  
-  
-      // Rest of your original onComplete logic
-      if (processor.isSuccess()) {
-        localStorage.setItem(
-          "biometrics",
-          JSON.stringify({ latestIDScanResult, flashUserResult })
-        );
-        localStorage.setItem(
-          "latestDocumentData",
-          JSON.stringify({ latestDocumentData })
-        );
+export function createOnCompleteHandler(
+	updateFaceTecData: (data: Partial<FaceTecData>) => void
+) {
+	return function onComplete(
+		sessionResult: FaceTecSessionResult | null,
+		idScanResult: FaceTecIDScanResult | null,
+		latestNetworkResponseStatus: number,
+		latestDocumentData: any
+	): void {
+		// Update global variables as in your original code
+		latestIDScanResult = idScanResult;
+		//   latestSessionResult = sessionResult;
 
-		const formattedData = extractIdDetails(latestDocumentData);
-		updateFaceTecData({
-		  sessionResult,
-		  idScanResult,
-		  documentData: latestDocumentData,
-		  formattedData,
-		  isSuccessfullyMatched: true
-		});
-  
-        setIDScanResult(formattedData);
-		displayStatus("Success");
+		// Update context
 
-        console.log(formattedData); 
-      } else {
-		updateFaceTecData({
-			isSuccessfullyMatched: false
-		  });
-        console.log({ sessionResult, idScanResult });
-        displayStatus("Unable to complete verification");
+		// Rest of your original onComplete logic
+		if (processor.isSuccess()) {
+			localStorage.setItem(
+				"biometrics",
+				JSON.stringify({ latestIDScanResult, flashUserResult })
+			);
+			localStorage.setItem(
+				"latestDocumentData",
+				JSON.stringify({ latestDocumentData })
+			);
 
-        if (isNetworkResponseServerIsOffline(latestNetworkResponseStatus)) {
-          console.log("Server is down");
-          return;
-        }
-      }
-  
-      showMainUI();
-      enableAllButtons();
-    };
-  }
+			const formattedData = extractIdDetails(latestDocumentData);
+			updateFaceTecData({
+				sessionResult,
+				idScanResult,
+				documentData: latestDocumentData,
+				formattedData,
+				isSuccessfullyMatched: true,
+			});
+
+			setIDScanResult(formattedData);
+			displayStatus("Success");
+
+			console.log(formattedData);
+		} else {
+			updateFaceTecData({
+				isSuccessfullyMatched: false,
+			});
+			console.log({ sessionResult, idScanResult });
+			displayStatus("Unable to complete verification");
+
+			if (isNetworkResponseServerIsOffline(latestNetworkResponseStatus)) {
+				console.log("Server is down");
+				return;
+			}
+		}
+
+		showMainUI();
+		enableAllButtons();
+	};
+}
 
 // function onComplete(
 // 	sessionResult: FaceTecSessionResult | null,
@@ -219,7 +223,7 @@ export function createOnCompleteHandler(updateFaceTecData: (data: Partial<FaceTe
 // 	latestSessionResult = sessionResult;
 // 	latestIDScanResult = idScanResult;
 // 	console.log({ latestDocumentData, latestSessionResult });
-	
+
 // 	localStorage.setItem(
 // 		"latestDocumentData_first",
 // 		JSON.stringify({ latestDocumentData })
@@ -260,22 +264,21 @@ export function createOnCompleteHandler(updateFaceTecData: (data: Partial<FaceTe
 // 	displayStatus("Success");
 // }
 
-function extractIdDetails(jsonString: any) {
+function extractIdDetails(jsonString) {
 	let parsedData;
-
+	// console.log(first)
 	try {
 		// First, try parsing the string directly
-		// parsedData = JSON.parse(jsonString);
-		parsedData = jsonString
+		parsedData = JSON.parse(jsonString);
 	} catch (error) {
 		// If direct parsing fails, try removing extra backslashes
-		const cleanJsonString = jsonString.replace(/\\/g, "");
 		try {
-			// parsedData = JSON.parse(cleanJsonString);
-			parsedData = cleanJsonString
+			const cleanJsonString = jsonString.replace(/\\/g, "");
+			parsedData = JSON.parse(cleanJsonString);
 		} catch (innerError) {
 			console.error("Failed to parse JSON:", innerError);
-			return null;
+			// return null;
+			parsedData = jsonString;
 		}
 	}
 
@@ -304,6 +307,51 @@ function extractIdDetails(jsonString: any) {
 
 	return extractedDetails;
 }
+
+// function extractIdDetails(jsonString: any) {
+// 	let parsedData;
+
+// 	try {
+// 		// First, try parsing the string directly
+// 		// parsedData = JSON.parse(jsonString);
+// 		parsedData = jsonString
+// 	} catch (error) {
+// 		// If direct parsing fails, try removing extra backslashes
+// 		const cleanJsonString = jsonString.replace(/\\/g, "");
+// 		try {
+// 			// parsedData = JSON.parse(cleanJsonString);
+// 			parsedData = cleanJsonString
+// 		} catch (innerError) {
+// 			console.error("Failed to parse JSON:", innerError);
+// 			return null;
+// 		}
+// 	}
+
+// 	// Initialize an object to store extracted details
+// 	const extractedDetails: any = {};
+
+// 	// Function to process groups and extract fields
+// 	function processGroups(groups: any) {
+// 		groups.forEach((group: any) => {
+// 			group.fields.forEach((field: any) => {
+// 				extractedDetails[field.fieldKey] = field.value;
+// 			});
+// 		});
+// 	}
+
+// 	// Process both scanned and user confirmed values
+// 	if (parsedData.scannedValues && parsedData.scannedValues.groups) {
+// 		processGroups(parsedData.scannedValues.groups);
+// 	}
+
+// 	// Add template information
+// 	if (parsedData.templateInfo) {
+// 		extractedDetails.documentCountry = parsedData.templateInfo.documentCountry;
+// 		extractedDetails.documentType = parsedData.templateInfo.templateType;
+// 	}
+
+// 	return extractedDetails;
+// }
 
 function isNetworkResponseServerIsOffline(
 	networkResponseStatus: number

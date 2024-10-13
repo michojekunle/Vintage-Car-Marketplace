@@ -16,6 +16,8 @@ export default function UserVerification() {
   const facetecData = useFacetecDataStore((state) => state.facetecData);
 
 console.log({facetecData})
+
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     setVerificationStatus("pending")
