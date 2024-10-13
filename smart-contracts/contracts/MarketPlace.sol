@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// import "./VintageCarNFT.sol"; //import our nft contract
+import "./VintageCarNFT.sol"; //import our nft contract
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     struct Listing {
@@ -14,7 +14,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     }
 
     //we'll reference the nft contract first, sth like
-    //VintageCarNFT public nftContract;
+    VintageCarNFT public nftContract;
     uint256 public marketplaceFee = 2; // 2% fee
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256) public proceeds;
