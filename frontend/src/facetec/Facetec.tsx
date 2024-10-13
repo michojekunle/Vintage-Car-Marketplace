@@ -1,6 +1,5 @@
-import { useFacetecDataStore } from "@/store/useFacetecDataStore";
 import { FaceTecButton, FaceTecInitializer } from "@/facetec/lib/faceTec";
-import React, { RefObject, useRef } from "react";
+import Reac from "react";
 
 export default function Facetec() {
 	// ** Vars

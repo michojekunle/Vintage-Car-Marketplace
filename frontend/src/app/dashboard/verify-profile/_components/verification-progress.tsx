@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import VerificationStep from "./verification-step";
 import type { VerificationStatus } from "../page";
-import { useFacetecDataStore } from "@/store/useFacetecDataStore";
+import { useFacetecDataStore } from "@/stores/useFacetecDataStore";
 
 export default function VerificationProgress({
 	verificationStatus,
