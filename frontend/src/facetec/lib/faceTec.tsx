@@ -264,7 +264,7 @@ export function createOnCompleteHandler(
 // 	displayStatus("Success");
 // }
 
-function extractIdDetails(jsonString) {
+function extractIdDetails(jsonString: any) {
 	let parsedData;
 	// console.log(first)
 	try {
