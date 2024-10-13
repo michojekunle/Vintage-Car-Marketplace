@@ -14,36 +14,10 @@ export default function Facetec() {
 		<div
 			id="controls"
 			className="wrapping-box-container"
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				gap: "1rem",
-				alignItems: "center",
-				justifyContent: "center",
-				width: "100vw",
-				minHeight: "100vh",
-			}}
+			
 		>
 			<FaceTecInitializer />
 			<FaceTecButton />
-
-			{/* <button
-				id="liveness-button"
-				type="button"
-				onClick={() => onPhotoIDMatchPressed()}
-				style={{ minWidth: "250px" }}
-			>
-				SignUp
-			</button> */}
-
-			{/* <button
-        type="button"
-        onClick={() => onLogIn(IDUser)}
-        style={{ minWidth: '250px' }}
-      >
-        SignIn
-      </button> */}
-
 			<p id="status">Loading...</p>
 		</div>
 	);

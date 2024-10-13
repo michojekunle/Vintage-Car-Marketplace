@@ -101,42 +101,6 @@ export function FaceTecInitializer() {
 
 	return null;
 }
-// export function onRegister(IDUser: string): void {
-// 	fadeOutMainUIAndPrepareForSession();
-
-// 	getSessionToken((token: string) => {
-// 		identifier = "browser_sample_app_" + generateUUId();
-
-// 		processor = new Enrollment(token, {
-// 			getLatestEnrollmentIdentifier,
-// 			onComplete,
-// 			clearLatestEnrollmentIdentifier,
-// 		});
-// 	});
-// }
-
-// export function onPhotoIDMatchPressed(): void {
-// 	const { updateFaceTecData } = useFaceTecData(); // Get the update function
-
-// 	initializeResultObjects();
-// 	fadeOutMainUIAndPrepareForSession();
-
-// 	getSessionToken((token: string) => {
-// 		identifier = "browser_sample_app_" + generateUUId();
-
-// 		processor = new PhotoIDMatchProcessor(token, {
-// 			getLatestEnrollmentIdentifier,
-// 			onComplete: createOnCompleteHandler(updateFaceTecData),
-// 			clearLatestEnrollmentIdentifier,
-// 		});
-// 	});
-
-// 	// getSessionToken((sessionToken?: string): void => {
-// 	//   latestEnrollmentIdentifier =
-// 	//     "browser_sample_app_" + SampleAppUtilities.generateUUId();
-// 	//   latestProcessor = new PhotoIDMatchProcessor(sessionToken as string, App);
-// 	// });
-// }
 
 export function FaceTecButton() {
 	const { updateFaceTecData } = useFaceTecData();
