@@ -58,7 +58,7 @@ export default function UserVerification() {
 			try {
 				const response = await axios.post(
 					"/api/verify-profile",
-					formattedScanData
+					requestBody
 				);
 				// if (!response.ok) throw new Error("Failed to verify profile");
 				const data = response.data;
