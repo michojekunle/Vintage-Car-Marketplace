@@ -82,7 +82,7 @@ export const FeaturedCars = ({
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious
-                        size=""
+                        size={null}
                         onClick={() =>
                           setCurrentPage(Math.max(currentPage - 1, 1))
                         }
@@ -96,7 +96,7 @@ export const FeaturedCars = ({
                     {[...Array(totalPages)].map((_, index) => (
                       <PaginationItem key={index} className="cursor-pointer ">
                         <PaginationLink
-                          size=""
+                          size={null}
                           className="hover:bg-amber-100"
                           onClick={() => setCurrentPage(index + 1)}
                           isActive={currentPage === index + 1}
@@ -107,7 +107,7 @@ export const FeaturedCars = ({
                     ))}
                     <PaginationItem>
                       <PaginationNext
-                        size=""
+                        size={null}
                         onClick={() =>
                           setCurrentPage(Math.min(currentPage + 1, totalPages))
                         }
