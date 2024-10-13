@@ -18,6 +18,7 @@ export const FeaturedCars = ({
     route.push(`/car-details/?id=${id}`);
   };
 
+
   return (
     <section id="marketplace" className="mx-2 px-4 sm:px-10 md:px-16">
       <div className="container mx-auto">
@@ -55,6 +56,7 @@ export const FeaturedCars = ({
                 {...car}
                 onClick={() => handleClick(car.id)}
               />
+
             ))}
           </div>
         ) : (

@@ -30,7 +30,22 @@ export const addCarSteps = [
 
 export const filterOptions = ["All", "Make", "Year", "Model"];
 
-export const featuredCars = [
+export interface Car {
+  id: number;
+  listed: string;
+  name: string;
+  make: string;
+  model: string;
+  year: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  image: string;
+  condition?: string;
+  serviceHistory?: string[];
+}
+
+export const featuredCars: Car[] = [
   {
     id: 1,
     listed: "Listed",
@@ -42,6 +57,8 @@ export const featuredCars = [
     reviews: 28,
     price: 20,
     image: "/mustang.png",
+    condition: "Excellent",
+    serviceHistory: ["Oil change on 01/2023", "Tire rotation on 02/2023"],
   },
   {
     id: 2,
@@ -54,6 +71,8 @@ export const featuredCars = [
     reviews: 42,
     price: 7,
     image: "/beetle.png",
+    condition: "Good",
+    serviceHistory: ["Brake check on 12/2022", "New battery on 01/2023"],
   },
   {
     id: 3,
@@ -66,6 +85,8 @@ export const featuredCars = [
     reviews: 37,
     price: 15,
     image: "/corvette.png",
+    condition: "Excellent",
+    serviceHistory: ["Fluid change on 03/2023", "Engine tune-up on 04/2023"],
   },
   {
     id: 4,
@@ -78,8 +99,11 @@ export const featuredCars = [
     reviews: 31,
     price: 9,
     image: "/mini.png",
+    condition: "Fair",
+    serviceHistory: ["Rust treatment on 05/2023", "Brake pads replacement on 06/2023"],
   },
 ];
+
 
 export const liveAuctions = [
   {
