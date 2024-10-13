@@ -12,10 +12,7 @@ import {
 	showMainUI,
 	generateUUId,
 } from "@/facetec/helpers/faceTecUtilities";
-// import {
-// 	FaceTecSessionResult,
-// 	FaceTecIDScanResult,
-// }
+
 import { en } from "@/facetec/locale/faceTec";
 import { PhotoIDMatchProcessor } from "../services/processors/PhotoIDMatchProcessor";
 import {
@@ -24,7 +21,6 @@ import {
 } from "../../../public/core-sdk/FaceTecSDK.js/FaceTecPublicApi";
 import { useEffect } from "react";
 import { FaceTecData } from "../@types/faceTec";
-import { useFaceTecData } from "../context/FacetecContext";
 import { useFacetecDataStore } from "@/store/useFacetecDataStore";
 
 type TResult = string | null;

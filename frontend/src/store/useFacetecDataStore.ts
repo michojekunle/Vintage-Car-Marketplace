@@ -1,13 +1,6 @@
+import { FaceTecData } from "@/facetec/@types/faceTec";
 import { create } from "zustand";
-import { FaceTecData } from "../@types/faceTec";
 
-
-// type CounterStore = {
-// 	count: number;
-// 	increment: () => void;
-// 	incrementAsync: () => Promise<void>;
-// 	decrement: () => void;
-// };
 type FacetecDataStore = {
 	facetecData: {
 		documentData: string;
@@ -18,25 +11,7 @@ type FacetecDataStore = {
 	};
 	setFacetecData: (data: Partial<FaceTecData>) => void;
 };
-// documentData: null;
-// formattedData: null;
-// idScanResult: null;
-// isSuccessfullyMatched: false;
-// sessionResult: null;
 
-// export const useCounterStore = create<CounterStore>((set) => ({
-// 	count: 0,
-// 	increment: () => {
-// 		set((state) => ({ count: state.count + 1 }));
-// 	},
-// 	incrementAsync: async () => {
-// 		await new Promise((resolve) => setTimeout(resolve, 1000));
-// 		set((state) => ({ count: state.count + 1 }));
-// 	},
-// 	decrement: () => {
-// 		set((state) => ({ count: state.count - 1 }));
-// 	},
-// }));
 
 export const useFacetecDataStore = create<FacetecDataStore>(
 	(set) => ({
@@ -56,15 +31,5 @@ export const useFacetecDataStore = create<FacetecDataStore>(
 			}));
 		},
 
-		// increment: () => {
-		// 	set((state) => ({ count: state.count + 1 }));
-		// },
-		// incrementAsync: async () => {
-		// 	await new Promise((resolve) => setTimeout(resolve, 1000));
-		// 	set((state) => ({ count: state.count + 1 }));
-		// },
-		// decrement: () => {
-		// 	set((state) => ({ count: state.count - 1 }));
-		// },
 	})
 );
