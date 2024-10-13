@@ -18,6 +18,8 @@ interface ICarCard {
 	rating: number;
 	reviews: number;
 	price: number;
+	condition?: string | undefined;
+	serviceHistory?: string[]; // Optional service history
 	onClick?: () => void;
 }
 
