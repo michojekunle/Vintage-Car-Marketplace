@@ -139,20 +139,6 @@ function initializeResultObjects(): void {
 	result = null;
 }
 
-// function onComplete(): void {
-//   showMainUI()
-//   enableAllButtons()
-
-//   if (!processor?.isSuccess()) {
-//     clearLatestEnrollmentIdentifier()
-
-//     displayStatus('Session exited early, see logs for more details.')
-
-//     return
-//   }
-
-//   displayStatus('Success')
-// }
 
 // Show the final result with the Session Review Screen.
 // let onComplete: OnComplete;
@@ -166,7 +152,7 @@ export function createOnCompleteHandler(
 		latestNetworkResponseStatus: number,
 		latestDocumentData: any
 	): void {
-		// Update global variables as in your original code
+		// Update global variables
 		latestIDScanResult = idScanResult;
 		//   latestSessionResult = sessionResult;
 
@@ -217,11 +203,11 @@ export function createOnCompleteHandler(
 
 function extractIdDetails(jsonString: any) {
 	let parsedData;
-	// console.log(first)
 	try {
 		// First, try parsing the string directly
 		parsedData = JSON.parse(jsonString);
 	} catch (error) {
+		console.log(error)
 		// If direct parsing fails, try removing extra backslashes
 		try {
 			const cleanJsonString = jsonString.replace(/\\/g, "");
@@ -233,7 +219,6 @@ function extractIdDetails(jsonString: any) {
 		}
 	}
 
-	// Initialize an object to store extracted details
 	const extractedDetails: any = {};
 
 	// Function to process groups and extract fields

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dummyDatabase from "@/lib/dummy-user-data.json";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
 	const { isSuccessfullyMatched, idNumber, fullName, ...others } =
 		await req.json();
 	console.log({ isSuccessfullyMatched, idNumber, fullName, others });
