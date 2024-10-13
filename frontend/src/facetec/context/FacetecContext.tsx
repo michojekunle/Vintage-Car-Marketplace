@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback } from 'react';
 import type { FaceTecSessionResult, FaceTecIDScanResult } from "../../../public/core-sdk/FaceTecSDK.js/FaceTecPublicApi";
+import { useFacetecDataStore } from '@/store/useFacetecDataStore';
 
 interface FaceTecData {
   sessionResult: FaceTecSessionResult | null;
@@ -19,16 +20,21 @@ interface FaceTecContextType {
 const FaceTecContext = createContext<FaceTecContextType | undefined>(undefined);
 
 export function FaceTecProvider({ children }: { children: React.ReactNode }) {
-  const [faceTecData, setFaceTecData] = useState<FaceTecData>({
-    sessionResult: null,
-    idScanResult: null,
-    documentData: null,
-    formattedData: null,
-    isSuccessfullyMatched: false
-  });
+  // const [faceTecData, setFaceTecData] = useState<FaceTecData>({
+  //   sessionResult: null,
+  //   idScanResult: null,
+  //   documentData: null,
+  //   formattedData: null,
+  //   isSuccessfullyMatched: false
+  // });
+
+  const setFacetecData = useFacetecDataStore((state) => state.setFacetecData);
+
+
+  // const facetecData = 
 
   const updateFaceTecData = useCallback((newData: Partial<FaceTecData>) => {
-    setFaceTecData(prevData => ({
+    setFacetecData(prevData => ({
       ...prevData,
       ...newData,
     }));

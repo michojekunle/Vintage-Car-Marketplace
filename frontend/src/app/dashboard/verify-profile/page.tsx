@@ -9,9 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { CloudUpload, CheckCircle, AlertCircle } from "lucide-react"
 import FacetecApp from "@/facetec/Facetec";
+import { useFacetecDataStore } from "@/store/useFacetecDataStore";
 export default function UserVerification() {
   const [verificationStatus, setVerificationStatus] = useState<"idle" | "pending" | "success" | "error">("idle")
 
+  const facetecData = useFacetecDataStore((state) => state.facetecData);
+
+console.log({facetecData})
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     setVerificationStatus("pending")

@@ -25,6 +25,7 @@ import {
 import { useEffect } from "react";
 import { FaceTecData } from "../@types/faceTec";
 import { useFaceTecData } from "../context/FacetecContext";
+import { useFacetecDataStore } from "@/store/useFacetecDataStore";
 
 type TResult = string | null;
 
@@ -103,7 +104,9 @@ export function FaceTecInitializer() {
 }
 
 export function FaceTecButton() {
-	const { updateFaceTecData } = useFaceTecData();
+	// const { updateFaceTecData } = useFaceTecData();
+	const setFacetecData = useFacetecDataStore((state) => state.setFacetecData);
+
 	console.log(processor?.isSuccess())
   
 	const handlePhotoIDMatch = () => {
@@ -115,7 +118,7 @@ export function FaceTecButton() {
   
 		processor = new PhotoIDMatchProcessor(token, {
 		  getLatestEnrollmentIdentifier,
-		  onComplete: createOnCompleteHandler(updateFaceTecData),
+		  onComplete: createOnCompleteHandler(setFacetecData),
 		  clearLatestEnrollmentIdentifier,
 		});
 	  });
