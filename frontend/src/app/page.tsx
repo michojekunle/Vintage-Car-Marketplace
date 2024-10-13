@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { Cta, FeaturedCars, Features, Hero, SearchCar } from "@/components";
 import { featuredCars } from "@/lib/constants";
-import LiveAuction from "@/components/LiveAuction";
-import MechanicVerification from "@/components/MechanicVerification";
+import { LiveAuction } from "@/components/LiveAuction";
+import { MechanicVerification } from "@/components/MechanicVerification";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");

@@ -14,7 +14,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { account, isConnected } = useAccount();
-  const { address } = account;
+  const address = account?.address;
 
   return (
     <div className="flex justify-between items-center gap-2 text-white sticky top-0 z-50 border-b border-amber-200 bg-amber-50 bg-opacity-90 backdrop-blur-sm py-4 px-4 sm:px-10 md:px-16">
