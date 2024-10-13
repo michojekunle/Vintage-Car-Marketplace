@@ -6,8 +6,8 @@ import { Input } from "./ui/input";
 
 export const Cta = () => {
   return (
-    <section className="flex flex-col items-center justify-center bg-primary-action text-white py-12 text-center">
-      <h3 className="text-2xl lg:text-3xl font-bold mb-4 text-amber-100">
+    <section className="flex flex-col items-center justify-center py-12 text-center px-4">
+      <h3 className="text-2xl lg:text-3xl font-bold mb-4 text-primary-action">
         Ready to Join the Revolution?
       </h3>
       <p className="text-lg lg:text-xl mb-8">
@@ -24,12 +24,12 @@ export const Cta = () => {
           <Input
             type="email"
             placeholder="Enter your email"
-            className="text-lg py-6 text-neutral-700"
+            className="text-base py-4 text-neutral-700 rounded-full"
           />
           <Button
             type="submit"
-            variant="outline"
-            className="bg-transparent hover:bg-amber-800 hover:text-white text-white text-lg py-6"
+            variant="default"
+            className="bg-primary-action hover:bg-amber-800 hover:text-white text-white text-base py-4"
           >
             Subscribe
           </Button>

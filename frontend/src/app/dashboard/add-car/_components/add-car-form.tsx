@@ -13,7 +13,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
-import { AddCarSchema } from "@/schema";
+import { addCarFormSchema } from "@/schema";
 import VehicleDetailsStep from "./vehicle-details-step";
 import VerificationStep from "./verification-step";
 import ImagesUploadStep from "./image-upload-step";
@@ -26,10 +26,8 @@ export default function AddCarForm() {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [status, setStatus] = useState("idle");
 
-
-
-	const form = useForm<z.infer<typeof AddCarSchema>>({
-		resolver: zodResolver(AddCarSchema),
+	const form = useForm<z.infer<typeof addCarFormSchema>>({
+		resolver: zodResolver(addCarFormSchema),
 		defaultValues: {
 			make: "",
 			model: "",
@@ -39,10 +37,7 @@ export default function AddCarForm() {
 		},
 	});
 
-
-
-
-	async function onSubmit(values: z.infer<typeof AddCarSchema>) {
+	async function onSubmit(values: z.infer<typeof addCarFormSchema>) {
 		console.log(values);
 		setStatus("loading");
 		try {

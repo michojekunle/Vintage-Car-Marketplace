@@ -20,7 +20,7 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between items-center gap-2 text-white sticky top-0 z-50 border-b border-amber-200 bg-amber-50 bg-opacity-90 backdrop-blur-sm py-4 px-4 sm:px-10 md:px-16">
-      <Link href='/' className="flex items-center space-x-4">
+      <Link href="/" className="flex items-center space-x-4">
         <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
           <Car className="h-8 w-8 text-amber-600" />
         </motion.div>
@@ -36,12 +36,10 @@ const Navbar = () => {
             className="flex items-center cursor-pointer"
             onClick={openAccountModal ? () => openAccountModal() : () => {}}
           >
-            {/* <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold"> */}
             <Avatar>
               <AvatarImage src="" alt="@user" />
               <AvatarFallback className="bg-amber-500">AU</AvatarFallback>
             </Avatar>
-            {/* </div> */}
 
             <div className="ml-3 hidden sm:block">
               <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -69,12 +67,10 @@ const Navbar = () => {
             className="flex items-center cursor-pointer"
             onClick={openAccountModal ? () => openAccountModal() : () => {}}
           >
-            {/* <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold"> */}
             <Avatar>
               <AvatarImage src="" alt="@user" />
               <AvatarFallback className="bg-amber-500">AU</AvatarFallback>
             </Avatar>
-            {/* </div> */}
 
             <div className="ml-3 hidden sm:block">
               <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
