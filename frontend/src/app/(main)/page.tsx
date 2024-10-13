@@ -12,6 +12,7 @@ import {
   LiveAuction,
 } from "@/components";
 import { featuredCars } from "@/lib/constants";
+import { TopMechanics } from "@/components/TopMechanics";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,6 +50,7 @@ const Home = () => {
       />
       <LiveAuction />
       <UserRoles />
+      <TopMechanics />
       <MechanicVerification />
       <Cta />
     </div>

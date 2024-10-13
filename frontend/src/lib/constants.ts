@@ -15,7 +15,7 @@ export const navItems = [
   },
   {
     name: "Mechanics",
-    href: "#mechanic-verification",
+    href: "#mechanics",
   },
 ];
 
@@ -136,5 +136,64 @@ export const userRoles = [
     description:
       "Offer your expertise, get verified, and connect with classic car owners for maintenance and restoration services.",
     icon: Wrench,
+  },
+];
+
+export const mockMechanics = [
+  {
+    id: 1,
+    name: "Roqib",
+    rating: 4.8,
+    specialties: ["Engine Repair", "Transmission"],
+    availability: "2024-10-15",
+  },
+  {
+    id: 2,
+    name: "Roheemah",
+    rating: 4.9,
+    specialties: ["Electrical Systems", "Bodywork"],
+    availability: "2024-10-16",
+  },
+  {
+    id: 3,
+    name: "Mike John",
+    rating: 4.7,
+    specialties: ["Suspension", "Brakes"],
+    availability: "2024-10-14",
+  },
+  {
+    id: 4,
+    name: "Abdulrahman",
+    rating: 4.55,
+    specialties: ["Suspension", "Brakes"],
+    availability: "2024-10-14",
+  },
+  {
+    id: 5,
+    name: "A M D",
+    rating: 4.35,
+    specialties: ["Suspension", "Brakes"],
+    availability: "2024-10-14",
+  },
+  {
+    id: 6,
+    name: "Donald",
+    rating: 4.5,
+    specialties: ["Suspension", "Brakes"],
+    availability: "2024-10-14",
+  },
+  {
+    id: 7,
+    name: "Rozzy",
+    rating: 3.8,
+    specialties: ["Suspension", "Brakes"],
+    availability: "2024-10-14",
+  },
+  {
+    id: 8,
+    name: "Chima",
+    rating: 2.7,
+    specialties: ["Suspension", "Brakes"],
+    availability: "2024-10-14",
   },
 ];
