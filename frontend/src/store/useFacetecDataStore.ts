@@ -3,15 +3,19 @@ import { create } from "zustand";
 
 interface FacetecDataStore extends FaceTecData {
 	setFacetecData: (data: Partial<FaceTecData>) => void;
+	reset: () => void;
 }
 
-export const useFacetecDataStore = create<FacetecDataStore>((set) => ({
-	documentData: "",
+const initialState: FaceTecData = {
+	isCompletelyDone: false,
 	formattedData: {},
 	idScanResult: "",
 	isSuccessfullyMatched: false,
 	sessionResult: "",
-	
+};
+
+export const useFacetecDataStore = create<FacetecDataStore>((set) => ({
+	...initialState,
 	setFacetecData: (data: Partial<FaceTecData>) => {
 		set((state) => ({
 			// facetecData: {
@@ -19,5 +23,8 @@ export const useFacetecDataStore = create<FacetecDataStore>((set) => ({
 			...data,
 			// },
 		}));
+	},
+	reset: () => {
+		set(initialState);
 	},
 }));

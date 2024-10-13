@@ -22,6 +22,7 @@ import {
 import { useEffect } from "react";
 import { FaceTecData } from "../@types/faceTec";
 import { useFacetecDataStore } from "@/store/useFacetecDataStore";
+import { Button } from "@/components/ui/button";
 
 type TResult = string | null;
 
@@ -99,12 +100,10 @@ export function FaceTecInitializer() {
 	return null;
 }
 
-export function FaceTecButton() {
-	// const { updateFaceTecData } = useFaceTecData();
+export function FaceTecButton({ paraInnerText }: { paraInnerText: string }) {
+	// console.log(paraInnerText)
 	const setFacetecData = useFacetecDataStore((state) => state.setFacetecData);
-
 	console.log(processor?.isSuccess());
-
 	const handlePhotoIDMatch = () => {
 		initializeResultObjects();
 		fadeOutMainUIAndPrepareForSession();
@@ -121,12 +120,14 @@ export function FaceTecButton() {
 	};
 
 	return (
-		<button
-			className="bg-gray-600 p-4 rounded-md text-white"
+		<Button
+			size={"lg"}
+			disabled={paraInnerText === "Loading..." || paraInnerText === undefined}
+			// className="bg-gray-600 p-4 rounded-md text-white"
 			onClick={handlePhotoIDMatch}
 		>
 			Start Photo ID Match
-		</button>
+		</Button>
 	);
 }
 
@@ -178,16 +179,17 @@ export function createOnCompleteHandler(
 				"biometrics",
 				JSON.stringify({ latestIDScanResult, flashUserResult })
 			);
-			localStorage.setItem(
-				"latestDocumentData",
-				JSON.stringify({ latestDocumentData })
-			);
+			// localStorage.setItem(
+			// 	"latestDocumentData",
+			// 	JSON.stringify({ latestDocumentData })
+			// );
 
 			const formattedData = extractIdDetails(latestDocumentData);
 			setFacetecData({
 				sessionResult,
 				idScanResult,
-				documentData: latestDocumentData,
+				isCompletelyDone: latestIDScanResult?.isCompletelyDone,
+				// documentData: latestDocumentData,
 				formattedData,
 				isSuccessfullyMatched: true,
 			});
@@ -213,8 +215,6 @@ export function createOnCompleteHandler(
 		enableAllButtons();
 	};
 }
-
-
 
 function extractIdDetails(jsonString: any) {
 	let parsedData;

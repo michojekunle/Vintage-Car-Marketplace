@@ -1,18 +1,18 @@
-// app/actions/contact.ts
-// import { NextRequest } from "next/server";
-// import nodemailer from "nodemailer";
+import { NextRequest, NextResponse } from "next/server";
 
-import { NextApiRequest, NextApiResponse } from "next";
-
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-	const {  } = await request.json();
+export async function POST(req: NextRequest, res: NextResponse) {
+	const {isSuccessfullyMatched, idNumber, fullName, ...others  } = await req.json();
+    console.log({isSuccessfullyMatched, idNumber, fullName, others})
+    console.log(req.body)
 
 	try {
-		const info = await transporter.sendMail(mailOptions);
-		console.log("Message sent: %s", info.messageId);
-		return new Response("Email sent successfully", { status: 200 });
+	
+        return NextResponse.json({ umessage: "successfully verified" });
+
 	} catch (error) {
 		console.error(error);
-		return new Response("Internal Server Error", { status: 500 });
+		// return new Response("Internal Server Error", { status: 500 });
+        return new NextResponse(JSON.stringify({ error: 'Error processing request' }), { status: 500 });
+
 	}
 }
