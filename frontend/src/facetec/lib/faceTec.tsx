@@ -34,7 +34,7 @@ let identifier: string = "";
 let processor: PhotoIDMatchProcessor;
 let result: TResult = null;
 // let IDScanResult: TResult = null;
-let flashUserResult = "";
+// const flashUserResult = "";
 let latestIDScanResult: FaceTecIDScanResult | null = null;
 // let latestSessionResult: FaceTecSessionResult | null ;
 declare global {
@@ -176,7 +176,7 @@ export function createOnCompleteHandler(
 		if (processor.isSuccess()) {
 			localStorage.setItem(
 				"biometrics",
-				JSON.stringify({ latestIDScanResult, flashUserResult })
+				JSON.stringify({ latestIDScanResult })
 			);
 			// localStorage.setItem(
 			// 	"latestDocumentData",

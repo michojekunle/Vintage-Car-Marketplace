@@ -74,15 +74,15 @@ export default function UserVerification() {
 		verifyDetails();
 	}, [formattedScanData, isCompletelyDone, isSuccessfullyMatched]);
 
-	const handleSubmit = (event: React.FormEvent) => {
-		event.preventDefault();
-		setVerificationStatus("verifying");
-		// Simulate API call
-		setTimeout(() => {
-			setVerificationStatus("success");
-			// handle the form submission and API response here
-		}, 2000);
-	};
+	// const handleSubmit = (event: React.FormEvent) => {
+	// 	event.preventDefault();
+	// 	setVerificationStatus("verifying");
+	// 	// Simulate API call
+	// 	setTimeout(() => {
+	// 		setVerificationStatus("success");
+	// 		// handle the form submission and API response here
+	// 	}, 2000);
+	// };
 
 	return (
 		<>

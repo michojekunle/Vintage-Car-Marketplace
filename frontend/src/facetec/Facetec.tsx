@@ -1,5 +1,4 @@
 import { FaceTecButton, FaceTecInitializer } from "@/facetec/lib/faceTec";
-import Reac from "react";
 
 export default function Facetec() {
 	// ** Vars
