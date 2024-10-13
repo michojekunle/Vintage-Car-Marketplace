@@ -32,7 +32,7 @@ declare let FaceTecSDK: typeof TFaceTecSDK;
 let identifier: string = "";
 let processor: PhotoIDMatchProcessor;
 let result: TResult = null;
-let IDScanResult: TResult = null;
+// let IDScanResult: TResult = null;
 let flashUserResult = "";
 let latestIDScanResult: FaceTecIDScanResult | null = null;
 // let latestSessionResult: FaceTecSessionResult | null ;
@@ -135,7 +135,7 @@ export function FaceTecButton() {
  */
 
 function initializeResultObjects(): void {
-	IDScanResult = null;
+	// IDScanResult = null;
 	result = null;
 }
 
@@ -158,7 +158,7 @@ function initializeResultObjects(): void {
 // let onComplete: OnComplete;
 
 export function createOnCompleteHandler(
-	updateFaceTecData: (data: Partial<FaceTecData>) => void
+	setFacetecData: (data: Partial<FaceTecData>) => void
 ) {
 	return function onComplete(
 		sessionResult: FaceTecSessionResult | null,
@@ -184,7 +184,7 @@ export function createOnCompleteHandler(
 			);
 
 			const formattedData = extractIdDetails(latestDocumentData);
-			updateFaceTecData({
+			setFacetecData({
 				sessionResult,
 				idScanResult,
 				documentData: latestDocumentData,
@@ -192,12 +192,12 @@ export function createOnCompleteHandler(
 				isSuccessfullyMatched: true,
 			});
 
-			setIDScanResult(formattedData);
+			// setIDScanResult(formattedData);
 			displayStatus("Success");
 
 			console.log(formattedData);
 		} else {
-			updateFaceTecData({
+			setFacetecData({
 				isSuccessfullyMatched: false,
 			});
 			console.log({ sessionResult, idScanResult });
@@ -214,55 +214,7 @@ export function createOnCompleteHandler(
 	};
 }
 
-// function onComplete(
-// 	sessionResult: FaceTecSessionResult | null,
-// 	idScanResult: FaceTecIDScanResult | null,
-// 	latestNetworkResponseStatus: number,
-// 	latestDocumentData: any
-// ): void {
-// 	latestSessionResult = sessionResult;
-// 	latestIDScanResult = idScanResult;
-// 	console.log({ latestDocumentData, latestSessionResult });
 
-// 	localStorage.setItem(
-// 		"latestDocumentData_first",
-// 		JSON.stringify({ latestDocumentData })
-// 	);
-
-// 	if (processor.isSuccess()) {
-// 		localStorage.setItem(
-// 			"biometrics",
-// 			JSON.stringify({ latestIDScanResult, flashUserResult })
-// 		);
-// 		localStorage.setItem(
-// 			"latestDocumentData",
-// 			JSON.stringify({ latestDocumentData })
-// 		);
-
-// 		const formattedData = extractIdDetails(latestDocumentData)
-
-// 		setIDScanResult(formattedData);
-// 		//! CHECK IT OUT
-// 		console.log(formattedData)
-
-// 		// window.location.href = "/suceess";
-// 		console.log("See logs for details");
-// 	} else {
-// 		console.log({ sessionResult, idScanResult });
-
-// 		if (
-// 			isNetworkResponseServerIsOffline(latestNetworkResponseStatus) === true
-// 		) {
-// 			// showAdditionalScreensServerIsDown();
-// 			console.log("Server is down");
-// 			return;
-// 		}
-// 	}
-
-// 	showMainUI();
-// 	enableAllButtons();
-// 	displayStatus("Success");
-// }
 
 function extractIdDetails(jsonString: any) {
 	let parsedData;
@@ -407,13 +359,13 @@ export function getLatstSessionResult(): TResult {
 	return result;
 }
 
-export function setIDScanResult(idScanResult: any): void {
-	IDScanResult = idScanResult;
-}
+// export function setIDScanResult(idScanResult: any): void {
+// 	IDScanResult = idScanResult;
+// }
 
-export function getIDScanResult(): any {
-	return IDScanResult;
-}
+// export function getIDScanResult(): any {
+// 	return IDScanResult;
+// }
 
 function getLatestEnrollmentIdentifier(): string {
 	return identifier;
