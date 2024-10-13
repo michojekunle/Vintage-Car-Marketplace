@@ -1,3 +1,5 @@
+import { Car, Hammer, Wrench } from "lucide-react";
+
 export const navItems = [
   {
     name: "Home",
@@ -5,15 +7,15 @@ export const navItems = [
   },
   {
     name: "Marketplace",
-    href: "/marketplace",
+    href: "#marketplace",
   },
   {
     name: "Auctions",
-    href: "/auctions",
+    href: "#auctions",
   },
   {
     name: "Mechanics",
-    href: "/mechanics",
+    href: "#mechanic-verification",
   },
 ];
 
@@ -81,15 +83,37 @@ export const featuredCars = [
 
 export const liveAuctions = [
   {
+    id: 1,
     name: "1965 Classic Mustang",
     currentBid: "75 ETH",
     timeLeft: "2h 45m",
     image: "/mustang.png",
   },
   {
+    id: 2,
     name: "1963 Aston Martin DB5",
     currentBid: "120 ETH",
     timeLeft: "4h 30m",
     image: "/mini.png",
+  },
+];
+
+export const features = [
+  {
+    icon: Car,
+    title: "NFT Ownership",
+    description:
+      "List your vintage cars as NFTs, Secure and verifiable ownership through VintageChain",
+  },
+  {
+    icon: Hammer,
+    title: "Auctions",
+    description: "Participate in exciting timed auctions for rare vintage cars",
+  },
+  {
+    icon: Wrench,
+    title: "Mechanic Services",
+    description:
+      "Offer your expertise, get verified, and connect with classic car owners for maintenance and restoration services.",
   },
 ];

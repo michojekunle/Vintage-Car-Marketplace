@@ -1,14 +1,12 @@
-import React from 'react'
-import UserCarDetail from '../../components/UserCarDetail'
-import { Button } from '@/components/ui/button';
+import React from "react";
+import UserCarDetail from "../../components/UserCarDetail";
 
 const page = () => {
-  const connectedWalletAddress = "0x1234...abcd"; 
   return (
     <div>
-      <UserCarDetail/>
+      <UserCarDetail />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
