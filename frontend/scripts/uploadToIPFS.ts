@@ -3,6 +3,7 @@ const CryptoJS = require("crypto-js");
 const pinataSDK = require("@pinata/sdk");
 const { Readable } = require("stream");
 const dotenv = require("dotenv");
+const dummyData = require("../src/lib/dummy-user-data.json");
 dotenv.config();
 
 const pinata = new pinataSDK(
@@ -24,15 +25,15 @@ const decryptData = (ciphertext, secretKey) => {
 	return decryptedData;
 };
 
-const uploadToIPFS = async (encryptedData) => {
+const uploadToIPFS = async () => {
 	try {
 		const secretKey = "mysecretkey";
-		const jsonData = [
-			{ name: "John Doe", age: 30 },
-			{ name: "Jane Smith", age: 25 },
-		];
+		// const jsonData = [
+		// 	{ name: "John Doe", age: 30 },
+		// 	{ name: "Jane Smith", age: 25 },
+		// ];
 
-		const encryptedData = encryptData(jsonData, secretKey);
+		const encryptedData = encryptData(dummyData, secretKey);
 
 		const buffer = Buffer.from(encryptedData, "utf-8");
 
@@ -74,7 +75,8 @@ const uploadToIPFS = async (encryptedData) => {
 
 const retrieveFromIPFS = async () => {
 	try {
-		const url = `https://gateway.pinata.cloud/ipfs/QmdMFkJk3xA59R4qAhwHpUnuXf4BgecPcvvrbwd4HGgvTy`;
+		// const url = `https://gateway.pinata.cloud/ipfs/QmdMFkJk3xA59R4qAhwHpUnuXf4BgecPcvvrbwd4HGgvTy`;
+		const url = `https://gateway.pinata.cloud/ipfs/QmVS5re4juQX6EiyKwNBNBgx9vJE6mBPgYCQXSLcmx4Qcg`;
 		const secretKey = "mysecretkey";
 
 		const response = await axios.get(url);
@@ -90,5 +92,5 @@ const retrieveFromIPFS = async () => {
 	}
 };
 
-// handleUploadToIPFS();
+// uploadToIPFS();
 retrieveFromIPFS();

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import dummyDatabase from "../dummy-user-data.json";
+import dummyDatabase from "@/lib/dummy-user-data.json";
 
 export async function POST(req: NextRequest, res: NextResponse) {
 	const { isSuccessfullyMatched, idNumber, fullName, ...others } =
