@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./AuctionLib.sol";
+import "./VintageCarNFT.sol";
 
 contract NFTAuction is ReentrancyGuard {
     using AuctionLib for *;
 
-    IERC721 public nftContract;
+    VintageCarNFT public nftContract;
 
     struct Auction {
         address payable seller;
@@ -34,8 +34,8 @@ contract NFTAuction is ReentrancyGuard {
     event AuctionEnded(uint256 indexed nftId, address indexed winner, uint256 amount);
     event AuctionCancelled(uint256 indexed nftId);
 
-    constructor(address _nftContract) {
-        nftContract = IERC721(_nftContract);
+    constructor(VintageCarNFT _nftContract) {
+        nftContract = _nftContract;
     }
 
     function createAuction(
@@ -47,7 +47,7 @@ contract NFTAuction is ReentrancyGuard {
         AuctionLib.validateOwner(nftContract.ownerOf(_nftId), msg.sender);
         AuctionLib.validateStartPrice(_startingPrice);
 
-        nftContract.transferFrom(msg.sender, address(this), _nftId);
+        nftContract.safeTransferFrom(msg.sender, address(this), _nftId);
 
         auctions[_nftId] = Auction({
             seller: payable(msg.sender),
@@ -98,7 +98,7 @@ contract NFTAuction is ReentrancyGuard {
         AuctionLib.validateNoBids(auction.highestBid);
 
         auction.active = false;
-        nftContract.transferFrom(address(this), msg.sender, _nftId);
+        nftContract.safeTransferFrom(address(this), msg.sender, _nftId);
 
         emit AuctionCancelled(_nftId);
     }
@@ -108,12 +108,12 @@ contract NFTAuction is ReentrancyGuard {
         auction.active = false;
 
         if (auction.highestBidder != address(0)) {
-            nftContract.transferFrom(address(this), auction.highestBidder, _nftId);
+            nftContract.safeTransferFrom(address(this), auction.highestBidder, _nftId);
             AuctionLib.transferFunds(auction.seller, auction.highestBid);
 
             emit AuctionEnded(_nftId, auction.highestBidder, auction.highestBid);
         } else {
-            nftContract.transferFrom(address(this), auction.seller, _nftId);
+            nftContract.safeTransferFrom(address(this), auction.seller, _nftId);
         }
     }
 
