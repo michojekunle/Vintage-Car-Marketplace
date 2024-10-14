@@ -27,6 +27,10 @@ const CarDetails = () => {
       </div>
     );
   }
+  
+  const handleListCarButton = () => {
+    router.push('/I do not know the link to that')
+  }
 
   if (!isMounted || !selectedCar) return null; //Displays blank component it this condiition is true
 
@@ -156,6 +160,12 @@ const CarDetails = () => {
                   <p className="text-sm text-gray-600">
                     This car is currently not listed for sale, so mechanic services are unavailable.
                   </p>
+                  <Button
+                    className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-full hover:bg-primary-action hover:text-white transition"
+                    onClick={handleListCarButton}
+                  >
+                    List Car
+                  </Button>
                 </div>
               )}
 
