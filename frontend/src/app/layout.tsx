@@ -4,6 +4,7 @@ import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/toaster";
+import Script from "next/script";
 
 const georama = Georama({
 	weight: ["300", "400", "500", "700", "900"],
@@ -23,6 +24,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
+			<head>
+				<Script
+					src="/core-sdk/FaceTecSDK.js/FaceTecSDK.js"
+					strategy="beforeInteractive"
+				/>
+			</head>
 			<body className={`${georama.className} antialiased`}>
 				<Toaster />
 				<Providers>{children}</Providers>
