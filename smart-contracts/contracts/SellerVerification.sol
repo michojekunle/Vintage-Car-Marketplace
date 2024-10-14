@@ -5,29 +5,38 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SellerVerification is Ownable {
     struct SellerInfo {
-        bytes32 nameHash;
+        bytes32 idNumberHash;
         bool isVerified;
-        string ipfsUrl;
         uint256 verificationTimestamp;
     }
 
     mapping(address => SellerInfo) private sellers;
+    string private encryptedDatabaseIpfsUrl;
 
     event SellerVerified(address indexed seller, uint256 timestamp);
     event VerificationRevoked(address indexed seller, uint256 timestamp);
     event SellerInfoUpdated(address indexed seller, uint256 timestamp);
+    event EncryptedDatabaseIpfsUrlUpdated(uint256 timestamp);
 
     constructor() Ownable(msg.sender) {}
 
-    function verifySeller(address seller, bytes32 nameHash, string memory ipfsUrl) external onlyOwner {
+    function setEncryptedDatabaseIpfsUrl(string memory _url) external onlyOwner {
+        require(bytes(_url).length > 0, "Invalid IPFS URL");
+        encryptedDatabaseIpfsUrl = _url;
+        emit EncryptedDatabaseIpfsUrlUpdated(block.timestamp);
+    }
+
+    function getEncryptedDatabaseIpfsUrl() external view onlyOwner returns (string memory) {
+        return encryptedDatabaseIpfsUrl;
+    }
+
+    function verifySeller(address seller, bytes32 idNumberHash) external onlyOwner {
         require(seller != address(0), "Invalid seller address");
-        require(nameHash != bytes32(0), "Invalid name hash");
-        require(bytes(ipfsUrl).length > 0, "Invalid IPFS URL");
+        require(idNumberHash != bytes32(0), "Invalid ID number hash");
 
         sellers[seller] = SellerInfo({
-            nameHash: nameHash,
+            idNumberHash: idNumberHash,
             isVerified: true,
-            ipfsUrl: ipfsUrl,
             verificationTimestamp: block.timestamp
         });
 
@@ -43,15 +52,13 @@ contract SellerVerification is Ownable {
         emit VerificationRevoked(seller, block.timestamp);
     }
 
-    function updateSellerInfo(address seller, bytes32 newNameHash, string memory newIpfsUrl) external onlyOwner {
+    function updateSellerInfo(address seller, bytes32 newIdNumberHash) external onlyOwner {
         require(seller != address(0), "Invalid seller address");
         require(sellers[seller].isVerified, "Seller is not verified");
-        require(newNameHash != bytes32(0), "Invalid name hash");
-        require(bytes(newIpfsUrl).length > 0, "Invalid IPFS URL");
+        require(newIdNumberHash != bytes32(0), "Invalid ID number hash");
 
         SellerInfo storage sellerInfo = sellers[seller];
-        sellerInfo.nameHash = newNameHash;
-        sellerInfo.ipfsUrl = newIpfsUrl;
+        sellerInfo.idNumberHash = newIdNumberHash;
 
         emit SellerInfoUpdated(seller, block.timestamp);
     }
