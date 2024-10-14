@@ -23,176 +23,176 @@ describe("SellerVerification", function () {
     });
   });
 
-  describe("verifySeller", function () {
-    it("Should allow owner to verify a seller", async function () {
-        const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-        const ipfsUrl = "ipfs://QmX...";
-        
-        const txResponse = await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
-        const txReceipt = await txResponse.wait();
-        
-        const block = await ethers.provider.getBlock(txReceipt.blockNumber);
-        const eventFilter = sellerVerification.filters.SellerVerified(addr1.address);
-        const events = await sellerVerification.queryFilter(eventFilter, txReceipt.blockNumber);
-        
-        expect(events.length).to.equal(1);
-        expect(events[0].args[0]).to.equal(addr1.address);
-        expect(events[0].args[1]).to.be.closeTo(BigInt(block.timestamp), BigInt(2));
-      
-        const sellerInfo = await sellerVerification.getSellerInfo(addr1.address);
-        expect(sellerInfo.isVerified).to.be.true;
-        expect(sellerInfo.nameHash).to.equal(nameHash);
-        expect(sellerInfo.ipfsUrl).to.equal(ipfsUrl);
-      });
+  describe("setEncryptedDatabaseIpfsUrl", function () {
+    const validUrl = "ipfs://QmTest";
 
-    it("Should revert if non-owner tries to verify a seller", async function () {
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-      const ipfsUrl = "ipfs://QmX...";
-      
-      await expect(sellerVerification.connect(addr1).verifySeller(addr2.address, nameHash, ipfsUrl))
+    it("Should set the encrypted database IPFS URL", async function () {
+      await expect(sellerVerification.setEncryptedDatabaseIpfsUrl(validUrl))
+        .to.emit(sellerVerification, "EncryptedDatabaseIpfsUrlUpdated");
+
+      expect(await sellerVerification.getEncryptedDatabaseIpfsUrl()).to.equal(validUrl);
+    });
+
+    it("Should fail if not called by owner", async function () {
+      await expect(sellerVerification.connect(addr1).setEncryptedDatabaseIpfsUrl(validUrl))
         .to.be.revertedWithCustomError(sellerVerification, "OwnableUnauthorizedAccount");
     });
 
-    it("Should revert if trying to verify with invalid inputs", async function () {
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-      const ipfsUrl = "ipfs://QmX...";
-
-      await expect(sellerVerification.verifySeller(ethers.ZeroAddress, nameHash, ipfsUrl))
-        .to.be.revertedWith("Invalid seller address");
-
-      await expect(sellerVerification.verifySeller(addr1.address, ethers.ZeroHash, ipfsUrl))
-        .to.be.revertedWith("Invalid name hash");
-
-      await expect(sellerVerification.verifySeller(addr1.address, nameHash, ""))
+    it("Should fail with empty URL", async function () {
+      await expect(sellerVerification.setEncryptedDatabaseIpfsUrl(""))
         .to.be.revertedWith("Invalid IPFS URL");
     });
   });
 
-  describe("revokeSeller", function () {
-    it("Should allow owner to revoke a verified seller", async function () {
-        const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-        const ipfsUrl = "ipfs://QmX...";
-        
-        await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
-        
-        const txResponse = await sellerVerification.revokeSeller(addr1.address);
-        const txReceipt = await txResponse.wait();
-        
-        const block = await ethers.provider.getBlock(txReceipt.blockNumber);
-        const eventFilter = sellerVerification.filters.VerificationRevoked(addr1.address);
-        const events = await sellerVerification.queryFilter(eventFilter, txReceipt.blockNumber);
-        
-        expect(events.length).to.equal(1);
-        expect(events[0].args[0]).to.equal(addr1.address);
-        expect(events[0].args[1]).to.be.closeTo(BigInt(block.timestamp), BigInt(2));
-        
-        expect(await sellerVerification.isSellerVerified(addr1.address)).to.be.false;
+  describe("getEncryptedDatabaseIpfsUrl", function () {
+    const validUrl = "ipfs://QmTest";
+
+    beforeEach(async function () {
+      await sellerVerification.setEncryptedDatabaseIpfsUrl(validUrl);
     });
 
-    it("Should revert if non-owner tries to revoke a seller", async function () {
+    it("Should return the correct URL when called by owner", async function () {
+      expect(await sellerVerification.getEncryptedDatabaseIpfsUrl()).to.equal(validUrl);
+    });
+
+    it("Should fail if not called by owner", async function () {
+      await expect(sellerVerification.connect(addr1).getEncryptedDatabaseIpfsUrl())
+        .to.be.revertedWithCustomError(sellerVerification, "OwnableUnauthorizedAccount");
+    });
+  });
+
+  describe("verifySeller", function () {
+    const validIdNumberHash = ethers.keccak256(ethers.toUtf8Bytes("123456789"));
+
+    it("Should verify a seller", async function () {
+      const tx = await sellerVerification.verifySeller(addr1.address, validIdNumberHash);
+      const receipt = await tx.wait();
+      const event = receipt.logs.find(log => log.eventName === 'SellerVerified');
+      expect(event).to.not.be.undefined;
+      expect(event.args[0]).to.equal(addr1.address);
+      expect(event.args[1]).to.be.closeTo(await ethers.provider.getBlock("latest").then(b => b.timestamp), 2);
+
+      const sellerInfo = await sellerVerification.getSellerInfo(addr1.address);
+      expect(sellerInfo.idNumberHash).to.equal(validIdNumberHash);
+      expect(sellerInfo.isVerified).to.be.true;
+      expect(sellerInfo.verificationTimestamp).to.be.gt(0);
+    });
+
+    it("Should fail if not called by owner", async function () {
+      await expect(sellerVerification.connect(addr1).verifySeller(addr2.address, validIdNumberHash))
+        .to.be.revertedWithCustomError(sellerVerification, "OwnableUnauthorizedAccount");
+    });
+
+    it("Should fail with invalid inputs", async function () {
+      await expect(sellerVerification.verifySeller(ethers.ZeroAddress, validIdNumberHash))
+        .to.be.revertedWith("Invalid seller address");
+
+      await expect(sellerVerification.verifySeller(addr1.address, ethers.ZeroHash))
+        .to.be.revertedWith("Invalid ID number hash");
+    });
+  });
+
+  describe("revokeSeller", function () {
+    const validIdNumberHash = ethers.keccak256(ethers.toUtf8Bytes("123456789"));
+
+    beforeEach(async function () {
+      await sellerVerification.verifySeller(addr1.address, validIdNumberHash);
+    });
+
+    it("Should revoke a verified seller", async function () {
+      const tx = await sellerVerification.revokeSeller(addr1.address);
+      const receipt = await tx.wait();
+      const event = receipt.logs.find(log => log.eventName === 'VerificationRevoked');
+      expect(event).to.not.be.undefined;
+      expect(event.args[0]).to.equal(addr1.address);
+      expect(event.args[1]).to.be.closeTo(await ethers.provider.getBlock("latest").then(b => b.timestamp), 2);
+
+      expect(await sellerVerification.isSellerVerified(addr1.address)).to.be.false;
+    });
+
+    it("Should fail if not called by owner", async function () {
       await expect(sellerVerification.connect(addr1).revokeSeller(addr2.address))
         .to.be.revertedWithCustomError(sellerVerification, "OwnableUnauthorizedAccount");
     });
 
-    it("Should revert if trying to revoke an unverified seller", async function () {
-      await expect(sellerVerification.revokeSeller(addr1.address))
+    it("Should fail if seller is not verified", async function () {
+      await expect(sellerVerification.revokeSeller(addr2.address))
         .to.be.revertedWith("Seller is not verified");
     });
   });
 
   describe("updateSellerInfo", function () {
-    it("Should allow owner to update a verified seller's info", async function () {
-        const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-        const ipfsUrl = "ipfs://QmX...";
-        await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
-      
-        const newNameHash = ethers.keccak256(ethers.toUtf8Bytes("Jane Doe"));
-        const newIpfsUrl = "ipfs://QmY...";
-        
-        const txResponse = await sellerVerification.updateSellerInfo(addr1.address, newNameHash, newIpfsUrl);
-        const txReceipt = await txResponse.wait();
-        
-        const block = await ethers.provider.getBlock(txReceipt.blockNumber);
-        const eventFilter = sellerVerification.filters.SellerInfoUpdated(addr1.address);
-        const events = await sellerVerification.queryFilter(eventFilter, txReceipt.blockNumber);
-        
-        expect(events.length).to.equal(1);
-        expect(events[0].args[0]).to.equal(addr1.address);
-        expect(events[0].args[1]).to.be.closeTo(BigInt(block.timestamp), BigInt(2)); // Allow 2 second difference
-        
-        const sellerInfo = await sellerVerification.getSellerInfo(addr1.address);
-        expect(sellerInfo.isVerified).to.be.true;
-        expect(sellerInfo.nameHash).to.equal(newNameHash);
-        expect(sellerInfo.ipfsUrl).to.equal(newIpfsUrl);
+    const validIdNumberHash = ethers.keccak256(ethers.toUtf8Bytes("123456789"));
+    const newValidIdNumberHash = ethers.keccak256(ethers.toUtf8Bytes("987654321"));
+
+    beforeEach(async function () {
+      await sellerVerification.verifySeller(addr1.address, validIdNumberHash);
     });
 
-    it("Should revert if non-owner tries to update seller info", async function () {
-      await expect(sellerVerification.connect(addr1).updateSellerInfo(addr2.address, ethers.ZeroHash, "ipfs://QmZ..."))
+    it("Should update seller info", async function () {
+      const tx = await sellerVerification.updateSellerInfo(addr1.address, newValidIdNumberHash);
+      const receipt = await tx.wait();
+      const event = receipt.logs.find(log => log.eventName === 'SellerInfoUpdated');
+      expect(event).to.not.be.undefined;
+      expect(event.args[0]).to.equal(addr1.address);
+      expect(event.args[1]).to.be.closeTo(await ethers.provider.getBlock("latest").then(b => b.timestamp), 2);
+
+      const sellerInfo = await sellerVerification.getSellerInfo(addr1.address);
+      expect(sellerInfo.idNumberHash).to.equal(newValidIdNumberHash);
+      expect(sellerInfo.isVerified).to.be.true;
+    });
+
+    it("Should fail if not called by owner", async function () {
+      await expect(sellerVerification.connect(addr1).updateSellerInfo(addr1.address, newValidIdNumberHash))
         .to.be.revertedWithCustomError(sellerVerification, "OwnableUnauthorizedAccount");
     });
 
-    it("Should revert if trying to update an unverified seller", async function () {
-      const newNameHash = ethers.keccak256(ethers.toUtf8Bytes("Jane Doe"));
-      const newIpfsUrl = "ipfs://QmY...";
-      
-      await expect(sellerVerification.updateSellerInfo(addr1.address, newNameHash, newIpfsUrl))
+    it("Should fail if seller is not verified", async function () {
+      await expect(sellerVerification.updateSellerInfo(addr2.address, newValidIdNumberHash))
         .to.be.revertedWith("Seller is not verified");
     });
 
-    it("Should revert if trying to update with invalid inputs", async function () {
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-      const ipfsUrl = "ipfs://QmX...";
-      await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
-
-      await expect(sellerVerification.updateSellerInfo(addr1.address, ethers.ZeroHash, ipfsUrl))
-        .to.be.revertedWith("Invalid name hash");
-
-      await expect(sellerVerification.updateSellerInfo(addr1.address, nameHash, ""))
-        .to.be.revertedWith("Invalid IPFS URL");
+    it("Should fail with invalid inputs", async function () {
+      await expect(sellerVerification.updateSellerInfo(addr1.address, ethers.ZeroHash))
+        .to.be.revertedWith("Invalid ID number hash");
     });
   });
 
   describe("isSellerVerified", function () {
-    it("Should return true for a verified seller", async function () {
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-      const ipfsUrl = "ipfs://QmX...";
-      await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
-      
+    const validIdNumberHash = ethers.keccak256(ethers.toUtf8Bytes("123456789"));
+
+    it("Should return true for verified sellers", async function () {
+      await sellerVerification.verifySeller(addr1.address, validIdNumberHash);
       expect(await sellerVerification.isSellerVerified(addr1.address)).to.be.true;
     });
 
-    it("Should return false for an unverified seller", async function () {
-      expect(await sellerVerification.isSellerVerified(addr1.address)).to.be.false;
+    it("Should return false for unverified sellers", async function () {
+      expect(await sellerVerification.isSellerVerified(addr2.address)).to.be.false;
     });
 
-    it("Should return false for a revoked seller", async function () {
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-      const ipfsUrl = "ipfs://QmX...";
-      await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
+    it("Should return false for revoked sellers", async function () {
+      await sellerVerification.verifySeller(addr1.address, validIdNumberHash);
       await sellerVerification.revokeSeller(addr1.address);
-      
       expect(await sellerVerification.isSellerVerified(addr1.address)).to.be.false;
     });
   });
 
   describe("getSellerInfo", function () {
-    it("Should return correct info for a verified seller", async function () {
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes("John Doe"));
-      const ipfsUrl = "ipfs://QmX...";
-      await sellerVerification.verifySeller(addr1.address, nameHash, ipfsUrl);
-      
+    const validIdNumberHash = ethers.keccak256(ethers.toUtf8Bytes("123456789"));
+
+    it("Should return correct info for verified sellers", async function () {
+      await sellerVerification.verifySeller(addr1.address, validIdNumberHash);
+
       const sellerInfo = await sellerVerification.getSellerInfo(addr1.address);
+      expect(sellerInfo.idNumberHash).to.equal(validIdNumberHash);
       expect(sellerInfo.isVerified).to.be.true;
-      expect(sellerInfo.nameHash).to.equal(nameHash);
-      expect(sellerInfo.ipfsUrl).to.equal(ipfsUrl);
       expect(sellerInfo.verificationTimestamp).to.be.gt(0);
     });
 
-    it("Should return default values for an unverified seller", async function () {
-      const sellerInfo = await sellerVerification.getSellerInfo(addr1.address);
+    it("Should return default values for unverified sellers", async function () {
+      const sellerInfo = await sellerVerification.getSellerInfo(addr2.address);
+      expect(sellerInfo.idNumberHash).to.equal(ethers.ZeroHash);
       expect(sellerInfo.isVerified).to.be.false;
-      expect(sellerInfo.nameHash).to.equal(ethers.ZeroHash);
-      expect(sellerInfo.ipfsUrl).to.equal("");
       expect(sellerInfo.verificationTimestamp).to.equal(0);
     });
   });
