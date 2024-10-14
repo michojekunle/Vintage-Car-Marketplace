@@ -27,7 +27,7 @@ const CarDetails = () => {
       </div>
     );
   }
-  
+
   const handleListCarButtonClick = () => {
     router.push('/I do not know the link to that')
   }
@@ -142,7 +142,10 @@ const CarDetails = () => {
                       VintageChain
                     </Link>
                   </p>
-                  <Button className="w-full bg-amber-700 text-white mt-2">
+                  <Button
+                    className="w-full bg-amber-700 text-white mt-2"
+                    onClick={() => router.push(`/service/request/${selectedCar.id}`)}
+                  >
                     Schedule a Service
                   </Button>
                   <div className="border-t border-gray-200 pt-2">
