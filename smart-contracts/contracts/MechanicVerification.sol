@@ -192,5 +192,4 @@ contract MechanicVerification is ERC721, Ownable {
     function transferFrom(address from, address to, uint256 tokenId) public override {}
     function safeTransferFrom(address from, address to, uint256 tokenId) public override {}
     function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory _data) public override {}
-
 }
