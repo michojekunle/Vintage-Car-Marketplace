@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { Car, Plus, ShieldCheck } from "lucide-react";
+import { Car, Plus, ShieldCheck, Wrench } from "lucide-react";
 import {motion} from 'framer-motion'
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
@@ -54,7 +54,7 @@ const Sidebar = () => {
               <Link
                 href="/dashboard"
                 className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/your-cars" ? "bg-amber-100" : ""
+                  pathname === "/dashboard" ? "bg-amber-100" : ""
                 }`}
               >
                 <Car className="w-5 h-5 mr-3" />
@@ -65,7 +65,7 @@ const Sidebar = () => {
               <Link
                 href="/dashboard/add-car"
                 className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/your-cars/add-new-car" ? "bg-amber-100" : ""
+                  pathname === "/dashboard/add-car" ? "bg-amber-100" : ""
                 }`}
               >
                 <Plus className="w-5 h-5 mr-3" />
@@ -76,11 +76,22 @@ const Sidebar = () => {
               <Link
                 href="/dashboard/verify-profile"
                 className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/your-cars/add-new-car" ? "bg-amber-100" : ""
+                  pathname === "/dashboard/verify-profile" ? "bg-amber-100" : ""
                 }`}
               >
                 <ShieldCheck className="w-5 h-5 mr-3" />
                 Verify Profile
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/mechanic"
+                className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
+                  pathname === "/dashboard/mechanic" ? "bg-amber-100" : ""
+                }`}
+              >
+                <Wrench className="w-5 h-5 mr-3" />
+                Become a Mechanic
               </Link>
             </li>
           </ul>
