@@ -4,6 +4,7 @@ pragma solidity ^0.8.27;
 // import "./VintageCarNFT.sol"; //import our nft contract
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+// import "./SellerVerification.sol"; 
 
 contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     struct Listing {
