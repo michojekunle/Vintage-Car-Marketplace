@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.0;
 
-import "./VintageCarNFT.sol"; //import our nft contract
+
+// import "./VintageCarNFT.sol";
+// import "./SellerVerification.sol";
+// import "./CarVerificationOracle.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -13,35 +16,48 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
         bool isActive;
     }
 
-    //we'll reference the nft contract first, sth like
-    VintageCarNFT public nftContract;
-    uint256 public marketplaceFee = 2; // 2% fee
+
+    // VintageCarNFT public nftContract;
+    // SellerVerification public sellerVerification;
+    // CarVerificationOracle public carVerification; 
+    uint256 public marketplaceFee = 2;  // 2% fee
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256) public proceeds;
 
-    event Listed(
-        uint256 indexed tokenId,
-        address indexed seller,
-        uint256 price
-    );
+    event Listed(uint256 indexed tokenId, address indexed seller, uint256 price);
     event Updated(uint256 indexed tokenId, uint256 newPrice);
     event Cancelled(uint256 indexed tokenId);
     event Bought(uint256 indexed tokenId, address indexed buyer, uint256 price);
     event Withdrawn(address indexed seller, uint256 amount);
 
-    constructor(VintageCarNFT _nftContract) Ownable(msg.sender) {
+    constructor(
+        VintageCarNFT _nftContract, 
+        SellerVerification _sellerVerification,
+        CarVerificationOracle _carVerification
+    ) Ownable(msg.sender) {
         nftContract = VintageCarNFT(_nftContract);
+        sellerVerification = SellerVerification(_sellerVerification); 
+        carVerification = CarVerificationOracle(_carVerification);   
     }
 
-    function listNFT(uint256 tokenId, uint256 price) external nonReentrant {
+
+    function listNFT(
+        uint256 tokenId, 
+        uint256 price,
+        string memory vin  //car vin
+    ) external nonReentrant {
         require(nftContract.exists(tokenId), "NFT does not exist");
         require(nftContract.ownerOf(tokenId) == msg.sender, "Not the owner");
         require(
+            nftContract.isApprovedForAll(msg.sender, address(this)) ||
             nftContract.getApproved(tokenId) == address(this),
             "Marketplace not approved"
         );
         require(price > 0, "Price must be greater than zero");
         require(!listings[tokenId].isActive, "NFT is already listed");
+        require(sellerVerification.isSellerVerified(msg.sender), "Seller Not Verified");
+        require(carVerification.isCarVerified(vin), "Car Not Verified"); //supply vin to check verfication
+
 
         listings[tokenId] = Listing({
             tokenId: tokenId,
@@ -116,7 +132,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
 }
 
 
-    // market place fn
+    // market place fee fn
     function setMarketplaceFee(uint256 _fee) external onlyOwner {
         require(_fee <= 100, "Fee cannot exceed 100%");
         marketplaceFee = _fee;
