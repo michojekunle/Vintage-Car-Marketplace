@@ -28,7 +28,7 @@ const CarDetails = () => {
     );
   }
   
-  const handleListCarButton = () => {
+  const handleListCarButtonClick = () => {
     router.push('/I do not know the link to that')
   }
 
@@ -162,7 +162,7 @@ const CarDetails = () => {
                   </p>
                   <Button
                     className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-full hover:bg-primary-action hover:text-white transition"
-                    onClick={handleListCarButton}
+                    onClick={handleListCarButtonClick}
                   >
                     List Car
                   </Button>
