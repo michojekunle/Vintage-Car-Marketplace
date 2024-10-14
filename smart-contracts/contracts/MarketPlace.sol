@@ -16,6 +16,7 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
 
     //we'll reference the nft contract first, sth like
     //VintageCarNFT public nftContract;
+    //SellerVerification public sellerVerification;
     uint256 public marketplaceFee = 2; // 2% fee
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256) public proceeds;
@@ -30,8 +31,10 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
     event Bought(uint256 indexed tokenId, address indexed buyer, uint256 price);
     event Withdrawn(address indexed seller, uint256 amount);
 
-    constructor(VintageCarNFT _nftContract) Ownable(msg.sender) {
+    constructor(VintageCarNFT _nftContract,
+    SellerVerification _sellerVerification) Ownable(msg.sender) {
         nftContract = VintageCarNFT(_nftContract);
+        sellerVerification = SellerVerification(_sellerVerification);
     }
 
     function listNFT(uint256 tokenId, uint256 price) external nonReentrant {
@@ -43,6 +46,8 @@ contract VintageCarMarketplace is Ownable, ReentrancyGuard {
         );
         require(price > 0, "Price must be greater than zero");
         require(!listings[tokenId].isActive, "NFT is already listed");
+        require(sellerVerification.isSellerVerified(msg.sender), "Seller Not Verified");
+
 
         listings[tokenId] = Listing({
             tokenId: tokenId,
