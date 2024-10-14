@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { motion } from "framer-motion";
 import {
 	Card,
@@ -22,20 +22,23 @@ import VerificationStep from "./verification-step";
 import type { VerificationStatus } from "../page";
 import { useFacetecDataStore } from "../../../../../stores/useFacetecDataStore";
 
+interface VerificationProgressProps {
+	verificationStatus: VerificationStatus;
+	setVerificationStatus: Dispatch<SetStateAction<VerificationStatus>>;
+}
+
 export default function VerificationProgress({
 	verificationStatus,
-}: {
-	verificationStatus: VerificationStatus;
-}) {
+	setVerificationStatus,
+}: VerificationProgressProps) {
 	const [progress, setProgress] = useState(0);
-    const resetDetails = useFacetecDataStore(state => state.reset) 
+	const resetDetails = useFacetecDataStore((state) => state.reset);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setProgress(66);
 			setTimeout(() => {
 				setProgress(100);
-				
 			}, 3000);
 		}, 2000);
 		return () => clearTimeout(timer);
@@ -101,7 +104,10 @@ export default function VerificationProgress({
 							</p>
 							<Button
 								variant="outline"
-								onClick={() =>resetDetails()}
+								onClick={() => {
+									resetDetails();
+                                    setVerificationStatus("verifying");
+								}}
 							>
 								Try Again
 							</Button>

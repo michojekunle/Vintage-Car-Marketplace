@@ -23,40 +23,39 @@ export default function UserVerification() {
 
 	useEffect(() => {
 		const verifyDetails = async () => {
-			if (!isCompletelyDone) return;
-			if (!formattedScanData.idNumber || !isSuccessfullyMatched) {
-				toast({
-					title: "Please complete the FaceTec scan first",
-					variant: "destructive",
-					duration: 5000,
-					// icon: <AlertCircle className="h-6 w-6" />,
-					description:
-						"You must complete the FaceTec scan before verifying your profile.",
-				});
-				return setVerificationStatus("failed");
-			}
-
-			const requestBody = { ...formattedScanData, isSuccessfullyMatched };
-			let fullName;
-			if (formattedScanData.firstName && !formattedScanData.lastName) {
-				fullName = `${formattedScanData.firstName}`;
-				delete requestBody.firstname;
-			} else if (!formattedScanData.firstName && formattedScanData.lastName) {
-				fullName = `${formattedScanData.lastName}`;
-				delete requestBody.lastName;
-			} else if (formattedScanData.firstName && formattedScanData.lastName) {
-				fullName = `${formattedScanData.firstName} ${formattedScanData.lastName}`;
-				delete requestBody.firstName;
-				delete requestBody.lastName;
-			}
-
-			//remove commas from fullName
-			fullName = fullName?.replace(/,/g, "");
-			requestBody.fullName = fullName;
-
-			console.log(requestBody);
-
 			try {
+				if (!isCompletelyDone) return;
+				if (!formattedScanData.idNumber || !isSuccessfullyMatched) {
+					toast({
+						title: "Please complete the FaceTec scan first",
+						variant: "destructive",
+						duration: 5000,
+						description:
+							"You must complete the FaceTec scan before verifying your profile.",
+					});
+					return setVerificationStatus("failed");
+				}
+
+				const requestBody = { ...formattedScanData, isSuccessfullyMatched };
+				let fullName;
+				if (formattedScanData.firstName && !formattedScanData.lastName) {
+					fullName = `${formattedScanData.firstName}`;
+					delete requestBody.firstname;
+				} else if (!formattedScanData.firstName && formattedScanData.lastName) {
+					fullName = `${formattedScanData.lastName}`;
+					delete requestBody.lastName;
+				} else if (formattedScanData.firstName && formattedScanData.lastName) {
+					fullName = `${formattedScanData.firstName} ${formattedScanData.lastName}`;
+					delete requestBody.firstName;
+					delete requestBody.lastName;
+				}
+
+				//remove commas from fullName
+				fullName = fullName?.replace(/,/g, "");
+				requestBody.fullName = fullName;
+
+				console.log(requestBody);
+
 				const response = await axios.post("/api/verify-document", requestBody);
 				const data = response.data;
 				console.log({ data });
@@ -87,7 +86,10 @@ export default function UserVerification() {
 	return (
 		<>
 			{isCompletelyDone && isSuccessfullyMatched ? (
-				<VerificationProgress verificationStatus={verificationStatus} />
+				<VerificationProgress
+					verificationStatus={verificationStatus}
+					setVerificationStatus={setVerificationStatus}
+				/>
 			) : (
 				<div className="container mx-auto p-4 min-h-full grid items-center">
 					<FacetecApp />
