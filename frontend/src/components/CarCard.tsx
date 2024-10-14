@@ -39,12 +39,12 @@ export const CarCard = ({
       listed,
       id: id,
     });
-  
+
     if (onClick) {
       onClick();
     }
   };
-  
+
 
   return (
     <MotionCard
@@ -91,14 +91,12 @@ export const CarCard = ({
         <p className="text-primary-action font-bold">{price} ETH</p>
       </div>
       <p
-        className={`absolute py-1 px-2 rounded-md right-2 top-2 text-xs font-semibold ${
-          listed === "Listed"
-            ? "bg-green-100 text-green-800"
-            : "bg-red-100 text-red-800"
-        }`}
+        className={`absolute py-1 px-2 rounded-md right-2 top-2 text-xs font-semibold ${listed ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          }`}
       >
-        {listed}
+        {listed ? "Listed" : "Sold"}
       </p>
+
     </MotionCard>
   );
 };

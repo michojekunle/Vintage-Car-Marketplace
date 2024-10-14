@@ -13,7 +13,7 @@ interface ICarCard {
 	name: string;
 	make: string;
 	model: string;
-	listed: string;
+	listed: boolean;
 	year: number;
 	rating: number;
 	reviews: number;

@@ -32,7 +32,7 @@ export const filterOptions = ["All", "Make", "Year", "Model"];
 
 export interface Car {
   id: number;
-  listed: string;
+  listed: boolean;
   name: string;
   make: string;
   model: string;
@@ -48,7 +48,7 @@ export interface Car {
 export const featuredCars: Car[] = [
   {
     id: 1,
-    listed: "Listed",
+    listed: true,
     name: "Classic Mustang",
     make: "Ford",
     model: "Mustang",
@@ -57,12 +57,12 @@ export const featuredCars: Car[] = [
     reviews: 28,
     price: 20,
     image: "/mustang.png",
-    condition: "Excellent",
+    condition: "Bad",
     serviceHistory: ["Oil change on 01/2023", "Tire rotation on 02/2023"],
   },
   {
     id: 2,
-    listed: "Sold",
+    listed: false,
     name: "Vintage Beetle",
     make: "Volkswagen",
     model: "Beetle",
@@ -76,7 +76,7 @@ export const featuredCars: Car[] = [
   },
   {
     id: 3,
-    listed: "Listed",
+    listed: true,
     name: "Retro Corvette",
     make: "Chevrolet",
     model: "Corvette",
@@ -90,7 +90,7 @@ export const featuredCars: Car[] = [
   },
   {
     id: 4,
-    listed: "Sold",
+    listed: false,
     name: "Classic Mini",
     make: "Austin",
     model: "Mini",
