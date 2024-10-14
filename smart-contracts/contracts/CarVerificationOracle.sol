@@ -104,6 +104,12 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         return carDetails;
     }
 
+    function isCarVerified(string memory vin) public view returns (bool) {
+        bytes32 requestId = vinToRequestId[vin];
+        if (requestId == bytes32(0)) return false;
+        return verifications[requestId].isVerified;
+    }
+
     function transferOwnership(string memory vin, address newOwner) public {
         bytes32 requestId = vinToRequestId[vin];
         CarDetails storage carDetails = verifications[requestId];
