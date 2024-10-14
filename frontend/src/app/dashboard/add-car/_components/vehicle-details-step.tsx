@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { UseFormReturn } from "react-hook-form";
 import {
 	FormControl,
@@ -35,11 +36,10 @@ const VehicleDetailsStep = ({
 	useEffect(() => {
 		async function fetchYear() {
 			try {
-				const response = await fetch("/api/car-years");
-				if (!response.ok) {
-					throw new Error("Network response was not ok");
-				}
-				const data = await response.json();
+				
+				const response = await axios.get("/api/car-years");
+			
+				const data = response.data;
 
 				const yearsOption = [];
 
@@ -61,11 +61,9 @@ const VehicleDetailsStep = ({
 		async function fetchMakes() {
 			if (!yearValue) return;
 			try {
-				const response = await fetch(`/api/car-makes/?year=${yearValue}`);
-				if (!response.ok) {
-					throw new Error("Network response was not ok");
-				}
-				const data = await response.json();
+				const response = await axios.get(`/api/car-makes/?year=${yearValue}`);
+			
+				const data = response.data
 
 				const makesOption = [];
 
@@ -92,13 +90,11 @@ const VehicleDetailsStep = ({
 		async function fetchModel() {
 			if (!yearValue || !makeValue) return form.setValue("model", "");
 			try {
-				const response = await fetch(
+				const response = await axios.get(
 					`/api/car-models/?year=${yearValue}&make=${makeValue}`
 				);
-				if (!response.ok) {
-					throw new Error("Network response was not ok");
-				}
-				const data = await response.json();
+			
+				const data = response.data;
 
 				const modelsOption = [];
 
