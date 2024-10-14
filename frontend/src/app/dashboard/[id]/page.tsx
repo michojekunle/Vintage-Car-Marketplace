@@ -1,5 +1,5 @@
 import React from "react";
-import UserCarDetail from "../../components/UserCarDetail";
+import UserCarDetail from "./_components/UserCarDetail";
 
 const page = () => {
   return (

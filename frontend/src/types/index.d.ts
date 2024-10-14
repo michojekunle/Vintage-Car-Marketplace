@@ -18,6 +18,8 @@ interface ICarCard {
   rating: number;
   reviews: number;
   price: number;
+  condition?: string | undefined;
+  serviceHistory?: string[]; // Optional service history
   onClick?: () => void;
 }
 
@@ -58,6 +60,11 @@ interface IFeatured {
   cars: ICarCard[];
   priceRange: number[];
   setPriceRange: (priceRange: number[]) => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
+  itemsPerPage: number;
+  totalCars: number;
 }
 
 interface IFilterCar {
@@ -75,4 +82,20 @@ interface ICountdownTimer {
 
 interface IProviders {
   children: React.ReactNode;
+}
+type ListCarFormValues = {
+  listingType: "normalSale" | "auction";
+  enableBuyout: boolean;
+  durationUnit: "minutes" | "hours" | "days";
+  salePrice?: string;
+  buyoutPrice?: string;
+  startingPrice?: string;
+  duration?: string;
+};
+
+interface IListCarDialog {
+  isDialogOpen: boolean;
+  onSubmit: (values: ListCarFormValues) => void;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  form: UseFormReturn<ListCarFormValues, undefined>;
 }
