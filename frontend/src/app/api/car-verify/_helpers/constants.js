@@ -380,9 +380,10 @@ export const abi = [
   { stateMutability: "payable", type: "receive" },
 ];
 
-export const source = `
-    const verifyCarDetails = async (vin, make, model, year) => {
-    const apiUrl = ${`https://car-verification-api.vercel.app/verify?vin=${vin}&make=${make}&model=${model}&year=${year}`};
+export const getSource = (vin, make, model, year) => {
+  return `
+    const verifyCarDetails = async (${vin}, ${make}, ${model}, ${year}) => {
+    const apiUrl = ${`https://car-verification-api.vercel.app/verify?vin=${`${vin}`}&make=${make}&model=${model}&year=${year}`};
     
     const response = await Functions.makeHttpRequest({
       url: apiUrl,
@@ -399,3 +400,4 @@ export const source = `
 };
   
 return verifyCarDetails(args[0], args[1], args[2], args[3]);`;
+};
