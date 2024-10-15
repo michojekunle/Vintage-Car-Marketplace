@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,6 @@ const questions: Question[] = [
     ],
     correctAnswer: 'Suggest resurfacing the rotors to even out the wear patterns and replace the brake pads.',
   },
-
 ];
 
 const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: string }) => void }) => {
@@ -52,14 +51,14 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
     return () => clearInterval(timer); // Cleanup interval on component unmount
   }, [timeLeft]);
 
- 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const answer = event.target.value;
     setSelectedAnswers({
       ...selectedAnswers,
-      [currentQuestion]: event.target.value,
+      [currentQuestion]: answer,
     });
+    handleNext(); // Automatically move to next question
   };
-
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
@@ -67,30 +66,37 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
     }
   };
 
-
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
 
-
   const handleSubmit = () => {
-    onSubmit(selectedAnswers); 
+    onSubmit(selectedAnswers);
   };
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-     
-      <div className="col-span-2">
-        <h2 className="text-2xl font-semibold text-amber-700 mb-4">Question {currentQuestion + 1} of {questions.length}</h2>
-        
-        <p className="text-lg mb-4">{questions[currentQuestion].question}</p>
+    <div className="flex flex-col items-center justify-center">
+      <div className="flex justify-end w-full mb-4 px-4">
+        <div className="text-right">
+          <h3 className="text-2xl font-semibold text-red-600">Time Left</h3>
+          <div className="text-lg">
+            <p>{Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}</p>
+          </div>
+        </div>
+      </div>
 
+      <div className=" w-[89%] bg-white shadow-lg rounded-lg p-8">
+        <h2 className="text-xl font-semibold text-amber-700 mb-4 text-center">Question {currentQuestion + 1} of {questions.length}</h2>
+
+        <p className="text-2xl font-bold text-700 mb-4 text-center">
+  {questions[currentQuestion].question}
+</p>
 
         <div className="space-y-3">
           {questions[currentQuestion].options.map((option, index) => (
-            <label key={index} className="block">
+            <label key={index} className="block ">
               <input
                 type="radio"
                 name={`question-${currentQuestion}`}
@@ -104,7 +110,6 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
           ))}
         </div>
 
-    
         <div className="mt-6 flex justify-between">
           <Button onClick={handlePrevious} disabled={currentQuestion === 0} className="bg-gray-500 hover:bg-gray-600 text-white">
             Previous
@@ -118,14 +123,6 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
               Submit
             </Button>
           )}
-        </div>
-      </div>
-
-  
-      <div className="col-span-1 text-right">
-        <h3 className="text-2xl font-semibold text-red-600">Time Left</h3>
-        <div className="text-lg">
-          <p>{Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}</p>
         </div>
       </div>
     </div>
