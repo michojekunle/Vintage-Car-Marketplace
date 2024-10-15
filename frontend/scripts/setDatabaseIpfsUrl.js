@@ -108,7 +108,7 @@ const retrieveFromIPFS = async () => {
 	}
 };
 
-retrieveFromIPFS()
+setDatabaIpfsUrl()
 	.then(() => console.log("All operations successful ✅✅✅"))
 	.catch((err) => console.log("Failed operation", err));
 
