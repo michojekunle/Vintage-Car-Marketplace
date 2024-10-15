@@ -200,7 +200,7 @@ We aim to implement a system that tracks all previous ownership, transactions, a
     1. Clone the repository:
        bash
        Copy code
-       git clone https://github.com/your-repo/vintage-car-marketplace.git
+       git clone https://github.com/michojekunle/Vintage-Car-Marketplace.git
 
     2. Install dependencies:
        bash
@@ -216,6 +216,12 @@ We aim to implement a system that tracks all previous ownership, transactions, a
 ## Contributions
 
 We welcome contributions from the community to help improve and expand the platform. To contribute, please submit a pull request or create an issue on our GitHub repository.
+
+## Contributors
+
+Below are the list of contributors to this project
+
+1. Michael John [click here](https://github.com/Micjohn01)
 
 ## License
 This project is licensed under the MIT License.
