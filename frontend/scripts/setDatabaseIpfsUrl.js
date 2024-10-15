@@ -14,13 +14,13 @@ const pinata = new pinataSDK(
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_PROVIDER);
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const contractAddress = "0x2c13E255Ae105ff262A7eD47040D1D7bB3f837Ed";
 const contractABI = [
 	"function setEncryptedDatabaseIpfsUrl(string memory _url) external",
 	"function getEncryptedDatabaseIpfsUrl() external view returns (string memory)",
 ];
-const writeContract = new Contract(contractAddress, contractABI, signer);
-const readContract = new Contract(contractAddress, contractABI, provider);
+const contract = new Contract(contractAddress, contractABI, signer);
+// const readContract = new Contract(contractAddress, contractABI, provider);
 
 const encryptData = (data, secretKey) => {
 	console.log("Encrypting data...");
@@ -76,7 +76,7 @@ const setDatabaIpfsUrl = async () => {
 	try {
 		const ipfsUrl = await uploadToIPFS();
 		console.log("Setting database IPFS URL to Contract...");
-		const txResponse = await writeContract.setEncryptedDatabaseIpfsUrl(ipfsUrl);
+		const txResponse = await contract.setEncryptedDatabaseIpfsUrl(ipfsUrl);
 		const txReceipt = await txResponse.wait();
 
 		console.log({ message: "Successfully added to database ✅✅", txReceipt });
@@ -107,7 +107,7 @@ const retrieveFromIPFS = async () => {
 	try {
 		// const url = `https://gateway.pinata.cloud/ipfs/QmdMFkJk3xA59R4qAhwHpUnuXf4BgecPcvvrbwd4HGgvTy`;
 		const url =
-			(await readContract.getEncryptedDatabaseIpfsUrl()) ?? "Oops we lost";
+			(await contract.getEncryptedDatabaseIpfsUrl()) ?? "Oops we lost";
 		console.log("URL", url);
 		const secretKey = process.env.SECRET_KEY;
 
