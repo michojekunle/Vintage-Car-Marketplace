@@ -65,6 +65,7 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
+  listingData?: any;
 }
 
 interface IFilterCar {
@@ -98,4 +99,39 @@ interface IListCarDialog {
   onSubmit: (values: ListCarFormValues) => void;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   form: UseFormReturn<ListCarFormValues, undefined>;
+}
+
+interface Car {
+  id: number;
+  listed: string;
+  name: string;
+  make: string;
+  model: string;
+  year: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  image: string;
+  condition: string | undefined;
+  serviceHistory?: string[] | null; // Array of strings to represent service records
+}
+
+interface CarStore {
+  selectedCar: Car | null;
+  setSelectedCar: (car: Car) => void;
+  listings: Listing[];
+  setListings: (listings: Listing[]) => void;
+  fetchListings: () => Promise<void>;
+}
+
+enum ListingType {
+  FixedPrice,
+  Auction,
+}
+interface Listing {
+  tokenId: string;
+  seller: string;
+  price: any;
+  isActive: boolean;
+  listingType: ListingType;
 }

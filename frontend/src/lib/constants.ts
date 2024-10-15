@@ -100,7 +100,10 @@ export const featuredCars: Car[] = [
     price: 9,
     image: "/mini.png",
     condition: "Fair",
-    serviceHistory: ["Rust treatment on 05/2023", "Brake pads replacement on 06/2023"],
+    serviceHistory: [
+      "Rust treatment on 05/2023",
+      "Brake pads replacement on 06/2023",
+    ],
   },
   {
     id: 5,
@@ -151,7 +154,6 @@ export const featuredCars: Car[] = [
     image: "/mini.png",
   },
 ];
-
 
 export const liveAuctions = [
   {
