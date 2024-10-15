@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.24;
+pragma solidity 0.8.27;
 
 import "@chainlink/contracts/src/v0.8/functions/v1_0_0/FunctionsClient.sol";
 import "@chainlink/contracts/src/v0.8/functions/v1_0_0/libraries/FunctionsRequest.sol";
@@ -17,22 +17,28 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         uint256 year;
         bool isVerified;
         uint256 verificationTimestamp;
+        address currentOwner;
     }
 
     event VerificationRequested(bytes32 indexed requestId, string indexed vin, address indexed requester);
     event VerificationFulfilled(bytes32 indexed requestId, string indexed vin, bool isVerified);
+    event OwnershipTransferred(string indexed vin, address indexed previousOwner, address indexed newOwner);
 
     bytes32 public latestRequestId;
     mapping(bytes32 => CarDetails) public verifications;
     mapping(bytes32 => bytes) private rawResponses;
+    mapping(string => bytes32) public vinToRequestId;
+    mapping(address => string[]) public ownerToCars;
+
     uint64 public subscriptionId;
     bytes32 public donId;
 
     error InvalidVIN(string vin);
     error VerificationNotFound(bytes32 requestId);
+    error CarNotOwnedByUser(string vin, address user);
 
     constructor(address router) FunctionsClient(router) ConfirmedOwner(msg.sender) {
-        subscriptionId = 201; 
+        subscriptionId = 201;
         donId = 0x66756e2d626173652d7365706f6c69612d310000000000000000000000000000;
     }
 
@@ -63,7 +69,9 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         );
 
         latestRequestId = requestId;
-        verifications[requestId] = CarDetails(vin, make, model, year, false, block.timestamp);
+        verifications[requestId] = CarDetails(vin, make, model, year, false, block.timestamp, msg.sender);
+        vinToRequestId[vin] = requestId;
+        ownerToCars[msg.sender].push(vin);
         emit VerificationRequested(requestId, vin, msg.sender);
 
         return requestId;
@@ -74,12 +82,63 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         bytes memory response,
         bytes memory err
     ) internal override {
+        CarDetails storage carDetails = verifications[requestId];
         if (err.length > 0) {
-            emit VerificationFulfilled(requestId, verifications[requestId].vin, false);
+            emit VerificationFulfilled(requestId, carDetails.vin, false);
         } else {
             rawResponses[requestId] = response;
-            emit VerificationFulfilled(requestId, verifications[requestId].vin, true);
+            carDetails.isVerified = true;
+            emit VerificationFulfilled(requestId, carDetails.vin, true);
         }
+    }
+
+    function getCarDetailsByVIN(string memory vin) public view returns (CarDetails memory) {
+        bytes32 requestId = vinToRequestId[vin];
+        if (requestId == bytes32(0)) revert VerificationNotFound(requestId);
+        return verifications[requestId];
+    }
+
+    function getCarDetailsByRequestId(bytes32 requestId) public view returns (CarDetails memory) {
+        CarDetails memory carDetails = verifications[requestId];
+        if (bytes(carDetails.vin).length == 0) revert VerificationNotFound(requestId);
+        return carDetails;
+    }
+
+    function isCarVerified(string memory vin) public view returns (bool) {
+        bytes32 requestId = vinToRequestId[vin];
+        if (requestId == bytes32(0)) return false;
+        return verifications[requestId].isVerified;
+    }
+
+    function transferOwnership(string memory vin, address newOwner) public {
+        bytes32 requestId = vinToRequestId[vin];
+        CarDetails storage carDetails = verifications[requestId];
+        
+        if (carDetails.currentOwner != msg.sender) revert CarNotOwnedByUser(vin, msg.sender);
+
+        address previousOwner = carDetails.currentOwner;
+        carDetails.currentOwner = newOwner;
+
+        removeVinFromOwner(previousOwner, vin);
+
+        ownerToCars[newOwner].push(vin);
+
+        emit OwnershipTransferred(vin, previousOwner, newOwner);
+    }
+
+    function removeVinFromOwner(address owner, string memory vin) internal {
+        string[] storage cars = ownerToCars[owner];
+        for (uint i = 0; i < cars.length; i++) {
+            if (keccak256(bytes(cars[i])) == keccak256(bytes(vin))) {
+                cars[i] = cars[cars.length - 1];
+                cars.pop();
+                break;
+            }
+        }
+    }
+
+    function getOwnerCars(address owner) public view returns (string[] memory) {
+        return ownerToCars[owner];
     }
 
     function getRawResponseBytes(bytes32 requestId) public view returns (bytes memory) {
@@ -92,12 +151,6 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
 
     function isResponseReceived(bytes32 requestId) public view returns (bool) {
         return rawResponses[requestId].length > 0;
-    }
-
-    function getCarDetails(bytes32 requestId) public view returns (CarDetails memory) {
-        CarDetails memory carDetails = verifications[requestId];
-        if (bytes(carDetails.vin).length == 0) revert VerificationNotFound(requestId);
-        return carDetails;
     }
 
     function updateSubscriptionId(uint64 newSubscriptionId) public onlyOwner {
