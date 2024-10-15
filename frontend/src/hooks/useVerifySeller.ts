@@ -4,7 +4,7 @@ import { useAccount, useSwitchChain } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useToast } from "./use-toast";
 
-const CORRECT_CHAIN_ID = "";
+const CORRECT_CHAIN_ID = 84532;
 
 console.log(CORRECT_CHAIN_ID);
 
