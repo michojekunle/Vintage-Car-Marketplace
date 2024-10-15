@@ -85,9 +85,9 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                href="/dashboard/mechanic"
+                href="/dashboard/become-a-mechanic"
                 className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/dashboard/mechanic" ? "bg-amber-100" : ""
+                  pathname === "/dashboard/become-a-mechanic" ? "bg-amber-100" : ""
                 }`}
               >
                 <Wrench className="w-5 h-5 mr-3" />

@@ -20,8 +20,6 @@ import ImagesUploadStep from "./image-upload-step";
 import ConfirmationStep from "./confirmation-step";
 import { addCarSteps } from "@/lib/constants";
 
-
-
 export default function AddCarForm() {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [status, setStatus] = useState("idle");
