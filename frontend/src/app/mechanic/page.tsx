@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Wrench, Car, Clock } from "lucide-react";
-import Testimonials from "./_components/MechanicTestimonials";
 import Link from "next/link";
+import Testimonials from "./_components/MechanicTestimonials";
 
 const MechanicsLandingPage = () => {
     return (
@@ -59,7 +59,7 @@ const MechanicsLandingPage = () => {
             <section className="bg-primary-action py-12">
                 <div className="container mx-auto text-center p-6">
                     <h2 className="text-3xl font-bold text-white mb-8">What Our Customers Say</h2>
-                    {Testimonials ? <Testimonials /> : <p>Error loading testimonials.</p>}
+                    {Testimonials ? <Testimonials/> : <p>Error loading testimonials.</p>}
                 </div>
             </section>
 
