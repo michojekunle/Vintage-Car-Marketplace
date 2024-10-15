@@ -21,7 +21,7 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable, Acc
         address currentOwner;
     }
 
-    event VerificationRequested(bytes32 indexed requestId, string indexed vin, address indexed requester);
+    event VerificationRequested(bytes32 indexed requestId, string indexed vin, address indexed owner);
     event VerificationFulfilled(bytes32 indexed requestId, string indexed vin, bool isVerified);
     event OwnershipTransferred(string indexed vin, address indexed previousOwner, address indexed newOwner);
 
@@ -53,7 +53,8 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable, Acc
         string memory make,
         string memory model,
         uint256 year,
-        string memory source
+        string memory source,
+        address carOwner
     ) public whenNotPaused onlyRole(VERIFIER_ROLE) returns (bytes32) {
         if (bytes(vin).length != 17) revert InvalidVIN(vin);
 
@@ -75,10 +76,10 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable, Acc
         );
 
         latestRequestId = requestId;
-        verifications[requestId] = CarDetails(vin, make, model, year, false, block.timestamp, msg.sender);
+        verifications[requestId] = CarDetails(vin, make, model, year, false, block.timestamp, carOwner);
         vinToRequestId[vin] = requestId;
-        ownerToCars[msg.sender].push(vin);
-        emit VerificationRequested(requestId, vin, msg.sender);
+        ownerToCars[carOwner].push(vin);
+        emit VerificationRequested(requestId, vin, carOwner);
 
         return requestId;
     }
