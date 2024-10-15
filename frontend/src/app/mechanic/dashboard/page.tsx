@@ -53,7 +53,7 @@ const MechanicDashboard = () => {
             <p className="text-lg text-red-600">{error}</p>
           </div>
         ) : serviceRequests.length > 0 ? (
-          serviceRequests.map((request) => (
+          serviceRequests.map((request: any) => (
             <div key={request.id} className="p-4 bg-white shadow-md rounded-lg">
               <h3 className="text-lg font-bold">Service Request for {request.carModel}</h3>
               <p className="text-gray-600">Service Type: {request.serviceType}</p>
