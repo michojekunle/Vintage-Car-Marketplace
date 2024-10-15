@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 interface Car {
     id: number;
-    listed: string;
+    listed: boolean;
     name: string;
     make: string;
     model: string;
