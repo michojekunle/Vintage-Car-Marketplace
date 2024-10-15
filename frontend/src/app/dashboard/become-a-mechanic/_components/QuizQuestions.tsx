@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { MerkleTree } from 'merkletreejs';
+import { ethers } from 'ethers';
+import mechanicVerificationABI from './MechanicVerification.json';
 
 type Question = {
   question: string;
@@ -40,16 +43,18 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      handleSubmit(); 
-      return;
+        handleSubmit();  
+        setTimeLeft(0);  
+        return;
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
+        setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
-    return () => clearInterval(timer); 
-  }, [timeLeft]);
+    return () => clearInterval(timer);
+}, [timeLeft]);
+
 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const answer = event.target.value;
@@ -72,9 +77,42 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
     }
   };
 
-  const handleSubmit = () => {
-    onSubmit(selectedAnswers);
-  };
+  const handleSubmit = async () => {
+
+    if (timeLeft <= 0) {
+      alert('Time is up! Auto-submitting your quiz.');
+      return;  
+  }
+
+  
+  const answerHashes = questions.map((q, index) =>
+    ethers.keccak256(ethers.toUtf8Bytes(selectedAnswers[index] || ''))
+);
+
+const leaves = answerHashes.map(x => ethers.keccak256(x));
+const tree = new MerkleTree(leaves, ethers.keccak256, { sortPairs: true });
+
+const proofs = answerHashes.map(hash => tree.getProof(hash).map(p => p.data));
+
+
+try {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = provider.getSigner();
+    const contractAddress = '0xfcC489386F8D3797713281EAf541108e9BEfe56e'; 
+    const mechanicVerificationContract = new ethers.Contract(
+        contractAddress,
+        mechanicVerificationABI,
+        signer
+    );
+
+    const tx = await mechanicVerificationContract.submitQuiz(answerHashes, proofs);
+    await tx.wait();
+
+    console.log('Quiz submitted successfully!');
+} catch (error) {
+    console.error('Error submitting the quiz:', error);
+}
+};
 
   return (
     <div className="flex flex-col items-center justify-center">
