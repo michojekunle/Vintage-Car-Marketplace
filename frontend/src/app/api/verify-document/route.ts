@@ -12,14 +12,19 @@ const ABI = [
 	"function getEncryptedDatabaseIpfsUrl() external view returns (string memory)",
 ];
 
-const provider = new JsonRpcProvider("https://sepolia.base.org");
-const contract = new Contract(sellerVerificationContractAddress, ABI, provider);
+const provider = new JsonRpcProvider(process.env.JSON_RPC_PROVIDER);
 const signer = new ethers.Wallet(PRIVATE_KEY!, provider);
-const contractWithSigner: any = contract.connect(signer);
+const contractWithSigner = new Contract(
+	sellerVerificationContractAddress,
+	ABI,
+	signer
+);
 
 const retrieveFromIPFS = async () => {
 	try {
-		const url = `https://gateway.pinata.cloud/ipfs/QmVS5re4juQX6EiyKwNBNBgx9vJE6mBPgYCQXSLcmx4Qcg`;
+		const url =
+			(await contractWithSigner.getEncryptedDatabaseIpfsUrl()) ??
+			"Oops we lost";
 		const secretKey = process.env.SECRET_KEY as string;
 
 		const response = await axios.get(url);

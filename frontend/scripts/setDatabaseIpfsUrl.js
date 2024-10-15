@@ -46,7 +46,7 @@ const uploadToIPFS = async () => {
 	console.log("Mission started! Getting dummy data...");
 	try {
 		const secretKey = process.env.SECRET_KEY;
-		
+
 		const encryptedData = encryptData(dummyData, secretKey);
 
 		console.log("Uploading to IPFS...");
