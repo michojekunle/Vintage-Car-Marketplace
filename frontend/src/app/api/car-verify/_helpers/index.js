@@ -1,4 +1,4 @@
-import { Contract, ethers, Wallet } from "ethers";
+import { Contract, ethers } from "ethers";
 import * as dotenv from "dotenv";
 dotenv.config();
 import fs from "fs";
