@@ -15,17 +15,38 @@ import { Clock, Lock, CheckCircle } from "lucide-react";
 import { ethers } from "ethers";
 import QuizQuestions from "./QuizQuestions";
 import { useRouter } from 'next/navigation'
+import mechanicVerificationABI from './MechanicVerification.json';
 
 export default function MechanicVerification() {
   const router = useRouter();
 
   const [quizStarted, setQuizStarted] = useState<boolean>(false);
 
-  const startQuiz = () => {
-    setQuizStarted(true);
 
-    router.push("/dashboard/become-a-mechanic/quiz");
+  const startQuiz = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const signer = provider.getSigner();
+
+      const contractAddress = '0xfcC489386F8D3797713281EAf541108e9BEfe56e'; 
+      const mechanicVerificationContract = new ethers.Contract(
+        contractAddress,
+        mechanicVerificationABI,
+        signer
+      );
+
+      const tx = await mechanicVerificationContract.startQuiz();
+      await tx.wait();
+
+      setQuizStarted(true); 
+
+      router.push("/dashboard/become-a-mechanic/quiz");
+    } catch (error) {
+      console.error('Error starting the quiz:', error);
+    }
   };
+
+
 
   return (
     <div className="container mx-auto p-4 space-y-6">
