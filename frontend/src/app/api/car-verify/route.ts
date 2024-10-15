@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { carVerifier } from "./_helpers";
 
 export async function POST(req: NextRequest) {
-  const { vin, make, model, year } = await req.json();
+  const { vin, make, model, year,  carOwner } = await req.json();
+  console.log({carOwner})
 
   if (!vin || !make || !model || !year) {
     return NextResponse.json(
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const verifiedInfo = await carVerifier(vin, make, model, year);
+    const verifiedInfo = await carVerifier(vin, make, model, year, carOwner);
     if (verifiedInfo && verifiedInfo.success) {
       console.log("Request id found successfully");
       return NextResponse.json({
