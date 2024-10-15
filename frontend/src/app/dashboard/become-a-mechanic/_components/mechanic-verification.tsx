@@ -1,11 +1,22 @@
+'use client'
+
+import { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Lock, CheckCircle } from "lucide-react"
 import { ethers } from 'ethers';
+import QuizQuestions from './QuizQuestions';
+
 
 export default function MechanicVerification() {
 
+  const [quizStarted, setQuizStarted] = useState<boolean>(false); // State to track if the quiz has started
+
+  // Function to start the quiz
+  const startQuiz = () => {
+    setQuizStarted(true); // Update the state to show the quiz
+  };
 
 
   return (
@@ -32,7 +43,16 @@ export default function MechanicVerification() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full bg-amber-700 hover:bg-[#A0522D] text-[#F8F3E6]">Start Test</Button>
+          <Button
+        onClick={startQuiz} // This will trigger the quiz to start
+        className="w-full bg-amber-700 hover:bg-[#A0522D] text-[#F8F3E6]"
+        disabled={quizStarted} // Disable the button after the quiz starts
+      >
+        {quizStarted ? 'Test Started' : 'Start Test'}
+      </Button>
+
+      {/* Show Quiz Questions after the button is clicked */}
+      {quizStarted && <QuizQuestions />}
           </CardFooter>
         </Card>
 

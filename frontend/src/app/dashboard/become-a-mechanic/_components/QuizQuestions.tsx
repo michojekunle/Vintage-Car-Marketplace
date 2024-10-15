@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
-// Define the question type
+
 type Question = {
   question: string;
   options: string[];
 };
 
-// Example questions (replace this with actual questions)
 const questions: Question[] = [
   {
     question: 'What is the function of a carburetor?',
@@ -17,47 +16,45 @@ const questions: Question[] = [
     question: 'Which tool is used to measure tire pressure?',
     options: ['Torque wrench', 'Tire gauge', 'Caliper', 'Micrometer'],
   },
-  // Add more questions here...
 ];
 
-// Define the props type for the QuizQuestions component
 type QuizQuestionsProps = {
   onSubmit: (answers: { [key: number]: string }) => void;
 };
 
 const QuizQuestions: React.FC<QuizQuestionsProps> = ({ onSubmit }) => {
-  const [timeLeft, setTimeLeft] = useState<number>(12 * 60); // 12 minutes in seconds
-  const [answers, setAnswers] = useState<{ [key: number]: string }>({}); // Store answers by question index
-  const [submitted, setSubmitted] = useState<boolean>(false); // Track submission status
+  const [timeLeft, setTimeLeft] = useState<number>(12 * 60); 
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+  const [submitted, setSubmitted] = useState<boolean>(false); 
 
-  // Timer countdown logic with auto-submit when time reaches zero
+ 
   useEffect(() => {
     if (timeLeft <= 0) {
-      handleSubmit(); // Auto-submit when the timer reaches zero
+      handleSubmit();
       return;
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1); // Decrease the timer by 1 second
+      setTimeLeft((prevTime) => prevTime - 1); 
     }, 1000);
 
-    return () => clearInterval(timer); // Clear the interval when the component unmounts
+    return () => clearInterval(timer); 
   }, [timeLeft]);
 
-  // Handle selecting an answer for a question
+
   const handleAnswerSelect = (questionIndex: number, answer: string) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [questionIndex]: answer, // Store the selected answer
+      [questionIndex]: answer,
     }));
   };
 
-  // Handle quiz submission
+
   const handleSubmit = () => {
-    if (submitted) return; // Prevent multiple submissions
+    if (submitted) return; 
     setSubmitted(true);
 
-    // Submit the answers to the parent component
+
     onSubmit(answers);
   };
 
@@ -65,7 +62,7 @@ const QuizQuestions: React.FC<QuizQuestionsProps> = ({ onSubmit }) => {
     <div>
       <h2 className="text-2xl font-semibold text-amber-700 mb-4">Quiz</h2>
 
-      {/* Timer */}
+   
       <div className="mb-4">
         <span className="text-xl font-bold text-red-600">
           Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
@@ -73,7 +70,7 @@ const QuizQuestions: React.FC<QuizQuestionsProps> = ({ onSubmit }) => {
         </span>
       </div>
 
-      {/* Quiz Questions */}
+    
       {questions.map((question, index) => (
         <div key={index} className="mb-6">
           <h3 className="text-lg font-medium text-amber-700">{question.question}</h3>
@@ -82,7 +79,7 @@ const QuizQuestions: React.FC<QuizQuestionsProps> = ({ onSubmit }) => {
               <Button
                 key={optionIndex}
                 variant={answers[index] === option ? 'primary' : 'secondary'}
-                onClick={() => handleAnswerSelect(index, option)} // Handle answer selection
+                onClick={() => handleAnswerSelect(index, option)} 
               >
                 {option}
               </Button>
@@ -91,11 +88,11 @@ const QuizQuestions: React.FC<QuizQuestionsProps> = ({ onSubmit }) => {
         </div>
       ))}
 
-      {/* Submit Button */}
+     
       <Button
         className="mt-4 bg-amber-700 hover:bg-[#A0522D] text-[#F8F3E6]"
         onClick={handleSubmit}
-        disabled={submitted} // Disable button after submission
+        disabled={submitted}
       >
         {submitted ? 'Submitted' : 'Submit Quiz'}
       </Button>
