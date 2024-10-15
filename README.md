@@ -219,9 +219,20 @@ We welcome contributions from the community to help improve and expand the platf
 
 ## Contributors
 
-Below are the list of contributors to this project
+The following individuals contributed their expertise and time to make this project a success:
 
-1. Michael John [click here](https://github.com/Micjohn01)
+FRONTEND TEAM
+***1. Abdulrahman Olalekan*** - [click here](https://github.com/RahmanC)
+***2. Emeka-Iheonu Chimaobi*** - [click here](https://github.com/ceasermikes002)
+***3. Michael Ojekunle*** - [click here](https://github.com/michojekunle)
+***4. Yusuf Roqib*** - [click here](https://github.com/yusufroqib)
+***5. Abolare Roheemah*** - [click here](https://github.com/AbolareRoheemah)
+
+SMART CONTRACT TEAM
+***6. Donald Nwokoro*** - [click here](https://github.com/DonGuillotine)
+***7. Rose Wachuka*** - [click here](https://github.com/ro61zzy)
+***8. Chisom Amadi*** -  [click here](https://github.com/Tchisom17)
+***9. Michael John*** - [click here](https://github.com/Micjohn01)
 
 ## License
 This project is licensed under the MIT License.
