@@ -103,19 +103,16 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
 
-        _carDetails[tokenId] = CarDetails({
-            make: make,
-            model: model,
-            year: year,
-            vin: vin,
-            color: color,
-            mileage: mileage,
-            condition: condition,
-            lastServiceDate: 0,
-            ownershipHistory: new address[](1),
-            serviceHistory: new ServiceRecord[](0)
-        });
-        _carDetails[tokenId].ownershipHistory[0] = to;
+        CarDetails storage car = _carDetails[tokenId];
+        car.make = make;
+        car.model = model;
+        car.year = year;
+        car.vin = vin;
+        car.color = color;
+        car.mileage = mileage;
+        car.condition = condition;
+        car.lastServiceDate = block.timestamp;
+        car.ownershipHistory.push(to);
 
         _vinExists[vin] = true;
         _tokenURIs[tokenId] = tokenURI_;
