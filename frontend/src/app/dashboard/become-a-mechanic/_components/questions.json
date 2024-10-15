@@ -1,0 +1,103 @@
+[
+    {
+      "question": "A customer brings their car to your workshop, complaining that the steering feels 'loose' and there’s a clunking noise when making turns. What is the most likely cause of this issue?",
+      "options": [
+        "The car's alignment is off, causing the steering to feel loose.",
+        "The power steering fluid is low, leading to increased steering effort and clunking sounds.",
+        "Worn-out or damaged tie rod ends or ball joints in the steering system are causing excessive play and noise.",
+        "The brake pads are worn out, leading to steering vibration and noise when turning."
+      ],
+      "answer": "Worn-out or damaged tie rod ends or ball joints in the steering system are causing excessive play and noise."
+    },
+    {
+      "question": "You are asked to perform a brake inspection on a customer's vehicle. While inspecting, you notice that the brake rotors are scored and have uneven wear patterns. What should be your recommended course of action?",
+      "options": [
+        "Suggest resurfacing the rotors to even out the wear patterns and replace the brake pads.",
+        "Recommend only replacing the brake pads, as they are the primary component that wears out.",
+        "Advise that the entire braking system, including calipers, brake lines, and master cylinder, be replaced.",
+        "Suggest applying brake grease to reduce noise and vibration and avoid any component replacement."
+      ],
+      "answer": "Suggest resurfacing the rotors to even out the wear patterns and replace the brake pads."
+    },
+    {
+      "question": "A car has come into the shop with an illuminated check engine light. The OBD-II scanner shows a P0171 code, indicating a 'System Too Lean (Bank 1)' error. Which of the following could be a potential cause for this issue?",
+      "options": [
+        "The car's fuel injectors are clogged, leading to a lean air-fuel mixture.",
+        "The oxygen sensor located before the catalytic converter is malfunctioning, sending inaccurate readings.",
+        "The mass airflow (MAF) sensor is dirty or faulty, causing incorrect air intake measurement.",
+        "All of the above."
+      ],
+      "answer": "All of the above."
+    },
+    {
+      "question": "A customer reports that their car’s engine runs rough and sometimes stalls when idling at a stop. What is the most likely cause of the problem?",
+      "options": [
+        "The fuel filter is clogged, reducing fuel flow to the engine and causing stalling.",
+        "The air conditioning compressor is overloading the engine, leading to rough idling.",
+        "The idle air control valve (IAC) is dirty or faulty, affecting the idle speed control.",
+        "The timing belt has slipped, causing misfires and uneven engine performance."
+      ],
+      "answer": "The idle air control valve (IAC) is dirty or faulty, affecting the idle speed control."
+    },
+    {
+      "question": "While changing the oil in a high-mileage vehicle, you notice small metal shavings in the old oil. What does this likely indicate about the engine's condition?",
+      "options": [
+        "The engine is in good condition, and this is normal wear and tear.",
+        "There is excessive internal engine wear, potentially from the bearings, camshaft, or piston rings.",
+        "The oil filter was not doing its job, allowing metal debris to circulate through the engine.",
+        "The oil pan is corroding, causing metal fragments to mix with the oil."
+      ],
+      "answer": "There is excessive internal engine wear, potentially from the bearings, camshaft, or piston rings."
+    },
+    {
+      "question": "A vehicle’s air conditioning is not blowing cold air, despite the fan working correctly. What would be your first step in diagnosing the issue?",
+      "options": [
+        "Check the refrigerant level to ensure it is not low or completely depleted.",
+        "Replace the air conditioning compressor, as it is most likely malfunctioning.",
+        "Inspect the air conditioning control switch for electrical continuity issues.",
+        "Flush and refill the refrigerant system to ensure proper flow and pressure."
+      ],
+      "answer": "Check the refrigerant level to ensure it is not low or completely depleted."
+    },
+    {
+      "question": "A customer brings in their vehicle, saying it pulls to the right while driving. Which of the following is the most likely cause?",
+      "options": [
+        "The tires are worn unevenly, causing the vehicle to pull to one side.",
+        "The power steering system is malfunctioning, making it harder to keep the car straight.",
+        "The wheel alignment is out of specification, leading to uneven tire wear and pulling.",
+        "The brake caliper on the right side is stuck, causing constant braking on that side."
+      ],
+      "answer": "The wheel alignment is out of specification, leading to uneven tire wear and pulling."
+    },
+    {
+      "question": "A car with a manual transmission is brought to you because the driver has noticed difficulty shifting gears, especially into first and reverse. What could be a likely cause?",
+      "options": [
+        "The clutch master cylinder or slave cylinder has a leak, reducing clutch engagement.",
+        "The shift linkage is out of adjustment, causing difficulty engaging certain gears.",
+        "The transmission fluid is old or contaminated, affecting gear engagement.",
+        "All of the above could potentially be causes."
+      ],
+      "answer": "All of the above could potentially be causes."
+    },
+    {
+      "question": "A customer complains that their car makes a high-pitched squealing noise when accelerating, especially during cold starts. What is the most likely source of this noise?",
+      "options": [
+        "The alternator belt is worn or loose, causing it to slip under load.",
+        "The exhaust system is leaking, causing a high-pitched whistle when accelerating.",
+        "The engine mounts are worn out, causing vibrations and noise during acceleration.",
+        "The power steering pump is failing, causing a whining noise when the engine is under load."
+      ],
+      "answer": "The alternator belt is worn or loose, causing it to slip under load."
+    },
+    {
+      "question": "While diagnosing an engine misfire, you determine that one of the spark plugs is fouled with a black, sooty deposit. What does this indicate about the engine’s operation?",
+      "options": [
+        "The engine is running too rich, resulting in excessive fuel combustion and carbon buildup.",
+        "The engine is burning oil, causing the spark plug to become contaminated with oil residue.",
+        "The cooling system is malfunctioning, leading to incomplete combustion.",
+        "The spark plug gap is too large, causing misfiring and carbon fouling."
+      ],
+      "answer": "The engine is running too rich, resulting in excessive fuel combustion and carbon buildup."
+    }
+  ]
+  

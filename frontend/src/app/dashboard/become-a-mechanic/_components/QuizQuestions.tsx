@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { MerkleTree } from 'merkletreejs';
 import { ethers } from 'ethers';
+import questionsData from './questions.json';
 import mechanicVerificationABI from './MechanicVerification.json';
 
 type Question = {
@@ -12,34 +13,23 @@ type Question = {
   correctAnswer: string;
 };
 
-const questions: Question[] = [
-  {
-    question: 'A customer brings their car to your workshop, complaining that the steering feels "loose" and there’s a clunking noise when making turns. What is the most likely cause of this issue?',
-    options: [
-      'The car\'s alignment is off, causing the steering to feel loose.',
-      'The power steering fluid is low, leading to increased steering effort and clunking sounds.',
-      'Worn-out or damaged tie rod ends or ball joints in the steering system are causing excessive play and noise.',
-      'The brake pads are worn out, leading to steering vibration and noise when turning.',
-    ],
-    correctAnswer: 'Worn-out or damaged tie rod ends or ball joints in the steering system are causing excessive play and noise.',
-  },
-  {
-    question: 'You are asked to perform a brake inspection on a customer\'s vehicle. While inspecting, you notice that the brake rotors are scored and have uneven wear patterns. What should be your recommended course of action?',
-    options: [
-      'Suggest resurfacing the rotors to even out the wear patterns and replace the brake pads.',
-      'Recommend only replacing the brake pads, as they are the primary component that wears out.',
-      'Advise that the entire braking system, including calipers, brake lines, and master cylinder, be replaced.',
-      'Suggest applying brake grease to reduce noise and vibration and avoid any component replacement.',
-    ],
-    correctAnswer: 'Suggest resurfacing the rotors to even out the wear patterns and replace the brake pads.',
-  },
-];
+
 
 const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: string }) => void }) => {
+  const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
   const [timeLeft, setTimeLeft] = useState<number>(12 * 60); 
 
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const response = await fetch('./questions.json');
+      const data = await response.json();
+      setQuestions(data);
+    };
+    
+    fetchQuestions();
+  }, []);
 
   useEffect(() => {
     if (timeLeft <= 0) {
