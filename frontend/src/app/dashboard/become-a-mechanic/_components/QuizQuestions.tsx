@@ -35,12 +35,12 @@ const questions: Question[] = [
 const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: string }) => void }) => {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
-  const [timeLeft, setTimeLeft] = useState<number>(12 * 60); // 12 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState<number>(12 * 60); 
 
-  // Countdown timer logic
+
   useEffect(() => {
     if (timeLeft <= 0) {
-      handleSubmit(); // Auto-submit when time runs out
+      handleSubmit(); 
       return;
     }
 
@@ -48,7 +48,7 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
-    return () => clearInterval(timer); // Cleanup interval on component unmount
+    return () => clearInterval(timer); 
   }, [timeLeft]);
 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +57,7 @@ const QuizQuestions = ({ onSubmit }: { onSubmit: (answers: { [key: number]: stri
       ...selectedAnswers,
       [currentQuestion]: answer,
     });
-    handleNext(); // Automatically move to next question
+    handleNext(); 
   };
 
   const handleNext = () => {
