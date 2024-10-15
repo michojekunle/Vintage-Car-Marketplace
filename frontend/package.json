@@ -33,14 +33,10 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
-<<<<<<< HEAD
-    "framer-motion": "^11.11.8",
-=======
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.4",
     "framer-motion": "^11.11.7",
->>>>>>> a8e8e4507d54c1b5b4db1fcf4f246754320bc8f1
     "lucide-react": "^0.451.0",
     "next": "14.2.15",
     "react": "^18",
