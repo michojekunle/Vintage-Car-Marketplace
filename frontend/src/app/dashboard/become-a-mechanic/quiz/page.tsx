@@ -1,5 +1,5 @@
 import React from 'react';
-import QuizQuestions from './_components/QuizQuestions';
+import QuizQuestions from '../_components/QuizQuestions';
 
 
 const QuizPage = () => {
