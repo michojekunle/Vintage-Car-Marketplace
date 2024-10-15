@@ -65,7 +65,6 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
-  listingData?: any;
 }
 
 interface IFilterCar {
