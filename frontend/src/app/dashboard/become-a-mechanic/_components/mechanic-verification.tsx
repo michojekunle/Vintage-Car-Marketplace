@@ -32,7 +32,7 @@ export default function MechanicVerification() {
       const mechanicVerificationContract = new ethers.Contract(
         contractAddress,
         mechanicVerificationABI,
-        signer
+        await signer
       );
 
       const tx = await mechanicVerificationContract.startQuiz();
