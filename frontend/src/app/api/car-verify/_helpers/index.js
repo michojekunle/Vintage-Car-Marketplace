@@ -19,7 +19,8 @@ let source;
 // Fetch file from the public directory
 try {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/chainlinkFunction.js`);
-  source = await res.text();
+  source = await res.text("utf8");
+  console.log(`${source}`);
 } catch (fetchError) {
   console.error("Error reading the source file from a public directory.", fetchError);
 }
@@ -32,7 +33,7 @@ export async function carVerifier(vin, make, model, year) {
       make,
       model,
       year,
-      source,
+      `${source}`,
       { gasLimit: 1000000 }
     );
 
