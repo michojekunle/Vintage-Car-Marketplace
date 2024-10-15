@@ -1,0 +1,99 @@
+{
+    "name": "Amber Car NFT",
+    "description": "A meticulously maintained 1969 Ford Mustang in vibrant red. This classic muscle car represents the golden era of American automotive design and performance.",
+    "external_url": "https://pinata.cloud/",
+    "image": "ipfs://QmSQQtDak9Q5u3TmHvTnUnpH6vUnyYj183MkrE3BYF7Shh",
+    "attributes": [
+      {
+        "trait_type": "Make",
+        "value": "Ford"
+      },
+      {
+        "trait_type": "Model",
+        "value": "Mustang"
+      },
+      {
+        "trait_type": "Year",
+        "value": 1969
+      },
+      {
+        "trait_type": "VIN",
+        "value": "1FABP40D6FF123456"
+      },
+      {
+        "trait_type": "Color",
+        "value": "Red"
+      },
+      {
+        "trait_type": "Mileage",
+        "value": 75000
+      },
+      {
+        "trait_type": "Exterior Condition",
+        "value": "Good"
+      },
+      {
+        "trait_type": "Engine Condition",
+        "value": "Good"
+      },
+      {
+        "trait_type": "Last Service Date",
+        "value": "2023-09-15"
+      },
+      {
+        "trait_type": "Verified",
+        "value": true
+      },
+      {
+        "trait_type": "Ownership History",
+        "value": 3
+      }
+    ],
+    "properties": {
+      "files": [
+        {
+          "uri": "ipfs://QmMainImageCID",
+          "type": "image/jpeg"
+        },
+        {
+          "uri": "ipfs://QmInteriorImageCID",
+          "type": "image/jpeg"
+        },
+        {
+          "uri": "ipfs://QmEngineImageCID",
+          "type": "image/jpeg"
+        }
+      ],
+      "category": "vintage_car",
+      "creators": [
+        {
+          "address": "0x1234...5678",
+          "share": 100
+        }
+      ]
+    },
+    "serviceHistory": [
+      {
+        "date": "2023-09-15",
+        "description": "Full engine rebuild",
+        "provider": "Classic Car Mechanics Inc.",
+        "providerAddress": "0x9876...5432"
+      },
+      {
+        "date": "2022-05-20",
+        "description": "Transmission overhaul",
+        "provider": "Vintage Transmission Specialists",
+        "providerAddress": "0xabcd...ef01"
+      }
+    ],
+    "valuationHistory": [
+      {
+        "date": "2023-10-01",
+        "value": "45000000000000000000",
+        "currency": "ETH",
+        "appraiser": "Classic Car Appraisals LLC",
+        "appraiserAddress": "0x2468...1357"
+      }
+    ]
+}
+  

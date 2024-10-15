@@ -1,0 +1,66 @@
+{
+    "name": "Emerald Car NFT",
+    "description": "A pristine 2020 Chevrolet Corvette in electric blue. A modern sports car with impressive performance and sleek design.",
+    "external_url": "https://pinata.cloud/",
+    "image": "ipfs://QmWMK68c41d9epMhQRQoAx9FdVn1onqT8bCtWznNiyX7RU",
+    "attributes": [
+      { "trait_type": "Make", "value": "Chevrolet" },
+      { "trait_type": "Model", "value": "Corvette" },
+      { "trait_type": "Year", "value": 2020 },
+      { "trait_type": "VIN", "value": "WAUEH74F76N901385" },
+      { "trait_type": "Color", "value": "Blue" },
+      { "trait_type": "Mileage", "value": 12000 },
+      { "trait_type": "Exterior Condition", "value": "Excellent" },
+      { "trait_type": "Engine Condition", "value": "Good" },
+      { "trait_type": "Last Service Date", "value": "2023-08-10" },
+      { "trait_type": "Verified", "value": true },
+      { "trait_type": "Ownership History", "value": 1 }
+    ],
+    "properties": {
+      "files": [
+        {
+          "uri": "ipfs://QmMainImageCID",
+          "type": "image/jpeg"
+        },
+        {
+          "uri": "ipfs://QmInteriorImageCID",
+          "type": "image/jpeg"
+        },
+        {
+          "uri": "ipfs://QmEngineImageCID",
+          "type": "image/jpeg"
+        }
+      ],
+      "category": "vintage_car",
+      "creators": [
+        {
+          "address": "0x1234...5678",
+          "share": 100
+        }
+      ]
+    },
+    "serviceHistory": [
+      {
+        "date": "2023-09-15",
+        "description": "Full engine rebuild",
+        "provider": "Classic Car Mechanics Inc.",
+        "providerAddress": "0x9876...5432"
+      },
+      {
+        "date": "2022-05-20",
+        "description": "Transmission overhaul",
+        "provider": "Vintage Transmission Specialists",
+        "providerAddress": "0xabcd...ef01"
+      }
+    ],
+    "valuationHistory": [
+      {
+        "date": "2023-10-01",
+        "value": "45000000000000000000",
+        "currency": "ETH",
+        "appraiser": "Classic Car Appraisals LLC",
+        "appraiserAddress": "0x2468...1357"
+      }
+    ]
+  }
+  

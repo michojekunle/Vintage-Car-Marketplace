@@ -1,4 +1,4 @@
-declare module "wagmi";
+// declare module "wagmi";
 
 interface ISearchInput {
   placeholder: string;

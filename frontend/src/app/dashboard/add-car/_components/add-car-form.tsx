@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -19,13 +19,15 @@ import VerificationStep from "./verification-step";
 import ImagesUploadStep from "./image-upload-step";
 import ConfirmationStep from "./confirmation-step";
 import { addCarSteps } from "@/lib/constants";
-
-
+import axios from "axios";
+import { toast } from "@/hooks/use-toast";
+import { useAccount } from "wagmi";
 
 export default function AddCarForm() {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [status, setStatus] = useState("idle");
-
+	const { address } = useAccount();
+	console.log({ address });
 	const form = useForm<z.infer<typeof addCarFormSchema>>({
 		resolver: zodResolver(addCarFormSchema),
 		defaultValues: {
@@ -40,11 +42,35 @@ export default function AddCarForm() {
 	async function onSubmit(values: z.infer<typeof addCarFormSchema>) {
 		console.log(values);
 		setStatus("loading");
+		setCurrentStep(2);
 		try {
 			// Simulate contract call
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			setStatus("success");
-			setCurrentStep(2);
+			const response = await axios.post("/api/car-verify", {
+				vin: values.vin,
+				make: values.make,
+				model: values.model,
+				year: values.year,
+				carOwner: address,
+			});
+			const data = response.data;
+			console.log({ data });
+
+			if (data?.message === "successfully verified") {
+				toast({
+					title: "Car Details Verified",
+					variant: "default",
+					description:
+						"Your Car details and ownership has been successfully verified.",
+				});
+				setStatus("success");
+			} else {
+				setStatus("error");
+				toast({
+					title: "Car Details Verification Error",
+					variant: "destructive",
+					description: "An error occured verifying your car details",
+				});
+			}
 		} catch (error) {
 			console.log(error);
 			setStatus("error");
@@ -138,7 +164,7 @@ export default function AddCarForm() {
 									onClick={() =>
 										setCurrentStep((prev) => Math.min(4, prev + 1))
 									}
-									disabled={currentStep === 4}
+									disabled={currentStep === 4 || status === "error"}
 								>
 									{currentStep === 4 ? "Finish" : "Next"}
 								</Button>
