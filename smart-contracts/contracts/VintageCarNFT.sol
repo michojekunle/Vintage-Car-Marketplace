@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.24;
+pragma solidity 0.8.27;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -7,6 +7,20 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+
+interface ICarVerificationOracle {
+    struct CarDetails {
+        string vin;
+        string make;
+        string model;
+        uint256 year;
+        bool isVerified;
+        uint256 verificationTimestamp;
+        address currentOwner;
+    }
+
+    function getCarDetailsByVIN(string memory vin) external view returns (CarDetails memory);
+}
 
 contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -42,18 +56,22 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
     mapping(uint256 => bool) private _isVerified;
     mapping(string => bool) private _vinExists;
     mapping(uint256 => ValuationData) private _carValuations;
+    mapping(uint256 => string) private _tokenURIs;
 
     string private _baseTokenURI;
+    ICarVerificationOracle public carVerificationContract;
 
-    event CarMinted(uint256 indexed tokenId, address indexed minter, string vin);
+    event CarMinted(uint256 indexed tokenId, address indexed minter, string vin, bool verified);
     event CarDetailsUpdated(uint256 indexed tokenId, address indexed updater);
     event ServiceRecordAdded(uint256 indexed tokenId, uint256 date, address indexed serviceProvider);
     event CarVerified(uint256 indexed tokenId, address indexed verifier);
     event CarValuationUpdated(uint256 indexed tokenId, uint256 valuation);
     event VINUpdated(uint256 indexed tokenId, string oldVIN, string newVIN);
     event OwnershipTransferred(uint256 indexed tokenId, address indexed from, address indexed to);
+    event CarVerificationContractUpdated(address newContract);
 
-    constructor(string memory name, string memory symbol) ERC721(name, symbol) Ownable(msg.sender) {
+    constructor(string memory name, string memory symbol, address _carVerificationContract) ERC721(name, symbol) Ownable(msg.sender) {
+        carVerificationContract = ICarVerificationOracle(_carVerificationContract);
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
@@ -62,7 +80,7 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
     }
 
     function exists(uint256 tokenId) public view returns (bool) {
-        return _nextTokenId > tokenId;
+        return _ownerOf(tokenId) != address(0);
     }
 
     function mintCar(
@@ -73,10 +91,15 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
         string memory vin,
         string memory color,
         uint32 mileage,
-        string memory condition
-    ) public onlyRole(MINTER_ROLE) whenNotPaused returns (uint256) {
+        string memory condition,
+        string memory tokenURI_
+    ) public onlyRole(MINTER_ROLE) whenNotPaused nonReentrant returns (uint256) {
         require(!_vinExists[vin], "VIN already exists");
-        
+
+        ICarVerificationOracle.CarDetails memory verifiedCar = carVerificationContract.getCarDetailsByVIN(vin);
+        require(verifiedCar.isVerified, "Car is not verified");
+        require(verifiedCar.currentOwner == to, "Minter is not the verified owner of the car");
+
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
 
@@ -92,8 +115,9 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
         car.ownershipHistory.push(to);
 
         _vinExists[vin] = true;
+        _tokenURIs[tokenId] = tokenURI_;
 
-        emit CarMinted(tokenId, msg.sender, vin);
+        emit CarMinted(tokenId, to, vin, true);
         return tokenId;
     }
 
@@ -159,7 +183,23 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(exists(tokenId), "Token does not exist");
-        return string(abi.encodePacked(_baseTokenURI, Strings.toString(tokenId)));
+
+        string memory _tokenURI = _tokenURIs[tokenId];
+        string memory base = _baseTokenURI;
+
+        if (bytes(base).length == 0) {
+            return _tokenURI;
+        }
+        if (bytes(_tokenURI).length > 0) {
+            return string(abi.encodePacked(base, _tokenURI));
+        }
+        return super.tokenURI(tokenId);
+    }
+
+    function setCarVerificationContract(address _newContract) public onlyOwner {
+        require(_newContract != address(0), "Invalid contract address");
+        carVerificationContract = ICarVerificationOracle(_newContract);
+        emit CarVerificationContractUpdated(_newContract);
     }
 
     function addMinter(address minter) public onlyOwner {
@@ -225,7 +265,8 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
         string[] memory vin,
         string[] memory color,
         uint32[] memory mileage,
-        string[] memory condition
+        string[] memory condition,
+        string[] memory tokenURIs
     ) public onlyRole(MINTER_ROLE) whenNotPaused {
         require(
             to.length == make.length &&
@@ -234,12 +275,13 @@ contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausa
             year.length == vin.length &&
             vin.length == color.length &&
             color.length == mileage.length &&
-            mileage.length == condition.length,
+            mileage.length == condition.length &&
+            condition.length == tokenURIs.length,
             "Input arrays must have the same length"
         );
 
         for (uint i = 0; i < to.length; i++) {
-            mintCar(to[i], make[i], model[i], year[i], vin[i], color[i], mileage[i], condition[i]);
+            mintCar(to[i], make[i], model[i], year[i], vin[i], color[i], mileage[i], condition[i], tokenURIs[i]);
         }
     }
 
