@@ -14,13 +14,17 @@ const pinata = new pinataSDK(
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_PROVIDER);
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-const contractAddress = "0x2c13E255Ae105ff262A7eD47040D1D7bB3f837Ed";
+const sellerVerificationContractAddress =
+	"0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77";
 const contractABI = [
 	"function setEncryptedDatabaseIpfsUrl(string memory _url) external",
 	"function getEncryptedDatabaseIpfsUrl() external view returns (string memory)",
 ];
-const contract = new Contract(contractAddress, contractABI, signer);
-// const readContract = new Contract(contractAddress, contractABI, provider);
+const contract = new Contract(
+	sellerVerificationContractAddress,
+	contractABI,
+	signer
+);
 
 const encryptData = (data, secretKey) => {
 	console.log("Encrypting data...");
@@ -42,11 +46,7 @@ const uploadToIPFS = async () => {
 	console.log("Mission started! Getting dummy data...");
 	try {
 		const secretKey = process.env.SECRET_KEY;
-		// const jsonData = [
-		// 	{ name: "John Doe", age: 30 },
-		// 	{ name: "Jane Smith", age: 25 },
-		// ];
-
+		
 		const encryptedData = encryptData(dummyData, secretKey);
 
 		console.log("Uploading to IPFS...");
@@ -86,29 +86,13 @@ const setDatabaIpfsUrl = async () => {
 	}
 };
 
-// const handleUploadToIPFS = async () => {
-// 	try {
-// 		const secretKey = "mysecretkey";
-// 		const jsonData = [
-// 			{ name: "John Doe", age: 30 },
-// 			{ name: "Jane Smith", age: 25 },
-// 		];
-
-// 		const encryptedData = encryptData(jsonData, secretKey);
-
-// 		const fileUrl = await uploadToIPFS(encryptedData);
-// 		console.log("Data uploaded to IPFS:", fileUrl);
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// };
-
 const retrieveFromIPFS = async () => {
 	try {
 		// const url = `https://gateway.pinata.cloud/ipfs/QmdMFkJk3xA59R4qAhwHpUnuXf4BgecPcvvrbwd4HGgvTy`;
 		const url =
 			(await contract.getEncryptedDatabaseIpfsUrl()) ?? "Oops we lost";
 		console.log("URL", url);
+		if (!url) throw new Error("URL not found");
 		const secretKey = process.env.SECRET_KEY;
 
 		const response = await axios.get(url);
