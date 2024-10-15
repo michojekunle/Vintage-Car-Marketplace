@@ -44,8 +44,9 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable, Acc
     constructor(address router) FunctionsClient(router) ConfirmedOwner(msg.sender) {
         subscriptionId = 201;
         donId = 0x66756e2d626173652d7365706f6c69612d310000000000000000000000000000;
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(VERIFIER_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(VERIFIER_ROLE, msg.sender);
+        _setRoleAdmin(VERIFIER_ROLE, DEFAULT_ADMIN_ROLE);
     }
 
     function requestCarValidation(
