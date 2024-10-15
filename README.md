@@ -221,7 +221,7 @@ We welcome contributions from the community to help improve and expand the platf
 
 The following individuals contributed their expertise and time to make this project a success:
 
-### FRONTEND TEAM
+##### FRONTEND TEAM
 
 ***1. Abdulrahman Olalekan*** - [click here](https://github.com/RahmanC)
 
@@ -233,7 +233,7 @@ The following individuals contributed their expertise and time to make this proj
 
 ***5. Abolare Roheemah*** - [click here](https://github.com/AbolareRoheemah)
 
-### SMART CONTRACT TEAM
+##### SMART CONTRACT TEAM
 
 ***6. Donald Nwokoro*** - [click here](https://github.com/DonGuillotine)
 
