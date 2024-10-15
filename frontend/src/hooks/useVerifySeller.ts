@@ -1,10 +1,5 @@
 import { useCallback } from "react";
-import {
-	useReadContract,
-	useWriteContract,
-	useAccount,
-	useSwitchChain,
-} from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useToast } from "./use-toast";
@@ -52,5 +47,5 @@ export function useCoursePayment() {
 		return true;
 	}, [isConnected, openConnectModal, chain, switchChain, address]);
 
-	return {};
+	return { checkConnectionAndChain };
 }

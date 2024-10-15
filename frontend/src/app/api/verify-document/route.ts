@@ -33,7 +33,7 @@ const retrieveFromIPFS = async () => {
 		const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
 		const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 		return decryptedData;
-		console.log(decryptedData);
+		// console.log(decryptedData);
 	} catch (error) {
 		console.error("Error retrieving from IPFS:", error);
 		throw error;
