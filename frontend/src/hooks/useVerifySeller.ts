@@ -8,7 +8,7 @@ const CORRECT_CHAIN_ID = "";
 
 console.log(CORRECT_CHAIN_ID);
 
-export function useCoursePayment() {
+export function useVerifySeller() {
 	const { address, isConnected, chain } = useAccount();
 	const { openConnectModal } = useConnectModal();
 	const { switchChain } = useSwitchChain();
