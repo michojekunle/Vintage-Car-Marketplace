@@ -1,4 +1,4 @@
-declare module "wagmi";
+// declare module "wagmi";
 
 interface ISearchInput {
   placeholder: string;
@@ -13,7 +13,7 @@ interface ICarCard {
   name: string;
   make: string;
   model: string;
-  listed: string;
+  listed: boolean;
   year: number;
   rating: number;
   reviews: number;
@@ -102,7 +102,7 @@ interface IListCarDialog {
 
 interface Car {
   id: number;
-  listed: string;
+  listed: boolean;
   name: string;
   make: string;
   model: string;

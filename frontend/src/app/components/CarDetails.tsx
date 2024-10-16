@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Verified, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useCarStore } from "../../stores/useCarStore";
+import { useCarStore } from "@/stores/useCarStore";
 import Link from "next/link";
 
 const CarDetails = () => {
@@ -28,8 +28,27 @@ const CarDetails = () => {
     );
   }
 
+  const handleListCarButtonClick = () => {
+    router.push("/I do not know the link to that");
+  };
+
   if (!isMounted || !selectedCar) return null; //Displays blank component it this condiition is true
 
+  const getConditionStyles = (condition: string | undefined) => {
+    switch (condition) {
+      case "Excellent":
+        return { textColor: "text-green-500", iconColor: "text-green-500" };
+      case "Good":
+        return { textColor: "text-blue-500", iconColor: "text-blue-500" };
+      case "Fair":
+        return { textColor: "text-yellow-500", iconColor: "text-yellow-500" };
+      case "Bad":
+        return { textColor: "text-red-500", iconColor: "text-red-500" };
+      default:
+        return { textColor: "text-gray-500", iconColor: "text-gray-500" };
+    }
+  };
+  const { textColor, iconColor } = getConditionStyles(selectedCar.condition);
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -86,9 +105,12 @@ const CarDetails = () => {
                 <p>
                   <strong>Year:</strong> {selectedCar.year}
                 </p>
-                <p className="flex items-center gap-1">
-                  <strong>Condition:</strong> {selectedCar.condition}
-                  <Verified className="text-green-500 w-4 h-4" />
+                <p className={`flex items-center gap-1`}>
+                  <strong>Condition:</strong>{" "}
+                  <span className={`${textColor}`}>
+                    {selectedCar.condition}
+                  </span>
+                  <Verified className={`w-4 h-4 ${iconColor}`} />
                 </p>
                 <p>
                   <strong>Service History:</strong>{" "}
@@ -116,31 +138,56 @@ const CarDetails = () => {
               </div>
 
               {/* Mechanic Booking Section */}
-              <div className="border-t border-gray-200 pt-4">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Book a Mechanic
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Schedule a service for your car with a verified mechanic on{" "}
-                  <Link
-                    href={"/"}
-                    className="text-primary-action font-semibold"
+              {selectedCar.listed ? (
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    Book a Mechanic
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Schedule a service for your car with a verified mechanic on{" "}
+                    <Link
+                      href={"/"}
+                      className="text-primary-action font-semibold"
+                    >
+                      VintageChain
+                    </Link>
+                  </p>
+                  <Button
+                    className="w-full bg-amber-700 text-white mt-2"
+                    onClick={() =>
+                      router.push(`/service/request/${selectedCar.id}`)
+                    }
                   >
-                    VintageChain
-                  </Link>
-                </p>
-                <Button className="w-full bg-amber-700 text-white mt-2">
-                  Schedule a Service
-                </Button>
-                <div className="border-t border-gray-200 pt-2">
-                  <p className="text-sm text-gray-600">Available Mechanics:</p>
-                  <ul className="list-disc list-inside">
-                    <li>Mechanic A - $50/hour</li>
-                    <li>Mechanic B - $60/hour</li>
-                    <li>Mechanic C - $55/hour</li>
-                  </ul>
+                    Schedule a Service
+                  </Button>
+                  <div className="border-t border-gray-200 pt-2">
+                    <p className="text-sm text-gray-600">
+                      Available Mechanics:
+                    </p>
+                    <ul className="list-disc list-inside">
+                      <li>Mechanic A - $50/hour</li>
+                      <li>Mechanic B - $60/hour</li>
+                      <li>Mechanic C - $55/hour</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="text-xl font-semibold text-red-600">
+                    Service Unavailable
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    This car is currently not listed for sale, so mechanic
+                    services are unavailable.
+                  </p>
+                  <Button
+                    className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-full hover:bg-primary-action hover:text-white transition"
+                    onClick={handleListCarButtonClick}
+                  >
+                    List Car
+                  </Button>
+                </div>
+              )}
             </motion.div>
           </div>
         </motion.div>
