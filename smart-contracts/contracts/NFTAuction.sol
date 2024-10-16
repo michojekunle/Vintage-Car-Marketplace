@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-// import "./AuctionLib.sol";
-// import "./VintageCarNFT.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./AuctionLib.sol";
+import "./VintageCarNFT.sol";
 
 contract NFTAuction is ReentrancyGuard {
     using AuctionLib for *;
@@ -79,7 +79,7 @@ contract NFTAuction is ReentrancyGuard {
         AuctionLib.refundPreviousBidder(auction.highestBidder, auction.highestBid);
 
         auction.highestBid = msg.value;
-        auction.highestBidder = payable(msg.sendet);
+        auction.highestBidder = payable(msg.sender);
 
         emit BidPlaced(_nftId, msg.sender, msg.value);
 
