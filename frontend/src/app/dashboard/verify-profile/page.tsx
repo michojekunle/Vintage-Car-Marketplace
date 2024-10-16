@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import FacetecApp from "@/facetec/Facetec";
 import { useFacetecDataStore } from "../../../stores/useFacetecDataStore";
 import axios from "axios";
-import { toast } from "@/hooks/use-toast";
 import VerificationProgress from "./_components/verification-progress";
+import { toast } from "sonner";
 
 export type VerificationStatus = "verifying" | "success" | "failed";
 

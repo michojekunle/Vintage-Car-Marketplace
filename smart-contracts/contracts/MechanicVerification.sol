@@ -190,6 +190,6 @@ contract MechanicVerification is ERC721, Ownable {
     /// @dev Overrides the OpenZeppelin ERC721 _transfer function
     // removing inherited transfer functions from Open Zeppelin, we want the NFT to be non-transferable
     function transferFrom(address from, address to, uint256 tokenId) public override {}
-    function safeTransferFrom(address from, address to, uint256 tokenId) public override {}
+    // function safeTransferFrom(address from, address to, uint256 tokenId) public override {}
     function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory _data) public override {}
 }
