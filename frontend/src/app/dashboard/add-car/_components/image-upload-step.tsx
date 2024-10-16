@@ -7,6 +7,7 @@ import { addCarFormSchema } from "@/schema";
 import * as z from "zod";
 import axios from "axios";
 import { usegeneratedTokenURI } from "../../../../../stores/useGeneratedTokenURI";
+import { toast } from "sonner";
 
 const ImagesUploadStep = ({
 	inputFormData,
@@ -16,6 +17,7 @@ const ImagesUploadStep = ({
 	const [selectedImages, setSelectedImages] = useState<File[]>([]);
 	const [previews, setPreviews] = useState<string[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
+	const [isSuccess, setIsSuccess] = useState(false);
 	// const {} = usegeneratedTokenURI()
 	const setGeneratedTokenURI = usegeneratedTokenURI(
 		(state) => state.setGeneratedTokenURI
@@ -75,8 +77,12 @@ const ImagesUploadStep = ({
 			setGeneratedTokenURI(tokenUri);
 			// await new Promise((resolve) => setTimeout(resolve, 2000));
 			console.log("Uploaded to IPFS:");
+			toast.success("Successfully uploaded to IPFS");
+			setIsSuccess(true);
 			// You might want to call a function here to mint NFT with these hashes
 		} catch (error) {
+			setIsSuccess(false);
+			toast.error("An error occured uploading to IPFS");
 			console.error("Error uploading to IPFS:", error);
 		} finally {
 			setIsUploading(false);
@@ -88,6 +94,7 @@ const ImagesUploadStep = ({
 			<div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
 				<ImagePlus className="mx-auto h-12 w-12 text-gray-400" />
 				<ButtonInput
+					disabled={isUploading || isSuccess}
 					value={
 						selectedImages.length > 0
 							? `${selectedImages.length} images selected`
@@ -124,6 +131,7 @@ const ImagesUploadStep = ({
 							height={200}
 						/>
 						<button
+							disabled={isUploading || isSuccess}
 							onClick={() => removeImage(index)}
 							className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
 						>
@@ -136,7 +144,7 @@ const ImagesUploadStep = ({
 			{selectedImages.length > 0 && (
 				<Button
 					onClick={uploadToIPFS}
-					disabled={isUploading}
+					disabled={isUploading || isSuccess}
 					className="w-full"
 				>
 					{isUploading ? (

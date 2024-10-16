@@ -24,12 +24,16 @@ import axios from "axios";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { usegeneratedTokenURI } from "../../../../../stores/useGeneratedTokenURI";
 
 export default function AddCarForm() {
-	const [currentStep, setCurrentStep] = useState(4);
+	const [currentStep, setCurrentStep] = useState(1);
 	const [isCompleted, setIsCompleted] = useState(false);
 	const [status, setStatus] = useState("idle");
 	const { address } = useAccount();
+	const generatedTokenURI = usegeneratedTokenURI(
+		(state) => state.generatedTokenURI
+	);
 	const router = useRouter();
 	console.log({ address });
 	const form = useForm<z.infer<typeof addCarFormSchema>>({
@@ -155,7 +159,12 @@ export default function AddCarForm() {
 								type="button"
 								variant="outline"
 								onClick={() => setCurrentStep((prev) => Math.max(1, prev - 1))}
-								disabled={currentStep !== 1 ||  status === "success" || isCompleted}
+								disabled={
+									currentStep === 1 ||
+									currentStep === 3 ||
+									status !== "error" ||
+									isCompleted
+								}
 							>
 								Previous
 							</Button>
@@ -173,6 +182,7 @@ export default function AddCarForm() {
 									}}
 									disabled={
 										(currentStep === 4 && !isCompleted) ||
+										(currentStep === 3 && !generatedTokenURI) ||
 										(currentStep === 2 && status !== "success")
 									}
 								>

@@ -78,6 +78,7 @@ export function useGetOwnedCars() {
 					}
 				})
 			);
+            console.log({carData})
 
 			return carData.filter((car) => car);
 		}
