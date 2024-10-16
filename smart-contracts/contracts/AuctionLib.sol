@@ -2,6 +2,7 @@
 pragma solidity ^0.8.27;
 
 library AuctionLib {
+    
     error NotOwner(address sender);
     error InvalidStartPrice();
     error AuctionNotActive();
@@ -11,6 +12,7 @@ library AuctionLib {
     error NotSeller(address sender);
     error BidsExist();
     error TransferFailed();
+    error NotApprovedForTransfer();
 
     // Ensure the auction is still active
     function validateAuctionActive(bool active) external pure {
@@ -64,5 +66,10 @@ library AuctionLib {
     function transferFunds(address payable recipient, uint256 amount) external {
         (bool sent, ) = recipient.call{value: amount}("");
         if (!sent) revert TransferFailed();
+    }
+
+    // Ensure the contract is approved by the nft owner    
+    function validateApproval(address approvedAddress, address contractAddress) external pure {
+        if (approvedAddress != contractAddress) revert NotApprovedForTransfer();
     }
 }
