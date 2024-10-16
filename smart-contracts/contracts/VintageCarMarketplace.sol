@@ -16,12 +16,13 @@ interface INFTAuction {
         uint256 _nftId,
         uint256 _startingPrice,
         uint256 _buyoutPrice,
-        uint256 _duration
+        uint256 _duration,
+        address _nftOwner
     ) external;
 
     function endAuction(uint256 _nftId) external;
 
-    function cancelAuction(uint256 _nftId) external;
+    function cancelAuction(uint256 _nftId, address _nftOwner) external;
 }
 
 contract VintageCarMarketplace is
@@ -117,7 +118,8 @@ contract VintageCarMarketplace is
             tokenId,
             startingPrice,
             buyoutPrice,
-            duration
+            duration,
+            msg.sender
         );
 
         emit AuctionCreated(tokenId, startingPrice, buyoutPrice, duration);
@@ -177,7 +179,7 @@ contract VintageCarMarketplace is
                 address(auctionContract) != address(0),
                 "Auction contract not set"
             );
-            auctionContract.cancelAuction(tokenId);
+            auctionContract.cancelAuction(tokenId, msg.sender);
         }
 
         listing.isActive = false;
