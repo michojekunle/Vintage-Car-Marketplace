@@ -4,11 +4,11 @@ import { useAccount, useSwitchChain } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useToast } from "./use-toast";
 
-const CORRECT_CHAIN_ID = "";
+const CORRECT_CHAIN_ID = 84532;
 
 console.log(CORRECT_CHAIN_ID);
 
-export function useCoursePayment() {
+export function useVerifySeller() {
 	const { address, isConnected, chain } = useAccount();
 	const { openConnectModal } = useConnectModal();
 	const { switchChain } = useSwitchChain();

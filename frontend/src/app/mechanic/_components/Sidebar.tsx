@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { Car, Plus, ShieldCheck, Wrench } from "lucide-react";
-import {motion} from 'framer-motion'
+import { Car, Plus, HomeIcon, BellDot } from "lucide-react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 const WalletConnection = dynamic(() => import("./wallet-connection"), {
   ssr: false,
@@ -23,6 +23,7 @@ const WalletConnection = dynamic(() => import("./wallet-connection"), {
 
 const Sidebar = () => {
   const pathname = usePathname();
+
   return (
     <div className="hidden w-64 bg-white dark:bg-gray-800 shadow-md lg:block">
       <div className="flex flex-col h-full">
@@ -30,7 +31,7 @@ const Sidebar = () => {
           <div className="flex items-center justify-center h-16 border-b border-r dark:border-gray-700 gap-2">
             <motion.div
               whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               <Car className="h-8 w-8 text-amber-600" />
             </motion.div>
@@ -41,57 +42,37 @@ const Sidebar = () => {
         </Link>
         <nav className="flex-1 overflow-y-auto">
           <ul className="p-4 space-y-2">
-            {/* <li>
-							<Link
-								href="/dashboard"
-								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === 'your-cars' ? 'bg-amber-100': ''}`}
-							>
-								<Home className="w-5 h-5 mr-3" />
-								Dashboard
-							</Link>
-						</li> */}
             <li>
               <Link
-                href="/dashboard"
+                href="/mechanic"
                 className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/dashboard" ? "bg-amber-100" : ""
+                  pathname === "/mechanic" ? "bg-amber-100" : ""
                 }`}
               >
-                <Car className="w-5 h-5 mr-3" />
-                Your Cars
+                <HomeIcon className="w-5 h-5 mr-3" />
+                Home
               </Link>
             </li>
             <li>
               <Link
-                href="/dashboard/add-car"
+                href="/mechanic/dashboard"
                 className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/dashboard/add-car" ? "bg-amber-100" : ""
+                  pathname === "/mechanic/dashboard" ? "bg-amber-100" : ""
+                }`}
+              >
+                <BellDot className="w-5 h-5 mr-3" />
+                Service Requests
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/mechanic/add-service"
+                className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
+                  pathname === "/mechanic/add-service" ? "bg-amber-100" : ""
                 }`}
               >
                 <Plus className="w-5 h-5 mr-3" />
-                Add Car
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/dashboard/verify-profile"
-                className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/dashboard/verify-profile" ? "bg-amber-100" : ""
-                }`}
-              >
-                <ShieldCheck className="w-5 h-5 mr-3" />
-                Verify Profile
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/dashboard/become-a-mechanic"
-                className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${
-                  pathname === "/dashboard/become-a-mechanic" ? "bg-amber-100" : ""
-                }`}
-              >
-                <Wrench className="w-5 h-5 mr-3" />
-                Become a Mechanic
+                Add Service
               </Link>
             </li>
           </ul>

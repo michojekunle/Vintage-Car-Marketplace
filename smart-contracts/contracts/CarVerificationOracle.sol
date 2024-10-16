@@ -6,8 +6,9 @@ import "@chainlink/contracts/src/v0.8/functions/v1_0_0/libraries/FunctionsReques
 import "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
+contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable, AccessControl {
     using FunctionsRequest for FunctionsRequest.Request;
 
     struct CarDetails {
@@ -20,7 +21,7 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         address currentOwner;
     }
 
-    event VerificationRequested(bytes32 indexed requestId, string indexed vin, address indexed requester);
+    event VerificationRequested(bytes32 indexed requestId, string indexed vin, address indexed owner);
     event VerificationFulfilled(bytes32 indexed requestId, string indexed vin, bool isVerified);
     event OwnershipTransferred(string indexed vin, address indexed previousOwner, address indexed newOwner);
 
@@ -33,13 +34,19 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
     uint64 public subscriptionId;
     bytes32 public donId;
 
+    bytes32 public constant VERIFIER_ROLE = keccak256("VERIFIER_ROLE");
+
     error InvalidVIN(string vin);
     error VerificationNotFound(bytes32 requestId);
+    error UnauthorizedAccess();
     error CarNotOwnedByUser(string vin, address user);
 
     constructor(address router) FunctionsClient(router) ConfirmedOwner(msg.sender) {
         subscriptionId = 201;
         donId = 0x66756e2d626173652d7365706f6c69612d310000000000000000000000000000;
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(VERIFIER_ROLE, msg.sender);
+        _setRoleAdmin(VERIFIER_ROLE, DEFAULT_ADMIN_ROLE);
     }
 
     function requestCarValidation(
@@ -47,8 +54,9 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         string memory make,
         string memory model,
         uint256 year,
-        string memory source
-    ) public whenNotPaused returns (bytes32) {
+        string memory source,
+        address carOwner
+    ) public whenNotPaused onlyRole(VERIFIER_ROLE) returns (bytes32) {
         if (bytes(vin).length != 17) revert InvalidVIN(vin);
 
         FunctionsRequest.Request memory req;
@@ -69,10 +77,10 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         );
 
         latestRequestId = requestId;
-        verifications[requestId] = CarDetails(vin, make, model, year, false, block.timestamp, msg.sender);
+        verifications[requestId] = CarDetails(vin, make, model, year, false, block.timestamp, carOwner);
         vinToRequestId[vin] = requestId;
-        ownerToCars[msg.sender].push(vin);
-        emit VerificationRequested(requestId, vin, msg.sender);
+        ownerToCars[carOwner].push(vin);
+        emit VerificationRequested(requestId, vin, carOwner);
 
         return requestId;
     }
@@ -98,16 +106,16 @@ contract CarVerificationOracle is FunctionsClient, ConfirmedOwner, Pausable {
         return verifications[requestId];
     }
 
-    function getCarDetailsByRequestId(bytes32 requestId) public view returns (CarDetails memory) {
-        CarDetails memory carDetails = verifications[requestId];
-        if (bytes(carDetails.vin).length == 0) revert VerificationNotFound(requestId);
-        return carDetails;
-    }
-
     function isCarVerified(string memory vin) public view returns (bool) {
         bytes32 requestId = vinToRequestId[vin];
         if (requestId == bytes32(0)) return false;
         return verifications[requestId].isVerified;
+    }
+
+    function getCarDetailsByRequestId(bytes32 requestId) public view returns (CarDetails memory) {
+        CarDetails memory carDetails = verifications[requestId];
+        if (bytes(carDetails.vin).length == 0) revert VerificationNotFound(requestId);
+        return carDetails;
     }
 
     function transferOwnership(string memory vin, address newOwner) public {
