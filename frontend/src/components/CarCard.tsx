@@ -1,5 +1,5 @@
 // CarCard.tsx
-import { Star } from "lucide-react";
+// import { Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
@@ -74,7 +74,7 @@ export const CarCard = ({
           <span className="font-semibold">Year: </span>
           {year}
         </p>
-        <div className="flex items-center mb-2">
+        {/* <div className="flex items-center mb-2">
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
@@ -86,7 +86,7 @@ export const CarCard = ({
           <span className="ml-2 text-sm text-gray-600">
             ({reviews} reviews)
           </span>
-        </div>
+        </div> */}
         <p className="text-primary-action font-bold">{price} ETH</p>
       </div>
       <p
