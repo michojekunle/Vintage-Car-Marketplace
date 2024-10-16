@@ -13,7 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useCarStore } from "../../stores/useCarStore";
+import { useCarStore } from "@/stores/useCarStore";
 
 export const FeaturedCars = ({
   cars,

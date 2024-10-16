@@ -3,7 +3,7 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
-import { useCarStore } from "../../stores/useCarStore";
+import { useCarStore } from "@/stores/useCarStore";
 
 const MotionCard = motion(Card);
 
@@ -39,12 +39,11 @@ export const CarCard = ({
       listed,
       id: id,
     });
-  
+
     if (onClick) {
       onClick();
     }
   };
-  
 
   return (
     <MotionCard

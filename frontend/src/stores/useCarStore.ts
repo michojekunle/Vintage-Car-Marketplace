@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { create } from "zustand";
-import { abi as marketplaceAbi } from "../abi/marketPlace.json";
+import { abi as marketplaceAbi } from "@/abi/marketPlace.json";
 import { getProvider } from "@/services/provider";
 
 const multicallAbi = [
@@ -52,7 +52,6 @@ export const useCarStore = create<CarStore>((set) => ({
       const listings: Listing[] = multicallResult
         .map((result: any, index: number) => {
           if (result[0]) {
-            // If the call was successful
             const decodedResult =
               marketplaceContract.interface.decodeFunctionResult(
                 "getListing",
