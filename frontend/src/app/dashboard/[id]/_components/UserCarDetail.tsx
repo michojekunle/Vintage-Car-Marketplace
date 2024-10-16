@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import { listingFormSchema } from "@/schema";
-import { CheckIcon } from "lucide-react";
 import UnlistCarDialog from "./unlist-car-dialog";
 import ListCarDialog from "./list-car-dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type ListingFormValues = z.infer<typeof listingFormSchema>;
 const defaultValues: Partial<ListingFormValues> = {
@@ -25,7 +25,7 @@ const UserCarDetail = () => {
 	const [loading, setLoading] = useState(true);
 	const [isListed, setIsListed] = useState(false);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const { toast } = useToast();
+	// const { toast } = useToast();
 	const router = useRouter();
 
 	useEffect(() => {
@@ -38,7 +38,6 @@ const UserCarDetail = () => {
 	});
 
 	function onSubmit(data: ListingFormValues) {
-	
 		if (data.listingType === "auction") {
 			if (data.enableBuyout) {
 				if (!data.buyoutPrice)
@@ -67,27 +66,14 @@ const UserCarDetail = () => {
 				});
 		}
 
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<div className="flex float-right h-6 w-6 items-center justify-center rounded-full bg-green-500 text-green-50">
-						<CheckIcon className="h-5 w-5" />
-					</div>
-					<code className="text-white">{JSON.stringify(data, null, 2)}</code>
-				</pre>
-			),
-		});
+		toast.success("Listing created successfully");
+
 		setIsListed(true);
 		setIsDialogOpen(false);
 	}
 
 	function handleUnlist() {
 		setIsListed(false);
-		toast({
-			title: "Vehicle Unlisted",
-			description: "Your vehicle has been successfully unlisted.",
-		});
 	}
 
 	if (loading) {

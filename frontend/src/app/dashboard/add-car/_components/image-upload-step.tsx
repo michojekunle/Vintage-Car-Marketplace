@@ -3,11 +3,25 @@ import { Button } from "@/components/ui/button";
 import { ImagePlus, X, Loader2 } from "lucide-react";
 import { ButtonInput } from "@/components/ui/button-input";
 import Image from "next/image";
+import { addCarFormSchema } from "@/schema";
+import * as z from "zod";
+import axios from "axios";
+import { usegeneratedTokenURI } from "../../../../../stores/useGeneratedTokenURI";
 
-const ImagesUploadStep = () => {
+const ImagesUploadStep = ({
+	inputFormData,
+}: {
+	inputFormData: z.infer<typeof addCarFormSchema>;
+}) => {
 	const [selectedImages, setSelectedImages] = useState<File[]>([]);
 	const [previews, setPreviews] = useState<string[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
+	// const {} = usegeneratedTokenURI()
+	const setGeneratedTokenURI = usegeneratedTokenURI(
+		(state) => state.setGeneratedTokenURI
+	);
+
+	console.log({ selectedImages });
 
 	const handleImageSelect = (files: FileList | null) => {
 		if (!files) return;
@@ -32,11 +46,34 @@ const ImagesUploadStep = () => {
 	};
 
 	const uploadToIPFS = async () => {
+		const formData = new FormData();
+		selectedImages.forEach((file) => formData.append("files", file));
 		setIsUploading(true);
+
+		// Add attributes as part of the form data
+		const attributes = {
+			description: inputFormData.description,
+			make: inputFormData.make,
+			model: inputFormData.model,
+			year: inputFormData.year,
+			vin: inputFormData.vin,
+			color: inputFormData.color,
+			mileage: inputFormData.mileage,
+			exteriorCondition: inputFormData.exteriorCondition,
+			engineCondition: inputFormData.engineCondition,
+			lastServiceDate: "",
+			verified: true,
+			ownershipHistory: 1,
+		};
+
+		formData.append("attributes", JSON.stringify(attributes));
 		try {
-		
 			// Simulate upload to ipfs
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+			const response = await axios.post("/api/ipfs-upload", formData);
+			console.log({ data: response.data });
+			const tokenUri = response.data.tokenUri;
+			setGeneratedTokenURI(tokenUri);
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
 			console.log("Uploaded to IPFS:");
 			// You might want to call a function here to mint NFT with these hashes
 		} catch (error) {
@@ -62,7 +99,7 @@ const ImagesUploadStep = () => {
 						input.type = "file";
 						input.multiple = true;
 						input.accept = "image/*";
-						input.max="5"; 
+						input.max = "5";
 						input.onchange = (e: Event) => {
 							const target = e.target as HTMLInputElement;
 							handleImageSelect(target.files);

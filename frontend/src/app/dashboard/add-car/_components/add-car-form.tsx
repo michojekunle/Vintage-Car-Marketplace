@@ -20,13 +20,17 @@ import ImagesUploadStep from "./image-upload-step";
 import ConfirmationStep from "./confirmation-step";
 import { addCarSteps } from "@/lib/constants";
 import axios from "axios";
-import { toast } from "@/hooks/use-toast";
+// import { toast } from "@/hooks/use-toast";
 import { useAccount } from "wagmi";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function AddCarForm() {
-	const [currentStep, setCurrentStep] = useState(1);
+	const [currentStep, setCurrentStep] = useState(4);
+	const [isCompleted, setIsCompleted] = useState(false);
 	const [status, setStatus] = useState("idle");
 	const { address } = useAccount();
+	const router = useRouter();
 	console.log({ address });
 	const form = useForm<z.infer<typeof addCarFormSchema>>({
 		resolver: zodResolver(addCarFormSchema),
@@ -56,20 +60,13 @@ export default function AddCarForm() {
 			console.log({ data });
 
 			if (data?.message === "successfully verified") {
-				toast({
-					title: "Car Details Verified",
-					variant: "default",
-					description:
-						"Your Car details and ownership has been successfully verified.",
-				});
+				toast.success(
+					"Your Car details and ownership has been successfully verified"
+				);
 				setStatus("success");
 			} else {
 				setStatus("error");
-				toast({
-					title: "Car Details Verification Error",
-					variant: "destructive",
-					description: "An error occured verifying your car details",
-				});
+				toast.error("An error occured verifying your car details");
 			}
 		} catch (error) {
 			console.log(error);
@@ -142,9 +139,15 @@ export default function AddCarForm() {
 						<CardContent>
 							{currentStep === 1 && <VehicleDetailsStep form={form} />}
 							{currentStep === 2 && <VerificationStep status={status} />}
-							{currentStep === 3 && <ImagesUploadStep />}
+							{currentStep === 3 && (
+								<ImagesUploadStep inputFormData={form.getValues()} />
+							)}
 							{currentStep === 4 && (
-								<ConfirmationStep formData={form.getValues()} />
+								<ConfirmationStep
+									setStatus={setStatus}
+									setIsCompleted={setIsCompleted}
+									formData={form.getValues()}
+								/>
 							)}
 						</CardContent>
 						<CardFooter className="flex justify-between">
@@ -152,7 +155,7 @@ export default function AddCarForm() {
 								type="button"
 								variant="outline"
 								onClick={() => setCurrentStep((prev) => Math.max(1, prev - 1))}
-								disabled={currentStep === 1}
+								disabled={currentStep !== 1 ||  status === "success" || isCompleted}
 							>
 								Previous
 							</Button>
@@ -161,10 +164,17 @@ export default function AddCarForm() {
 							) : (
 								<Button
 									type="button"
-									onClick={() =>
-										setCurrentStep((prev) => Math.min(4, prev + 1))
+									onClick={() => {
+										if (currentStep === 4) {
+											router.push("/dashboard/my-cars");
+										} else {
+											setCurrentStep((prev) => Math.min(4, prev + 1));
+										}
+									}}
+									disabled={
+										(currentStep === 4 && !isCompleted) ||
+										(currentStep === 2 && status !== "success")
 									}
-									disabled={currentStep === 4 || status === "error"}
 								>
 									{currentStep === 4 ? "Finish" : "Next"}
 								</Button>
