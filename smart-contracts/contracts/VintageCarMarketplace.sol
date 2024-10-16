@@ -7,32 +7,8 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
-interface IVintageCarNFT {
-    function isApprovedOrOwner(address spender, uint256 tokenId) external view returns (bool);
-    function transferFrom(address from, address to, uint256 tokenId) external;
-    function getCarDetails(uint256 tokenId) external view returns (
-        string memory make,
-        string memory model,
-        uint16 year,
-        string memory vin,
-        string memory color,
-        uint32 mileage,
-        string memory condition,
-        uint256 lastServiceDate
-    );
-}
-
-interface ICarVerificationOracle {
-    function getCarDetailsByVIN(string memory vin) external view returns (
-        string memory,
-        string memory make,
-        string memory model,
-        uint256 year,
-        bool isVerified,
-        uint256 verificationTimestamp,
-        address currentOwner
-    );
-    function transferOwnership(string memory vin, address newOwner) external;
+interface IVintageCarNFT is IERC721 {
+    function getTokenIdByVIN(string memory vin) external view returns (uint256);
 }
 
 interface INFTAuction {
@@ -42,19 +18,28 @@ interface INFTAuction {
         uint256 _buyoutPrice,
         uint256 _duration
     ) external;
+
     function endAuction(uint256 _nftId) external;
+
     function cancelAuction(uint256 _nftId) external;
 }
 
-contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Holder {
+contract VintageCarMarketplace is
+    ReentrancyGuard,
+    Ownable,
+    Pausable,
+    ERC721Holder
+{
     IVintageCarNFT public vintageCarNFT;
-    ICarVerificationOracle public carVerificationOracle;
     INFTAuction public auctionContract;
 
     uint256 public marketplaceFeePercentage;
     address public feeRecipient;
 
-    enum ListingType { FixedPrice, Auction }
+    enum ListingType {
+        FixedPrice,
+        Auction
+    }
 
     struct Listing {
         uint256 tokenId;
@@ -66,13 +51,27 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
     mapping(uint256 => Listing) public listings;
 
-    event ListingCreated(uint256 indexed tokenId, address indexed seller, uint256 price, ListingType listingType);
+    event ListingCreated(
+        uint256 indexed tokenId,
+        address indexed seller,
+        uint256 price,
+        ListingType listingType
+    );
     event ListingUpdated(uint256 indexed tokenId, uint256 newPrice);
     event ListingCancelled(uint256 indexed tokenId);
-    event CarSold(uint256 indexed tokenId, address indexed seller, address indexed buyer, uint256 price);
-    event AuctionCreated(uint256 indexed tokenId, uint256 startingPrice, uint256 buyoutPrice, uint256 duration);
+    event CarSold(
+        uint256 indexed tokenId,
+        address indexed seller,
+        address indexed buyer,
+        uint256 price
+    );
+    event AuctionCreated(
+        uint256 indexed tokenId,
+        uint256 startingPrice,
+        uint256 buyoutPrice,
+        uint256 duration
+    );
     event AuctionEnded(uint256 indexed tokenId);
-    event FundsWithdrawn(address indexed seller, uint256 amount);
     event MarketplaceFeeUpdated(uint256 newFeePercentage);
     event FeeRecipientUpdated(address newFeeRecipient);
     event MarketplaceFeesWithdrawn(uint256 amount);
@@ -80,17 +79,19 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
     constructor(
         address _vintageCarNFT,
-        address _carVerificationOracle,
         uint256 _initialFeePercentage,
         address _initialFeeRecipient
     ) Ownable(msg.sender) {
         vintageCarNFT = IVintageCarNFT(_vintageCarNFT);
-        carVerificationOracle = ICarVerificationOracle(_carVerificationOracle);
         marketplaceFeePercentage = _initialFeePercentage;
         feeRecipient = _initialFeeRecipient;
     }
 
-    function createFixedPriceListing(uint256 tokenId, uint256 price) external whenNotPaused nonReentrant {
+    function createFixedPriceListing(uint256 tokenId, uint256 price)
+        external
+        whenNotPaused
+        nonReentrant
+    {
         _createListing(tokenId, price, ListingType.FixedPrice);
     }
 
@@ -100,24 +101,38 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
         uint256 buyoutPrice,
         uint256 duration
     ) external whenNotPaused nonReentrant {
-        require(address(auctionContract) != address(0), "Auction contract not set");
+        require(
+            address(auctionContract) != address(0),
+            "Auction contract not set"
+        );
+      
         _createListing(tokenId, startingPrice, ListingType.Auction);
-        
-        vintageCarNFT.transferFrom(msg.sender, address(auctionContract), tokenId);
-        auctionContract.createAuction(tokenId, startingPrice, buyoutPrice, duration);
-        
+
+        vintageCarNFT.transferFrom(
+            msg.sender,
+            address(auctionContract),
+            tokenId
+        );
+        auctionContract.createAuction(
+            tokenId,
+            startingPrice,
+            buyoutPrice,
+            duration
+        );
+
         emit AuctionCreated(tokenId, startingPrice, buyoutPrice, duration);
     }
 
-    function _createListing(uint256 tokenId, uint256 price, ListingType listingType) internal {
-        require(vintageCarNFT.isApprovedOrOwner(msg.sender, tokenId), "Not owner or approved");
+    function _createListing(
+        uint256 tokenId,
+        uint256 price,
+        ListingType listingType
+    ) internal {
+        require(
+            vintageCarNFT.ownerOf(tokenId) == msg.sender,
+            "Not owner of the token"
+        );
         require(price > 0, "Price must be greater than zero");
-
-        (, , , string memory vin, , , ,) = vintageCarNFT.getCarDetails(tokenId);
-        (, , , , bool isVerified, , address currentOwner) = carVerificationOracle.getCarDetailsByVIN(vin);
-
-        require(isVerified, "Car is not verified");
-        require(currentOwner == msg.sender, "Ownership mismatch in verification oracle");
 
         listings[tokenId] = Listing({
             tokenId: tokenId,
@@ -130,24 +145,38 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
         emit ListingCreated(tokenId, msg.sender, price, listingType);
     }
 
-    function updateListing(uint256 tokenId, uint256 newPrice) external whenNotPaused nonReentrant {
+    function updateListing(uint256 tokenId, uint256 newPrice)
+        external
+        whenNotPaused
+        nonReentrant
+    {
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
         require(listing.seller == msg.sender, "Not the seller");
         require(newPrice > 0, "Price must be greater than zero");
-        require(listing.listingType == ListingType.FixedPrice, "Can only update fixed price listings");
+        require(
+            listing.listingType == ListingType.FixedPrice,
+            "Can only update fixed price listings"
+        );
 
         listing.price = newPrice;
         emit ListingUpdated(tokenId, newPrice);
     }
 
-    function cancelListing(uint256 tokenId) external whenNotPaused nonReentrant {
+    function cancelListing(uint256 tokenId)
+        external
+        whenNotPaused
+        nonReentrant
+    {
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
         require(listing.seller == msg.sender, "Not the seller");
 
         if (listing.listingType == ListingType.Auction) {
-            require(address(auctionContract) != address(0), "Auction contract not set");
+            require(
+                address(auctionContract) != address(0),
+                "Auction contract not set"
+            );
             auctionContract.cancelAuction(tokenId);
         }
 
@@ -155,10 +184,18 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
         emit ListingCancelled(tokenId);
     }
 
-    function buyCar(uint256 tokenId) external payable whenNotPaused nonReentrant {
+    function buyCar(uint256 tokenId)
+        external
+        payable
+        whenNotPaused
+        nonReentrant
+    {
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
-        require(listing.listingType == ListingType.FixedPrice, "Not a fixed price listing");
+        require(
+            listing.listingType == ListingType.FixedPrice,
+            "Not a fixed price listing"
+        );
         require(msg.value >= listing.price, "Insufficient payment");
 
         _processSale(listing, msg.sender, listing.price);
@@ -169,10 +206,16 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
     }
 
     function endAuction(uint256 tokenId) external whenNotPaused nonReentrant {
-        require(address(auctionContract) != address(0), "Auction contract not set");
+        require(
+            address(auctionContract) != address(0),
+            "Auction contract not set"
+        );
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
-        require(listing.listingType == ListingType.Auction, "Not an auction listing");
+        require(
+            listing.listingType == ListingType.Auction,
+            "Not an auction listing"
+        );
 
         auctionContract.endAuction(tokenId);
         listing.isActive = false;
@@ -180,7 +223,11 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
         emit AuctionEnded(tokenId);
     }
 
-    function _processSale(Listing storage listing, address buyer, uint256 price) internal {
+    function _processSale(
+        Listing storage listing,
+        address buyer,
+        uint256 price
+    ) internal {
         address seller = listing.seller;
         uint256 tokenId = listing.tokenId;
 
@@ -191,16 +238,17 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
         vintageCarNFT.transferFrom(seller, buyer, tokenId);
 
-        (, , , string memory vin, , , ,) = vintageCarNFT.getCarDetails(tokenId);
-        carVerificationOracle.transferOwnership(vin, buyer);
-
         payable(feeRecipient).transfer(feeAmount);
         payable(seller).transfer(sellerAmount);
 
         emit CarSold(tokenId, seller, buyer, price);
     }
 
-    function getListing(uint256 tokenId) external view returns (Listing memory) {
+    function getListing(uint256 tokenId)
+        external
+        view
+        returns (Listing memory)
+    {
         return listings[tokenId];
     }
 
@@ -225,12 +273,10 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
     function updateContractAddresses(
         address _vintageCarNFT,
-        address _carVerificationOracle,
         address _auctionContract
     ) external onlyOwner {
-        require(_vintageCarNFT != address(0) && _carVerificationOracle != address(0), "Invalid addresses");
+        require(_vintageCarNFT != address(0), "Invalid NFT contract address");
         vintageCarNFT = IVintageCarNFT(_vintageCarNFT);
-        carVerificationOracle = ICarVerificationOracle(_carVerificationOracle);
         auctionContract = INFTAuction(_auctionContract);
         emit AuctionContractUpdated(_auctionContract);
     }
