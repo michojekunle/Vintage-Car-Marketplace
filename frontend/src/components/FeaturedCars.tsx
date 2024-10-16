@@ -16,14 +16,26 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { CustomSlider } from "@/components/CustomSlider";
+import { CarCard } from "./CarCard";
 
-// Define the structure of an NFT object
+// Defined the structure of an NFT object
 interface NFT {
-  id: string;
+  id: number;
   name: string;
   description: string;
   image: string;
+  make?: string;
+  model?: string;
+  year?: number;
+  rating?: number;
+  reviews?: number;
+  condition?: string;
+  price?: number;
+  serviceHistory?: string[];
+  listed?: boolean;
 }
+
+
 
 const CONTRACT_ADDRESS = "0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16";
 
@@ -75,7 +87,7 @@ export const FeaturedCars = ({
     }
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: number) => {
     router.push(`/car-details/?id=${id}`);
   };
 
@@ -122,8 +134,20 @@ export const FeaturedCars = ({
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
               {nfts.map((nft) => (
-                <div
+                <CarCard
                   key={nft.id}
+                  id={nft.id} // Ensure to include id here
+                  image={nft.image} // Include image
+                  name={nft.name} // Include name
+                  make={nft.make || "Unknown Make"} // Add make if available, otherwise default
+                  model={nft.model || "Unknown Model"} // Add model if available, otherwise default
+                  year={nft.year || 0} // Add year if available, otherwise default
+                  rating={nft.rating || 0} // Add rating if available, otherwise default
+                  reviews={nft.reviews || 0} // Add reviews if available, otherwise default
+                  condition={nft.condition || "Unknown Condition"} // Add condition if available, otherwise default
+                  price={nft.price || 0} // Add price if available, otherwise default
+                  serviceHistory={nft.serviceHistory || ['No History']} // Add serviceHistory if available, otherwise default
+                  listed={nft.listed || false} // Add listed status if available, otherwise default
                   className="border p-4 rounded shadow cursor-pointer"
                   onClick={() => handleClick(nft.id)}
                 >
@@ -136,8 +160,9 @@ export const FeaturedCars = ({
                   />
                   <h3 className="text-xl font-bold mt-2">{nft.name}</h3>
                   <p className="text-gray-600">{nft.description}</p>
-                </div>
+                </CarCard>
               ))}
+
             </div>
             <div className="mt-8 w-full flex justify-between items-center">
               <p className="text-sm text-gray-600 mb-4">

@@ -1,4 +1,3 @@
-declare module "wagmi";
 
 interface ISearchInput {
   placeholder: string;
@@ -21,7 +20,9 @@ interface ICarCard {
   condition?: string; // Optional condition (e.g., "New", "Used")
   serviceHistory?: string[]; // Optional service history (e.g., ["Oil change", "Brake replacement"])
   onClick?: () => void; // Optional onClick handler for car card interaction
+  children?: React.ReactNode; // Include children prop
 }
+
 
 
 interface IAddCarValues {
