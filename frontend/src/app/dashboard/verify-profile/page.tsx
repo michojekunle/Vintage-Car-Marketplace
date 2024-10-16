@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import FacetecApp from "@/facetec/Facetec";
-import { useFacetecDataStore } from "../../../../stores/useFacetecDataStore";
+import { useFacetecDataStore } from "../../../stores/useFacetecDataStore";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import VerificationProgress from "./_components/verification-progress";
@@ -10,87 +10,90 @@ import VerificationProgress from "./_components/verification-progress";
 export type VerificationStatus = "verifying" | "success" | "failed";
 
 export default function UserVerification() {
-	const [verificationStatus, setVerificationStatus] =
-		useState<VerificationStatus>("verifying");
+  const [verificationStatus, setVerificationStatus] =
+    useState<VerificationStatus>("verifying");
 
-	const formattedScanData = useFacetecDataStore((state) => state.formattedData);
-	const isSuccessfullyMatched = useFacetecDataStore(
-		(state) => state.isSuccessfullyMatched
-	);
-	const isCompletelyDone = useFacetecDataStore(
-		(state) => state.isCompletelyDone
-	);
+  const formattedScanData = useFacetecDataStore((state) => state.formattedData);
+  const isSuccessfullyMatched = useFacetecDataStore(
+    (state) => state.isSuccessfullyMatched
+  );
+  const isCompletelyDone = useFacetecDataStore(
+    (state) => state.isCompletelyDone
+  );
 
-	useEffect(() => {
-		const verifyDetails = async () => {
+  useEffect(() => {
+    const verifyDetails = async () => {
       try {
-			if (!isCompletelyDone) return;
-			if (!formattedScanData.idNumber || !isSuccessfullyMatched) {
-				toast({
-					title: "Please complete the FaceTec scan first",
-					variant: "destructive",
-					duration: 5000,
-					description:
-						"You must complete the FaceTec scan before verifying your profile.",
-				});
-				return setVerificationStatus("failed");
-			}
+        if (!isCompletelyDone) return;
+        if (!formattedScanData.idNumber || !isSuccessfullyMatched) {
+          toast({
+            title: "Please complete the FaceTec scan first",
+            variant: "destructive",
+            duration: 5000,
+            description:
+              "You must complete the FaceTec scan before verifying your profile.",
+          });
+          return setVerificationStatus("failed");
+        }
 
-			const requestBody = { ...formattedScanData, isSuccessfullyMatched };
-			let fullName;
-			if (formattedScanData.firstName && !formattedScanData.lastName) {
-				fullName = `${formattedScanData.firstName}`;
-				delete requestBody.firstname;
-			} else if (!formattedScanData.firstName && formattedScanData.lastName) {
-				fullName = `${formattedScanData.lastName}`;
-				delete requestBody.lastName;
-			} else if (formattedScanData.firstName && formattedScanData.lastName) {
-				fullName = `${formattedScanData.firstName} ${formattedScanData.lastName}`;
-				delete requestBody.firstName;
-				delete requestBody.lastName;
-			}
+        const requestBody = { ...formattedScanData, isSuccessfullyMatched };
+        let fullName;
+        if (formattedScanData.firstName && !formattedScanData.lastName) {
+          fullName = `${formattedScanData.firstName}`;
+          delete requestBody.firstname;
+        } else if (!formattedScanData.firstName && formattedScanData.lastName) {
+          fullName = `${formattedScanData.lastName}`;
+          delete requestBody.lastName;
+        } else if (formattedScanData.firstName && formattedScanData.lastName) {
+          fullName = `${formattedScanData.firstName} ${formattedScanData.lastName}`;
+          delete requestBody.firstName;
+          delete requestBody.lastName;
+        }
 
-			//remove commas from fullName
-			fullName = fullName?.replace(/,/g, "");
-			requestBody.fullName = fullName;
+        //remove commas from fullName
+        fullName = fullName?.replace(/,/g, "");
+        requestBody.fullName = fullName;
 
-			console.log(requestBody);
+        console.log(requestBody);
 
-				const response = await axios.post("/api/verify-document", requestBody);
-				const data = response.data;
-				console.log({ data });
-				setVerificationStatus("success");
-				toast({
-					title: "Profile Verified",
-					variant: "default",
-					description: "Your profile has been successfully verified.",
-				});
-			} catch (error) {
-				console.error(error);
-				setVerificationStatus("failed");
-			}
-		};
-		verifyDetails();
-	}, [formattedScanData, isCompletelyDone, isSuccessfullyMatched]);
+        const response = await axios.post("/api/verify-document", requestBody);
+        const data = response.data;
+        console.log({ data });
+        setVerificationStatus("success");
+        toast({
+          title: "Profile Verified",
+          variant: "default",
+          description: "Your profile has been successfully verified.",
+        });
+      } catch (error) {
+        console.error(error);
+        setVerificationStatus("failed");
+      }
+    };
+    verifyDetails();
+  }, [formattedScanData, isCompletelyDone, isSuccessfullyMatched]);
 
-	// const handleSubmit = (event: React.FormEvent) => {
-	// 	event.preventDefault();
-	// 	setVerificationStatus("verifying");
-	// 	// Simulate API call
-	// 	setTimeout(() => {
-	// 		setVerificationStatus("success");
-	// 		// handle the form submission and API response here
-	// 	}, 2000);
-	// };
+  // const handleSubmit = (event: React.FormEvent) => {
+  // 	event.preventDefault();
+  // 	setVerificationStatus("verifying");
+  // 	// Simulate API call
+  // 	setTimeout(() => {
+  // 		setVerificationStatus("success");
+  // 		// handle the form submission and API response here
+  // 	}, 2000);
+  // };
 
-	return (
-		<>
-			{isCompletelyDone && isSuccessfullyMatched ? (
-				<VerificationProgress verificationStatus={verificationStatus} setVerificationStatus={setVerificationStatus} />
-			) : (
-				<div className="container mx-auto p-4 min-h-full grid items-center">
-					<FacetecApp />
-					{/* <Card className="max-w-2xl mx-auto border-2 border-amber-900">
+  return (
+    <>
+      {isCompletelyDone && isSuccessfullyMatched ? (
+        <VerificationProgress
+          verificationStatus={verificationStatus}
+          setVerificationStatus={setVerificationStatus}
+        />
+      ) : (
+        <div className="container mx-auto p-4 min-h-full grid items-center">
+          <FacetecApp />
+          {/* <Card className="max-w-2xl mx-auto border-2 border-amber-900">
 						<CardHeader className="bg-amber-100">
 							<CardTitle className="text-2xl font-bold text-amber-900">
 								Verify Your Profile
@@ -218,8 +221,8 @@ export default function UserVerification() {
 							)}
 						</CardFooter>
 					</Card> */}
-				</div>
-			)}
-		</>
-	);
+        </div>
+      )}
+    </>
+  );
 }

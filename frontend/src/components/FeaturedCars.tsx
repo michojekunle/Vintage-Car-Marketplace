@@ -23,8 +23,11 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
+  listings,
 }: IFeatured) => {
   const route = useRouter();
+
+  console.log({ listings });
 
   const handleClick = (id: number) => {
     route.push(`/car-details/?id=${id}`);

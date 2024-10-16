@@ -21,6 +21,7 @@ export const abi = [
     name: "AccessControlUnauthorizedAccount",
     type: "error",
   },
+  { inputs: [], name: "ERC721EnumerableForbiddenBatchMint", type: "error" },
   {
     inputs: [
       { internalType: "address", name: "sender", type: "address" },
@@ -68,18 +69,16 @@ export const abi = [
     name: "ERC721NonexistentToken",
     type: "error",
   },
+  {
+    inputs: [
+      { internalType: "address", name: "owner", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" },
+    ],
+    name: "ERC721OutOfBoundsIndex",
+    type: "error",
+  },
   { inputs: [], name: "EnforcedPause", type: "error" },
   { inputs: [], name: "ExpectedPause", type: "error" },
-  {
-    inputs: [{ internalType: "address", name: "owner", type: "address" }],
-    name: "OwnableInvalidOwner",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "account", type: "address" }],
-    name: "OwnableUnauthorizedAccount",
-    type: "error",
-  },
   { inputs: [], name: "ReentrancyGuardReentrantCall", type: "error" },
   {
     anonymous: false,
@@ -130,19 +129,19 @@ export const abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
-        name: "tokenId",
+        name: "_fromTokenId",
         type: "uint256",
       },
       {
-        indexed: true,
-        internalType: "address",
-        name: "updater",
-        type: "address",
+        indexed: false,
+        internalType: "uint256",
+        name: "_toTokenId",
+        type: "uint256",
       },
     ],
-    name: "CarDetailsUpdated",
+    name: "BatchMetadataUpdate",
     type: "event",
   },
   {
@@ -170,25 +169,6 @@ export const abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "valuation",
-        type: "uint256",
-      },
-    ],
-    name: "CarValuationUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: false,
         internalType: "address",
         name: "newContract",
@@ -202,53 +182,13 @@ export const abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
-        name: "tokenId",
+        name: "_tokenId",
         type: "uint256",
       },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "verifier",
-        type: "address",
-      },
     ],
-    name: "CarVerified",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "previousOwner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      { indexed: true, internalType: "address", name: "from", type: "address" },
-      { indexed: true, internalType: "address", name: "to", type: "address" },
-    ],
-    name: "OwnershipTransferred",
+    name: "MetadataUpdate",
     type: "event",
   },
   {
@@ -327,31 +267,6 @@ export const abi = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "date",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "serviceProvider",
-        type: "address",
-      },
-    ],
-    name: "ServiceRecordAdded",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
       { indexed: true, internalType: "address", name: "from", type: "address" },
       { indexed: true, internalType: "address", name: "to", type: "address" },
       {
@@ -378,29 +293,11 @@ export const abi = [
     type: "event",
   },
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "oldVIN",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "newVIN",
-        type: "string",
-      },
-    ],
-    name: "VINUpdated",
-    type: "event",
+    inputs: [],
+    name: "ADMIN_ROLE",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],
@@ -410,40 +307,8 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "MINTER_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "VERIFIER_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "minter", type: "address" }],
-    name: "addMinter",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "tokenId", type: "uint256" },
-      { internalType: "string", name: "description", type: "string" },
-      { internalType: "address", name: "serviceProvider", type: "address" },
-    ],
-    name: "addServiceRecord",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "verifier", type: "address" }],
-    name: "addVerifier",
+    inputs: [{ internalType: "address", name: "newAdmin", type: "address" }],
+    name: "addAdmin",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -466,23 +331,6 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "address[]", name: "to", type: "address[]" },
-      { internalType: "string[]", name: "make", type: "string[]" },
-      { internalType: "string[]", name: "model", type: "string[]" },
-      { internalType: "uint16[]", name: "year", type: "uint16[]" },
-      { internalType: "string[]", name: "vin", type: "string[]" },
-      { internalType: "string[]", name: "color", type: "string[]" },
-      { internalType: "uint32[]", name: "mileage", type: "uint32[]" },
-      { internalType: "string[]", name: "condition", type: "string[]" },
-      { internalType: "string[]", name: "tokenURIs", type: "string[]" },
-    ],
-    name: "bulkMintCars",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "carVerificationContract",
     outputs: [
@@ -497,74 +345,15 @@ export const abi = [
   },
   {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "exists",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "getApproved",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "getCarDetails",
-    outputs: [
-      {
-        components: [
-          { internalType: "string", name: "make", type: "string" },
-          { internalType: "string", name: "model", type: "string" },
-          { internalType: "uint16", name: "year", type: "uint16" },
-          { internalType: "string", name: "vin", type: "string" },
-          { internalType: "string", name: "color", type: "string" },
-          { internalType: "uint32", name: "mileage", type: "uint32" },
-          { internalType: "string", name: "condition", type: "string" },
-          { internalType: "uint256", name: "lastServiceDate", type: "uint256" },
-          {
-            internalType: "address[]",
-            name: "ownershipHistory",
-            type: "address[]",
-          },
-          {
-            components: [
-              { internalType: "uint256", name: "date", type: "uint256" },
-              { internalType: "string", name: "description", type: "string" },
-              {
-                internalType: "address",
-                name: "serviceProvider",
-                type: "address",
-              },
-            ],
-            internalType: "struct VintageCarNFT.ServiceRecord[]",
-            name: "serviceHistory",
-            type: "tuple[]",
-          },
-        ],
-        internalType: "struct VintageCarNFT.CarDetails",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "getCarValuation",
-    outputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "uint256", name: "", type: "uint256" },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "getOwnershipHistory",
-    outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
+    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+    name: "getNFTsOwnedBy",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
     stateMutability: "view",
     type: "function",
   },
@@ -572,6 +361,13 @@ export const abi = [
     inputs: [{ internalType: "bytes32", name: "role", type: "bytes32" }],
     name: "getRoleAdmin",
     outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "string", name: "vin", type: "string" }],
+    name: "getTokenIdByVIN",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
@@ -607,32 +403,8 @@ export const abi = [
   },
   {
     inputs: [
-      { internalType: "address", name: "spender", type: "address" },
-      { internalType: "uint256", name: "tokenId", type: "uint256" },
-    ],
-    name: "isApprovedOrOwner",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "isCarVerified",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "to", type: "address" },
-      { internalType: "string", name: "make", type: "string" },
-      { internalType: "string", name: "model", type: "string" },
-      { internalType: "uint16", name: "year", type: "uint16" },
       { internalType: "string", name: "vin", type: "string" },
-      { internalType: "string", name: "color", type: "string" },
-      { internalType: "uint32", name: "mileage", type: "uint32" },
-      { internalType: "string", name: "condition", type: "string" },
-      { internalType: "string", name: "tokenURI_", type: "string" },
+      { internalType: "string", name: "_tokenURI", type: "string" },
     ],
     name: "mintCar",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -643,13 +415,6 @@ export const abi = [
     inputs: [],
     name: "name",
     outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
@@ -675,22 +440,8 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "minter", type: "address" }],
-    name: "removeMinter",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "verifier", type: "address" }],
-    name: "removeVerifier",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
+    inputs: [{ internalType: "address", name: "admin", type: "address" }],
+    name: "removeAdmin",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -749,23 +500,6 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "string", name: "baseURI", type: "string" }],
-    name: "setBaseTokenURI",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "tokenId", type: "uint256" },
-      { internalType: "uint256", name: "valuation", type: "uint256" },
-    ],
-    name: "setCarValuation",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
       { internalType: "address", name: "_newContract", type: "address" },
     ],
@@ -789,9 +523,33 @@ export const abi = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "uint256", name: "index", type: "uint256" }],
+    name: "tokenByIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "owner", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" },
+    ],
+    name: "tokenOfOwnerByIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "tokenURI",
     outputs: [{ internalType: "string", name: "", type: "string" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
@@ -807,44 +565,8 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "unpause",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "tokenId", type: "uint256" },
-      { internalType: "string", name: "color", type: "string" },
-      { internalType: "uint32", name: "mileage", type: "uint32" },
-      { internalType: "string", name: "condition", type: "string" },
-    ],
-    name: "updateCarDetails",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "tokenId", type: "uint256" },
-      { internalType: "string", name: "newVIN", type: "string" },
-    ],
-    name: "updateVIN",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "verifyCar",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
