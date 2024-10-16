@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.27;
 
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -24,6 +25,7 @@ interface ICarVerificationOracle {
 }
 
 contract VintageCarNFT is
+    ERC721Enumerable,
     ERC721URIStorage,
     AccessControl,
     ReentrancyGuard,
@@ -58,16 +60,6 @@ contract VintageCarNFT is
         _grantRole(ADMIN_ROLE, msg.sender);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(ERC721URIStorage, AccessControl)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
-
     function setCarVerificationContract(address _newContract)
         public
         onlyRole(ADMIN_ROLE)
@@ -77,7 +69,7 @@ contract VintageCarNFT is
         emit CarVerificationContractUpdated(_newContract);
     }
 
-    function mintCar(string memory vin, string memory tokenURI)
+    function mintCar(string memory vin, string memory _tokenURI)
         public
         whenNotPaused
         nonReentrant
@@ -97,7 +89,7 @@ contract VintageCarNFT is
 
         uint256 tokenId = _nextTokenId++;
         _safeMint(msg.sender, tokenId);
-        _setTokenURI(tokenId, tokenURI);
+        _setTokenURI(tokenId, _tokenURI);
 
         _vinToTokenId[vin] = tokenId;
         emit CarMinted(tokenId, msg.sender, vin, true);
@@ -124,5 +116,51 @@ contract VintageCarNFT is
 
     function unpause() public onlyRole(ADMIN_ROLE) {
         _unpause();
+    }
+
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override(ERC721, ERC721Enumerable) returns (address) {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._increaseBalance(account, value);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Enumerable, AccessControl, ERC721URIStorage)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function getNFTsOwnedBy(address owner)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        uint256 balance = balanceOf(owner);
+        uint256[] memory tokens = new uint256[](balance);
+        for (uint256 i = 0; i < balance; i++) {
+            tokens[i] = tokenOfOwnerByIndex(owner, i);
+        }
+        return tokens;
     }
 }
