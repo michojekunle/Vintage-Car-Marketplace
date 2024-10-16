@@ -8,9 +8,7 @@ const multicallAbi = [
 ];
 
 const MARKETPLACE_ADDRESS = "0x887136e9Db3CDC8C1d45644e48DAD5DcdB71170d";
-const MULTICALL_ADDRESS =
-  process.env.NEXT_MULTICALL_ADDRESS ??
-  "0x7F41b9A82BE6eB20EFD4C1030255FeaE0A442913";
+const MULTICALL_ADDRESS = "0x7F41b9A82BE6eB20EFD4C1030255FeaE0A442913";
 
 export const useCarStore = create<CarStore>((set) => ({
   selectedCar: null,
@@ -59,10 +57,7 @@ export const useCarStore = create<CarStore>((set) => ({
               );
             return {
               tokenId: index.toString(),
-              seller: decodedResult.seller,
-              price: decodedResult.price,
-              isActive: decodedResult.isActive,
-              listingType: decodedResult.listingType,
+              ...decodedResult,
             };
           }
           return null;
