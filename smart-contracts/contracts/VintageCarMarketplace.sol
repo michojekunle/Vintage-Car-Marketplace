@@ -109,11 +109,6 @@ contract VintageCarMarketplace is
       
         _createListing(tokenId, startingPrice, ListingType.Auction);
 
-        vintageCarNFT.transferFrom(
-            msg.sender,
-            address(auctionContract),
-            tokenId
-        );
         auctionContract.createAuction(
             tokenId,
             startingPrice,
