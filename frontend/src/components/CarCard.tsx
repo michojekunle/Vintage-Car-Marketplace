@@ -45,7 +45,7 @@ export const CarCard = ({
       listed,
       id: id,
     });
-  
+
     if (onClick) {
       onClick();
     }
@@ -63,7 +63,7 @@ export const CarCard = ({
 
   useEffect(() => {
     if (isError) {
-      console.error('Error fetching car details:', carDetails?.error?.message, carDetails, isError)
+      console.error('Error fetching car details:', carDetails, isError)
       toast({
         title: "Error fetching car details",
         description: "Please try again later.",
@@ -129,14 +129,12 @@ export const CarCard = ({
         <p className="text-primary-action font-bold">{price} ETH</p>
       </div>
       <p
-        className={`absolute py-1 px-2 rounded-md right-2 top-2 text-xs font-semibold ${
-          listed === "Listed"
-            ? "bg-green-100 text-green-800"
-            : "bg-red-100 text-red-800"
-        }`}
+        className={`absolute py-1 px-2 rounded-md right-2 top-2 text-xs font-semibold ${listed ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          }`}
       >
-        {listed}
+        {listed ? "Listed" : "Sold"}
       </p>
+
     </MotionCard>
   );
 };

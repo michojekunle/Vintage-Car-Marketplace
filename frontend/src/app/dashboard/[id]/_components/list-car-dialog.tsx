@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -60,7 +61,7 @@ const ListCarDialog = ({
 							<FormField
 								control={form.control}
 								name="listingType"
-								render={({ field }) => (
+								render={({ field }:any) => (
 									<FormItem className="space-y-3">
 										<FormLabel>Listing Type</FormLabel>
 										<FormControl>
@@ -93,7 +94,7 @@ const ListCarDialog = ({
 								<FormField
 									control={form.control}
 									name="salePrice"
-									render={({ field }) => (
+									render={({ field }:any) => (
 										<FormItem>
 											<FormLabel>Sale Price</FormLabel>
 											<FormControl>
@@ -112,7 +113,7 @@ const ListCarDialog = ({
 									<FormField
 										control={form.control}
 										name="enableBuyout"
-										render={({ field }) => (
+										render={({ field }:any) => (
 											<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
 												<div className="space-y-0.5">
 													<FormLabel className="text-base">
@@ -135,7 +136,7 @@ const ListCarDialog = ({
 										<FormField
 											control={form.control}
 											name="buyoutPrice"
-											render={({ field }) => (
+											render={({ field }:any) => (
 												<FormItem>
 													<FormLabel>Buyout Price</FormLabel>
 													<FormControl>
@@ -156,7 +157,7 @@ const ListCarDialog = ({
 									<FormField
 										control={form.control}
 										name="startingPrice"
-										render={({ field }) => (
+										render={({ field }:any) => (
 											<FormItem>
 												<FormLabel>Starting Price</FormLabel>
 												<FormControl>
@@ -176,7 +177,7 @@ const ListCarDialog = ({
 									<FormField
 										control={form.control}
 										name="durationUnit"
-										render={({ field }) => (
+										render={({ field }:any) => (
 											<FormItem>
 												<FormLabel>Duration Unit</FormLabel>
 												<Select
@@ -204,7 +205,7 @@ const ListCarDialog = ({
 									<FormField
 										control={form.control}
 										name="duration"
-										render={({ field }) => (
+										render={({ field }:any) => (
 											<FormItem>
 												<FormLabel>Auction Duration</FormLabel>
 												<FormControl>

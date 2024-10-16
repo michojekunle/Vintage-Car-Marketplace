@@ -44,7 +44,7 @@ const ConfirmationStep = ({
 				</div>
 			</div>
 			<div className="mt-4">
-				<Button type="button" className="w-full">Mint NFT and List Car</Button>
+				<Button type="button" className="w-full">Mint Car NFT</Button>
 			</div>
 		</div>
 	);

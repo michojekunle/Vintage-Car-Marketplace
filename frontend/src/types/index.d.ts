@@ -1,4 +1,4 @@
-declare module "wagmi";
+// declare module "wagmi";
 
 interface ISearchInput {
   placeholder: string;
@@ -8,19 +8,19 @@ interface ISearchInput {
 }
 
 interface ICarCard {
-  id: number;
-  image: string;
-  name: string;
-  make: string;
-  model: string;
-  listed: string;
-  year: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  condition?: string | undefined;
-  serviceHistory?: string[]; // Optional service history
-  onClick?: () => void;
+	id: number;
+	image: string;
+	name: string;
+	make: string;
+	model: string;
+	listed: boolean;
+	year: number;
+	rating: number;
+	reviews: number;
+	price: number;
+	condition?: string | undefined;
+	serviceHistory?: string[]; // Optional service history
+	onClick?: () => void;
 }
 
 interface IAddCarValues {
