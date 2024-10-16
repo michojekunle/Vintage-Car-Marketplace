@@ -65,6 +65,7 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
+  listings: Listing[];
 }
 
 interface IFilterCar {
@@ -120,6 +121,8 @@ interface CarStore {
   setSelectedCar: (car: Car) => void;
   listings: Listing[];
   setListings: (listings: Listing[]) => void;
+  auctions: Listing[];
+  setAuctions: (auctions: Listing[]) => void;
   fetchListings: () => Promise<void>;
 }
 
@@ -133,4 +136,8 @@ interface Listing {
   price: any;
   isActive: boolean;
   listingType: ListingType;
+}
+
+interface ILiveAuction {
+  auctions: Listing[];
 }

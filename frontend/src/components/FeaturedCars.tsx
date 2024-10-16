@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { CarCard } from "./CarCard";
 import { useRouter } from "next/navigation";
 import { ArchiveX } from "lucide-react";
@@ -13,7 +13,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useCarStore } from "@/stores/useCarStore";
 
 export const FeaturedCars = ({
   cars,
@@ -24,13 +23,9 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
+  listings,
 }: IFeatured) => {
   const route = useRouter();
-  const { listings, fetchListings } = useCarStore();
-
-  useEffect(() => {
-    fetchListings();
-  }, []);
 
   console.log({ listings });
 

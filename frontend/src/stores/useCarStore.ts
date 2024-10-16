@@ -15,6 +15,8 @@ export const useCarStore = create<CarStore>((set) => ({
   setSelectedCar: (car) => set({ selectedCar: car }),
   listings: [],
   setListings: (listings) => set({ listings }),
+  auctions: [],
+  setAuctions: (auctions) => set({ auctions }),
   fetchListings: async () => {
     try {
       const provider = await getProvider();
@@ -67,7 +69,15 @@ export const useCarStore = create<CarStore>((set) => ({
             listing !== null && listing.isActive
         );
 
-      set({ listings });
+      // auctions
+      const auctionListings = listings.filter(
+        (listing) => listing.listingType === 1
+      );
+
+      set({
+        listings: listings.filter((listing) => listing.listingType === 0),
+      });
+      set({ auctions: auctionListings });
     } catch (error) {
       console.error("Failed to fetch listings:", error);
     }

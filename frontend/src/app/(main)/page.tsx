@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Cta,
   FeaturedCars,
@@ -13,10 +13,17 @@ import {
 } from "@/components";
 import { featuredCars } from "@/lib/constants";
 import { TopMechanics } from "@/components/TopMechanics";
+import { useCarStore } from "@/stores/useCarStore";
 
 const ITEMS_PER_PAGE = 8;
 
 const Home = () => {
+  const { listings, auctions, fetchListings } = useCarStore();
+
+  useEffect(() => {
+    fetchListings();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
@@ -64,8 +71,9 @@ const Home = () => {
         totalPages={totalPages}
         itemsPerPage={ITEMS_PER_PAGE}
         totalCars={filteredCars.length}
+        listings={listings}
       />
-      <LiveAuction />
+      <LiveAuction auctions={auctions} />
       <UserRoles />
       <TopMechanics />
       <MechanicVerification />
