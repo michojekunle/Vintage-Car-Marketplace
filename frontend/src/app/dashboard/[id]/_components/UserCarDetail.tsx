@@ -3,16 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check, Loader2, } from "lucide-react";
+import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { listingFormSchema } from "@/schema";
 import { CheckIcon } from "lucide-react";
 import UnlistCarDialog from "./unlist-car-dialog";
 import ListCarDialog from "./list-car-dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 type ListingFormValues = z.infer<typeof listingFormSchema>;
 const defaultValues: Partial<ListingFormValues> = {
@@ -29,7 +29,6 @@ const UserCarDetail = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		// Simulate data fetching or loading delay
 		setTimeout(() => setLoading(false), 1500);
 	}, []);
 
@@ -39,8 +38,7 @@ const UserCarDetail = () => {
 	});
 
 	function onSubmit(data: ListingFormValues) {
-		console.log({ data });
-		console.log("listing...");
+	
 		if (data.listingType === "auction") {
 			if (data.enableBuyout) {
 				if (!data.buyoutPrice)

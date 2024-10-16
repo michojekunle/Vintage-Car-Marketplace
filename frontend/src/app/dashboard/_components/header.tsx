@@ -19,7 +19,6 @@ import { useEffect, useState } from "react";
 
 const DashboardHeader = () => {
 	const [mounted, setMounted] = useState(false);
-
 	const { openConnectModal } = useConnectModal();
 	const { disconnect } = useDisconnect();
 	const { isConnected } = useAccount();

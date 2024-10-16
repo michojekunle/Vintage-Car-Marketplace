@@ -32,7 +32,7 @@ export function ComboboxForm({
     const [open, setOpen] = useState(false)
 
 	return (
-		<FormItem className="flex flex-col">
+		<FormItem>
 			<FormLabel>{fieldName}</FormLabel>
 			<Popover open={open} onOpenChange={setOpen}>
 				<PopoverTrigger asChild>

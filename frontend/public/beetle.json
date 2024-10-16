@@ -1,0 +1,66 @@
+{
+    "name": "Ruby Car NFT",
+    "description": "A charming 1974 Volkswagen Beetle in sunny yellow. A classic car beloved for its iconic design and reliability.",
+    "external_url": "https://pinata.cloud/",
+    "image": "ipfs://QmP89vH5Mo9XuJu3P35xpJRZjzpYbs4iqsETum9ujqMhtt",
+    "attributes": [
+      { "trait_type": "Make", "value": "Volkswagen" },
+      { "trait_type": "Model", "value": "Beetle" },
+      { "trait_type": "Year", "value": 1974 },
+      { "trait_type": "VIN", "value": "1FAFP53295A123456" },
+      { "trait_type": "Color", "value": "Yellow" },
+      { "trait_type": "Mileage", "value": 93000 },
+      { "trait_type": "Exterior Condition", "value": "Good" },
+      { "trait_type": "Engine Condition", "value": "Good" },
+      { "trait_type": "Last Service Date", "value": "2023-07-20" },
+      { "trait_type": "Verified", "value": true },
+      { "trait_type": "Ownership History", "value": 2 }
+    ],
+    "properties": {
+      "files": [
+        {
+          "uri": "ipfs://QmMainImageCID",
+          "type": "image/jpeg"
+        },
+        {
+          "uri": "ipfs://QmInteriorImageCID",
+          "type": "image/jpeg"
+        },
+        {
+          "uri": "ipfs://QmEngineImageCID",
+          "type": "image/jpeg"
+        }
+      ],
+      "category": "vintage_car",
+      "creators": [
+        {
+          "address": "0x1234...5678",
+          "share": 100
+        }
+      ]
+    },
+    "serviceHistory": [
+      {
+        "date": "2023-09-15",
+        "description": "Full engine rebuild",
+        "provider": "Classic Car Mechanics Inc.",
+        "providerAddress": "0x9876...5432"
+      },
+      {
+        "date": "2022-05-20",
+        "description": "Transmission overhaul",
+        "provider": "Vintage Transmission Specialists",
+        "providerAddress": "0xabcd...ef01"
+      }
+    ],
+    "valuationHistory": [
+      {
+        "date": "2023-10-01",
+        "value": "45000000000000000000",
+        "currency": "ETH",
+        "appraiser": "Classic Car Appraisals LLC",
+        "appraiserAddress": "0x2468...1357"
+      }
+    ]
+  }
+  
