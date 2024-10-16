@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
-import { CarCard } from "./CarCard";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArchiveX } from "lucide-react";
-import { CustomSlider } from "./CustomSlider";
+import { ArchiveX, Loader } from "lucide-react"; // Import Loader icon
+import { ethers } from "ethers";
+import Image from "next/image";
+import ABI from '../ABIs/vintageCarNFTContractABI.json';
+
 import {
   Pagination,
   PaginationContent,
@@ -13,9 +15,19 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { CustomSlider } from "@/components/CustomSlider";
+
+// Define the structure of an NFT object
+interface NFT {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+}
+
+const CONTRACT_ADDRESS = "0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16";
 
 export const FeaturedCars = ({
-  cars,
   priceRange,
   setPriceRange,
   currentPage,
@@ -24,10 +36,47 @@ export const FeaturedCars = ({
   itemsPerPage,
   totalCars,
 }: IFeatured) => {
-  const route = useRouter();
+  const router = useRouter();
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  const [loading, setLoading] = useState<boolean>(false); // Loading state
 
-  const handleClick = (id: number) => {
-    route.push(`/car-details/?id=${id}`);
+  useEffect(() => {
+    fetchNFTs();
+  }, []);
+
+  const fetchNFTs = async () => {
+    setLoading(true); // Set loading to true when fetching starts
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+
+      const totalSupply = await contract.totalSupply();
+      const nftData: NFT[] = [];
+
+      for (let i = 0; i < totalSupply; i++) {
+        const tokenId = await contract.tokenByIndex(i);
+        const tokenURI = await contract.tokenURI(tokenId);
+
+        const metadata = await fetch(tokenURI).then((res) => res.json());
+
+        nftData.push({
+          id: tokenId.toString(),
+          name: metadata.name,
+          description: metadata.description,
+          image: metadata.image,
+        });
+      }
+
+      setNfts(nftData);
+    } catch (error) {
+      console.error("Error fetching NFTs:", error);
+    } finally {
+      setLoading(false); // Set loading to false when fetching ends
+    }
+  };
+
+  const handleClick = (id: string) => {
+    router.push(`/car-details/?id=${id}`);
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
@@ -62,15 +111,32 @@ export const FeaturedCars = ({
         <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
           Featured Listings
         </h3>
-        {cars.length > 0 ? (
+        {loading ? ( // Show loading icon while fetching
+          <div className="flex flex-col gap-2 items-center">
+            <Loader size={44} className="text-blue-400 animate-spin" /> {/* Loading icon */}
+            <p className="text-center text-lg font-medium text-text-body">
+              Loading cars...
+            </p>
+          </div>
+        ) : nfts.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-              {cars.map((car) => (
-                <CarCard
-                  key={car.id}
-                  {...car}
-                  onClick={() => handleClick(car.id)}
-                />
+              {nfts.map((nft) => (
+                <div
+                  key={nft.id}
+                  className="border p-4 rounded shadow cursor-pointer"
+                  onClick={() => handleClick(nft.id)}
+                >
+                  <Image
+                    src={nft.image}
+                    alt={nft.name}
+                    width={200}
+                    height={200}
+                    className="w-full h-64 object-cover rounded"
+                  />
+                  <h3 className="text-xl font-bold mt-2">{nft.name}</h3>
+                  <p className="text-gray-600">{nft.description}</p>
+                </div>
               ))}
             </div>
             <div className="mt-8 w-full flex justify-between items-center">
@@ -94,7 +160,7 @@ export const FeaturedCars = ({
                       />
                     </PaginationItem>
                     {[...Array(totalPages)].map((_, index) => (
-                      <PaginationItem key={index} className="cursor-pointer ">
+                      <PaginationItem key={index} className="cursor-pointer">
                         <PaginationLink
                           size={"default"}
                           className="hover:bg-amber-100"
