@@ -9,13 +9,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useReadContract, useAccount } from "wagmi";
 import { abi } from "../../abi/CarNFTabi";
 import { toast } from "@/hooks/use-toast";
+// import useDashboardStore from "@/stores/useDashboardStore";
 
 export default function Dashboard() {
   const router = useRouter();
   const sortedCars = featuredCars.toSorted((a, b) => b.reviews - a.reviews);
   const contractAddress = "0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16";
   const { address } = useAccount();
-  const [carsOwned, setCarsOwned] = useState<any[]>([]);
+  const [carsOwned, setCarsOwned] = useState<number[]>([]);
+  // const {isLoading, carsOwned, fetchCarsOwned, isError} = useDashboardStore();
 
   const handleClick = (id: number) => {
     router.push(`/dashboard/${id}`);
@@ -24,7 +26,7 @@ export default function Dashboard() {
     abi,
     address: contractAddress,
     functionName: "getNFTsOwnedBy",
-    args: [address],
+    args: ['0x6c8fcDeb117a1d40Cd2c2eB6ECDa58793FD636b1'],
   });
 
   useEffect(() => {
@@ -37,10 +39,11 @@ export default function Dashboard() {
       });
     }
     if (fetchedCarsOwned) {
-      setCarsOwned(fetchedCarsOwned as any[]);
-      console.log("Car details:", carsOwned);
+      setCarsOwned(fetchedCarsOwned as number[]);
+      console.log("Car details:", fetchedCarsOwned);
+      console.log("Car set:", carsOwned);
     }
-  }, [fetchedCarsOwned, isError]);
+  })
 
   useEffect(() => {
     if (!address) {
@@ -49,6 +52,9 @@ export default function Dashboard() {
       });
     }
   }, [address]);
+  // useEffect(() => {
+  //   fetchCarsOwned(); // Fetch cars owned on component mount
+  // }, []);
 
   return (
     <div className="mt-8">
