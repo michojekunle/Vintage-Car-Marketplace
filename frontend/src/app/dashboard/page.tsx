@@ -45,43 +45,6 @@ export default function Dashboard() {
             </div>
           </TabsContent>
         </Tabs>
-        {/* <div className="flex items-center justify-between">
-            <h3 className="text-3xl font-bold text-left mb-6">
-            Cars Listed
-            </h3>
-            <div className="w-[40vw] ml-auto mb-6">
-                <FilterCar />
-            </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {sortedCars.map((car) => (
-            <CarCard
-              key={car.id}
-              {...car}
-              onClick={() => handleClick(car.id)}
-            />
-          ))}
-        </div>
-      </div> */}
-        {/* <div className="container mx-auto mt-20">
-        <div className="flex items-center justify-between">
-            <h3 className="text-3xl font-bold text-left mb-6">
-            Cars Bought
-            </h3>
-            <div className="w-[40vw] ml-auto mb-6">
-                <FilterCar />
-            </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {sortedCars.map((car) => (
-            <CarCard
-              key={car.id}
-              {...car}
-              onClick={() => handleClick(car.id)}
-            />
-          ))}
-        </div>
-      </div> */}
       </div>
     </div>
   );

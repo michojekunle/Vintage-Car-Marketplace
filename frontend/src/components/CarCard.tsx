@@ -1,9 +1,13 @@
-// CarCard.tsx
+'use client'
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
 import { useCarStore } from "../../stores/useCarStore";
+import { useReadContract, useAccount } from 'wagmi'
+import { abi } from '../lib/CarNFTabi'
+import { useEffect } from "react";
+import { toast } from "@/hooks/use-toast";
 
 const MotionCard = motion(Card);
 
@@ -23,6 +27,8 @@ export const CarCard = ({
   onClick,
 }: ICarCard) => {
   const setSelectedCar = useCarStore((state) => state.setSelectedCar);
+  const contractAddress = '0x26950e95ED15b4B172D600d31f4dcA60127C6dF4'
+  const { address } = useAccount()
 
   const handleClick = () => {
     setSelectedCar({
@@ -44,6 +50,38 @@ export const CarCard = ({
       onClick();
     }
   };
+
+  const { data: carDetails, isError, isLoading } = useReadContract({
+    abi,
+    address: contractAddress,
+    functionName: 'getCarDetails',
+    args: [1]
+  })
+  if (!isLoading && carDetails) {
+    console.log('Car details:', carDetails)
+  }
+
+  useEffect(() => {
+    if (isError) {
+      console.error('Error fetching car details:', carDetails?.error?.message, carDetails, isError)
+      toast({
+        title: "Error fetching car details",
+        description: "Please try again later.",
+        variant: "destructive",
+      })
+    }
+    if (carDetails) {
+      console.log('Car details:', carDetails)
+    }
+  }, [carDetails, isError])
+
+  useEffect(() => {
+    if (!address) {
+      toast({
+        title: "Please connect your wallet"
+      })
+    }
+  }, [address])
   
 
   return (
