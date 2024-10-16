@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-
 import { addCarFormSchema } from "@/schema";
 import VehicleDetailsStep from "./vehicle-details-step";
 import VerificationStep from "./verification-step";
@@ -20,7 +19,6 @@ import ImagesUploadStep from "./image-upload-step";
 import ConfirmationStep from "./confirmation-step";
 import { addCarSteps } from "@/lib/constants";
 import axios from "axios";
-// import { toast } from "@/hooks/use-toast";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";

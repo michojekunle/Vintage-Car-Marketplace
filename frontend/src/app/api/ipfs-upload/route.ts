@@ -12,7 +12,6 @@ export async function POST(req: Request) {
 	const formData = await req.formData();
 	const files = formData.getAll("files") as File[];
 	const attributes = JSON.parse(formData.get("attributes") as string);
-
 	const pinataFileCIDs: string[] = [];
 	const vin = attributes.vin; 
 
@@ -83,7 +82,6 @@ export async function POST(req: Request) {
 
 		const tokenUri = `https://gateway.pinata.cloud/ipfs/${metadataRes.IpfsHash}`;
 		console.log(tokenUri);
-
 		return NextResponse.json({ tokenUri });
 	} catch (error) {
 		console.error("Error uploading metadata to Pinata:", error);
