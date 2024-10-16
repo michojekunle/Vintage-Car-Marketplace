@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.27;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 interface ICarVerificationOracle {
     struct CarDetails {
@@ -19,277 +18,149 @@ interface ICarVerificationOracle {
         address currentOwner;
     }
 
-    function getCarDetailsByVIN(string memory vin) external view returns (CarDetails memory);
+    function getCarDetailsByVIN(string memory vin)
+        external
+        view
+        returns (CarDetails memory);
 }
 
-contract VintageCarNFT is ERC721, Ownable, AccessControl, ReentrancyGuard, Pausable {
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant VERIFIER_ROLE = keccak256("VERIFIER_ROLE");
+contract VintageCarNFT is
+    ERC721Enumerable,
+    ERC721URIStorage,
+    AccessControl,
+    ReentrancyGuard,
+    Pausable
+{
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
     uint256 private _nextTokenId;
 
-    struct ServiceRecord {
-        uint256 date;
-        string description;
-        address serviceProvider;
-    }
+    mapping(string => uint256) private _vinToTokenId;
 
-    struct CarDetails {
-        string make;
-        string model;
-        uint16 year;
-        string vin;
-        string color;
-        uint32 mileage;
-        string condition;
-        uint256 lastServiceDate;
-        address[] ownershipHistory;
-        ServiceRecord[] serviceHistory;
-    }
-
-    struct ValuationData {
-        uint256 lastValuation;
-        uint256 valuationTimestamp;
-    }
-
-    mapping(uint256 => CarDetails) private _carDetails;
-    mapping(uint256 => bool) private _isVerified;
-    mapping(string => bool) private _vinExists;
-    mapping(uint256 => ValuationData) private _carValuations;
-    mapping(uint256 => string) private _tokenURIs;
-
-    string private _baseTokenURI;
     ICarVerificationOracle public carVerificationContract;
 
-    event CarMinted(uint256 indexed tokenId, address indexed minter, string vin, bool verified);
-    event CarDetailsUpdated(uint256 indexed tokenId, address indexed updater);
-    event ServiceRecordAdded(uint256 indexed tokenId, uint256 date, address indexed serviceProvider);
-    event CarVerified(uint256 indexed tokenId, address indexed verifier);
-    event CarValuationUpdated(uint256 indexed tokenId, uint256 valuation);
-    event VINUpdated(uint256 indexed tokenId, string oldVIN, string newVIN);
-    event OwnershipTransferred(uint256 indexed tokenId, address indexed from, address indexed to);
+    event CarMinted(
+        uint256 indexed tokenId,
+        address indexed minter,
+        string vin,
+        bool verified
+    );
     event CarVerificationContractUpdated(address newContract);
 
-    constructor(string memory name, string memory symbol, address _carVerificationContract) ERC721(name, symbol) Ownable(msg.sender) {
-        carVerificationContract = ICarVerificationOracle(_carVerificationContract);
+    constructor(
+        string memory name,
+        string memory symbol,
+        address _carVerificationContract
+    ) ERC721(name, symbol) {
+        carVerificationContract = ICarVerificationOracle(
+            _carVerificationContract
+        );
+
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, AccessControl) returns (bool) {
-        return super.supportsInterface(interfaceId);
-    }
-
-    function exists(uint256 tokenId) public view returns (bool) {
-        return _ownerOf(tokenId) != address(0);
-    }
-
-    function mintCar(
-        address to,
-        string memory make,
-        string memory model,
-        uint16 year,
-        string memory vin,
-        string memory color,
-        uint32 mileage,
-        string memory condition,
-        string memory tokenURI_
-    ) public onlyRole(MINTER_ROLE) whenNotPaused nonReentrant returns (uint256) {
-        require(!_vinExists[vin], "VIN already exists");
-
-        ICarVerificationOracle.CarDetails memory verifiedCar = carVerificationContract.getCarDetailsByVIN(vin);
-        require(verifiedCar.isVerified, "Car is not verified");
-        require(verifiedCar.currentOwner == to, "Minter is not the verified owner of the car");
-
-        uint256 tokenId = _nextTokenId++;
-        _safeMint(to, tokenId);
-
-        CarDetails storage car = _carDetails[tokenId];
-        car.make = make;
-        car.model = model;
-        car.year = year;
-        car.vin = vin;
-        car.color = color;
-        car.mileage = mileage;
-        car.condition = condition;
-        car.lastServiceDate = block.timestamp;
-        car.ownershipHistory.push(to);
-
-        _vinExists[vin] = true;
-        _tokenURIs[tokenId] = tokenURI_;
-
-        emit CarMinted(tokenId, to, vin, true);
-        return tokenId;
-    }
-
-    function isApprovedOrOwner(address spender, uint256 tokenId) public view returns (bool) {
-        address owner = ownerOf(tokenId);
-        return (spender == owner || isApprovedForAll(owner, spender) || getApproved(tokenId) == spender);
-    }
-
-    function updateCarDetails(
-        uint256 tokenId,
-        string memory color,
-        uint32 mileage,
-        string memory condition
-    ) public whenNotPaused {
-        require(isApprovedOrOwner(msg.sender, tokenId), "Not approved or owner");
-        
-        CarDetails storage car = _carDetails[tokenId];
-        car.color = color;
-        car.mileage = mileage;
-        car.condition = condition;
-
-        emit CarDetailsUpdated(tokenId, msg.sender);
-    }
-
-    function addServiceRecord(
-        uint256 tokenId,
-        string memory description,
-        address serviceProvider
-    ) public whenNotPaused {
-        require(isApprovedOrOwner(msg.sender, tokenId), "Not approved or owner");
-        
-        ServiceRecord memory newRecord = ServiceRecord({
-            date: block.timestamp,
-            description: description,
-            serviceProvider: serviceProvider
-        });
-
-        _carDetails[tokenId].serviceHistory.push(newRecord);
-        _carDetails[tokenId].lastServiceDate = block.timestamp;
-
-        emit ServiceRecordAdded(tokenId, block.timestamp, serviceProvider);
-    }
-
-    function verifyCar(uint256 tokenId) public onlyRole(VERIFIER_ROLE) whenNotPaused {
-        require(!_isVerified[tokenId], "Car already verified");
-        _isVerified[tokenId] = true;
-        emit CarVerified(tokenId, msg.sender);
-    }
-
-    function getCarDetails(uint256 tokenId) public view returns (CarDetails memory) {
-        require(exists(tokenId), "Token does not exist");
-        return _carDetails[tokenId];
-    }
-
-    function isCarVerified(uint256 tokenId) public view returns (bool) {
-        require(exists(tokenId), "Token does not exist");
-        return _isVerified[tokenId];
-    }
-
-    function setBaseTokenURI(string memory baseURI) public onlyOwner {
-        _baseTokenURI = baseURI;
-    }
-
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        require(exists(tokenId), "Token does not exist");
-
-        string memory _tokenURI = _tokenURIs[tokenId];
-        string memory base = _baseTokenURI;
-
-        if (bytes(base).length == 0) {
-            return _tokenURI;
-        }
-        if (bytes(_tokenURI).length > 0) {
-            return string(abi.encodePacked(base, _tokenURI));
-        }
-        return super.tokenURI(tokenId);
-    }
-
-    function setCarVerificationContract(address _newContract) public onlyOwner {
+    function setCarVerificationContract(address _newContract)
+        public
+        onlyRole(ADMIN_ROLE)
+    {
         require(_newContract != address(0), "Invalid contract address");
         carVerificationContract = ICarVerificationOracle(_newContract);
         emit CarVerificationContractUpdated(_newContract);
     }
 
-    function addMinter(address minter) public onlyOwner {
-        grantRole(MINTER_ROLE, minter);
-    }
+    function mintCar(string memory vin, string memory _tokenURI)
+        public
+        whenNotPaused
+        nonReentrant
+        returns (uint256)
+    {
+        require(_vinToTokenId[vin] == 0, "VIN already exists");
 
-    function removeMinter(address minter) public onlyOwner {
-        revokeRole(MINTER_ROLE, minter);
-    }
-
-    function addVerifier(address verifier) public onlyOwner {
-        grantRole(VERIFIER_ROLE, verifier);
-    }
-
-    function removeVerifier(address verifier) public onlyOwner {
-        revokeRole(VERIFIER_ROLE, verifier);
-    }
-
-    function setCarValuation(uint256 tokenId, uint256 valuation) external onlyRole(VERIFIER_ROLE) whenNotPaused {
-        require(exists(tokenId), "Token does not exist");
-        _carValuations[tokenId] = ValuationData(valuation, block.timestamp);
-        emit CarValuationUpdated(tokenId, valuation);
-    }
-
-    function getCarValuation(uint256 tokenId) public view returns (uint256, uint256) {
-        require(exists(tokenId), "Token does not exist");
-        ValuationData memory data = _carValuations[tokenId];
-        return (data.lastValuation, data.valuationTimestamp);
-    }
-
-    function transferFrom(address from, address to, uint256 tokenId) public virtual override whenNotPaused {
-        super.transferFrom(from, to, tokenId);
-        _carDetails[tokenId].ownershipHistory.push(to);
-        emit OwnershipTransferred(tokenId, from, to);
-    }
-
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public virtual override whenNotPaused {
-        super.safeTransferFrom(from, to, tokenId, data);
-        _carDetails[tokenId].ownershipHistory.push(to);
-        emit OwnershipTransferred(tokenId, from, to);
-    }
-
-    function getOwnershipHistory(uint256 tokenId) public view returns (address[] memory) {
-        require(exists(tokenId), "Token does not exist");
-        return _carDetails[tokenId].ownershipHistory;
-    }
-
-    function updateVIN(uint256 tokenId, string memory newVIN) public onlyRole(DEFAULT_ADMIN_ROLE) whenNotPaused {
-        require(exists(tokenId), "Token does not exist");
-        require(!_vinExists[newVIN], "New VIN already exists");
-        string memory oldVIN = _carDetails[tokenId].vin;
-        _vinExists[oldVIN] = false;
-        _carDetails[tokenId].vin = newVIN;
-        _vinExists[newVIN] = true;
-        emit VINUpdated(tokenId, oldVIN, newVIN);
-    }
-
-    function bulkMintCars(
-        address[] memory to,
-        string[] memory make,
-        string[] memory model,
-        uint16[] memory year,
-        string[] memory vin,
-        string[] memory color,
-        uint32[] memory mileage,
-        string[] memory condition,
-        string[] memory tokenURIs
-    ) public onlyRole(MINTER_ROLE) whenNotPaused {
+        ICarVerificationOracle.CarDetails
+            memory verifiedCar = carVerificationContract.getCarDetailsByVIN(
+                vin
+            );
+        require(verifiedCar.isVerified, "Car is not verified");
         require(
-            to.length == make.length &&
-            make.length == model.length &&
-            model.length == year.length &&
-            year.length == vin.length &&
-            vin.length == color.length &&
-            color.length == mileage.length &&
-            mileage.length == condition.length &&
-            condition.length == tokenURIs.length,
-            "Input arrays must have the same length"
+            verifiedCar.currentOwner == msg.sender,
+            "Minter is not the verified owner of the car"
         );
 
-        for (uint i = 0; i < to.length; i++) {
-            mintCar(to[i], make[i], model[i], year[i], vin[i], color[i], mileage[i], condition[i], tokenURIs[i]);
-        }
+        uint256 tokenId = _nextTokenId++;
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, _tokenURI);
+
+        _vinToTokenId[vin] = tokenId;
+        emit CarMinted(tokenId, msg.sender, vin, true);
+        return tokenId;
     }
 
-    function pause() public onlyOwner {
+    function getTokenIdByVIN(string memory vin) public view returns (uint256) {
+        uint256 tokenId = _vinToTokenId[vin];
+        require(tokenId != 0, "VIN not found");
+        return tokenId;
+    }
+
+    function addAdmin(address newAdmin) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(ADMIN_ROLE, newAdmin);
+    }
+
+    function removeAdmin(address admin) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        revokeRole(ADMIN_ROLE, admin);
+    }
+
+    function pause() public onlyRole(ADMIN_ROLE) {
         _pause();
     }
 
-    function unpause() public onlyOwner {
+    function unpause() public onlyRole(ADMIN_ROLE) {
         _unpause();
+    }
+
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override(ERC721, ERC721Enumerable) returns (address) {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._increaseBalance(account, value);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Enumerable, AccessControl, ERC721URIStorage)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function getNFTsOwnedBy(address owner)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        uint256 balance = balanceOf(owner);
+        uint256[] memory tokens = new uint256[](balance);
+        for (uint256 i = 0; i < balance; i++) {
+            tokens[i] = tokenOfOwnerByIndex(owner, i);
+        }
+        return tokens;
     }
 }
