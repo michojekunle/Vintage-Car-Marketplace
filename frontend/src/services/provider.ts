@@ -5,7 +5,9 @@ export const getProvider = async () => {
     await window.ethereum.request({ method: "eth_requestAccounts" });
     return new ethers.BrowserProvider(window.ethereum);
   } else {
-    console.warn("MetaMask not detected. Using fallback provider.");
-    return new ethers.JsonRpcProvider(process.env.NEXT_JSON_RPC_PROVIDER);
+    // Fallback to a read-only provider
+    return new ethers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_JSON_RPC_PROVIDER
+    );
   }
 };
