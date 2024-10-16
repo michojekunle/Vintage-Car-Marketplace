@@ -7,49 +7,40 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
-interface IVintageCarNFT {
-    function isApprovedOrOwner(address spender, uint256 tokenId) external view returns (bool);
-    function transferFrom(address from, address to, uint256 tokenId) external;
-    function getCarDetails(uint256 tokenId) external view returns (
-        string memory make,
-        string memory model,
-        uint16 year,
-        string memory vin,
-        string memory color,
-        uint32 mileage,
-        string memory condition,
-        uint256 lastServiceDate
-    );
+interface IVintageCarNFT is IERC721 {
+    function getTokenIdByVIN(string memory vin) external view returns (uint256);
 }
 
-interface ICarVerificationOracle {
-    function getCarDetailsByVIN(string memory vin) external view returns (
-        string memory,
-        string memory make,
-        string memory model,
-        uint256 year,
-        bool isVerified,
-        uint256 verificationTimestamp,
-        address currentOwner
-    );
-    function transferOwnership(string memory vin, address newOwner) external;
+interface INFTAuction {
+    function createAuction(
+        uint256 _nftId,
+        uint256 _startingPrice,
+        uint256 _buyoutPrice,
+        uint256 _duration,
+        address _nftOwner
+    ) external;
+
+    function endAuction(uint256 _nftId) external;
+
+    function cancelAuction(uint256 _nftId, address _nftOwner) external;
 }
 
-interface IAuction {
-    function createAuction(uint256 tokenId, uint256 startingPrice, uint256 duration) external returns (uint256 auctionId);
-    function cancelAuction(uint256 auctionId) external;
-    function finishAuction(uint256 auctionId) external;
-}
-
-contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Holder {
+contract VintageCarMarketplace is
+    ReentrancyGuard,
+    Ownable,
+    Pausable,
+    ERC721Holder
+{
     IVintageCarNFT public vintageCarNFT;
-    ICarVerificationOracle public carVerificationOracle;
-    IAuction public auctionContract;
+    INFTAuction public auctionContract;
 
     uint256 public marketplaceFeePercentage;
     address public feeRecipient;
 
-    enum ListingType { FixedPrice, Auction }
+    enum ListingType {
+        FixedPrice,
+        Auction
+    }
 
     struct Listing {
         uint256 tokenId;
@@ -57,18 +48,31 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
         uint256 price;
         bool isActive;
         ListingType listingType;
-        uint256 auctionId;  // Will only be used for auction listings
     }
 
     mapping(uint256 => Listing) public listings;
 
-    event ListingCreated(uint256 indexed tokenId, address indexed seller, uint256 price, ListingType listingType);
+    event ListingCreated(
+        uint256 indexed tokenId,
+        address indexed seller,
+        uint256 price,
+        ListingType listingType
+    );
     event ListingUpdated(uint256 indexed tokenId, uint256 newPrice);
     event ListingCancelled(uint256 indexed tokenId);
-    event CarSold(uint256 indexed tokenId, address indexed seller, address indexed buyer, uint256 price);
-    event AuctionCreated(uint256 indexed tokenId, uint256 indexed auctionId, uint256 startingPrice);
-    event AuctionCancelled(uint256 indexed tokenId, uint256 indexed auctionId);
-    event FundsWithdrawn(address indexed seller, uint256 amount);
+    event CarSold(
+        uint256 indexed tokenId,
+        address indexed seller,
+        address indexed buyer,
+        uint256 price
+    );
+    event AuctionCreated(
+        uint256 indexed tokenId,
+        uint256 startingPrice,
+        uint256 buyoutPrice,
+        uint256 duration
+    );
+    event AuctionEnded(uint256 indexed tokenId);
     event MarketplaceFeeUpdated(uint256 newFeePercentage);
     event FeeRecipientUpdated(address newFeeRecipient);
     event MarketplaceFeesWithdrawn(uint256 amount);
@@ -76,105 +80,151 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
     constructor(
         address _vintageCarNFT,
-        address _carVerificationOracle,
         uint256 _initialFeePercentage,
         address _initialFeeRecipient
     ) Ownable(msg.sender) {
         vintageCarNFT = IVintageCarNFT(_vintageCarNFT);
-        carVerificationOracle = ICarVerificationOracle(_carVerificationOracle);
         marketplaceFeePercentage = _initialFeePercentage;
         feeRecipient = _initialFeeRecipient;
     }
 
-    function createFixedPriceListing(uint256 tokenId, uint256 price) external whenNotPaused nonReentrant {
+    function createFixedPriceListing(uint256 tokenId, uint256 price)
+        external
+        whenNotPaused
+        nonReentrant
+    {
         _createListing(tokenId, price, ListingType.FixedPrice);
     }
 
-    function createAuctionListing(uint256 tokenId, uint256 startingPrice, uint256 duration) external whenNotPaused nonReentrant {
-        require(address(auctionContract) != address(0), "Auction contract not set");
+    function createAuctionListing(
+        uint256 tokenId,
+        uint256 startingPrice,
+        uint256 buyoutPrice,
+        uint256 duration
+    ) external whenNotPaused nonReentrant {
+        require(
+            address(auctionContract) != address(0),
+            "Auction contract not set"
+        );
+      
         _createListing(tokenId, startingPrice, ListingType.Auction);
-        
-        uint256 auctionId = auctionContract.createAuction(tokenId, startingPrice, duration);
-        listings[tokenId].auctionId = auctionId;
-        
-        emit AuctionCreated(tokenId, auctionId, startingPrice);
+
+        auctionContract.createAuction(
+            tokenId,
+            startingPrice,
+            buyoutPrice,
+            duration,
+            msg.sender
+        );
+
+        emit AuctionCreated(tokenId, startingPrice, buyoutPrice, duration);
     }
 
-    function _createListing(uint256 tokenId, uint256 price, ListingType listingType) internal {
-        require(vintageCarNFT.isApprovedOrOwner(msg.sender, tokenId), "Not owner or approved");
+    function _createListing(
+        uint256 tokenId,
+        uint256 price,
+        ListingType listingType
+    ) internal {
+        require(
+            vintageCarNFT.ownerOf(tokenId) == msg.sender,
+            "Not owner of the token"
+        );
         require(price > 0, "Price must be greater than zero");
-
-        (, , , string memory vin, , , ,) = vintageCarNFT.getCarDetails(tokenId);
-        (, , , , bool isVerified, , address currentOwner) = carVerificationOracle.getCarDetailsByVIN(vin);
-
-        require(isVerified, "Car is not verified");
-        require(currentOwner == msg.sender, "Ownership mismatch in verification oracle");
 
         listings[tokenId] = Listing({
             tokenId: tokenId,
             seller: msg.sender,
             price: price,
             isActive: true,
-            listingType: listingType,
-            auctionId: 0
+            listingType: listingType
         });
 
         emit ListingCreated(tokenId, msg.sender, price, listingType);
     }
 
-    function updateListing(uint256 tokenId, uint256 newPrice) external whenNotPaused nonReentrant {
+    function updateListing(uint256 tokenId, uint256 newPrice)
+        external
+        whenNotPaused
+        nonReentrant
+    {
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
         require(listing.seller == msg.sender, "Not the seller");
         require(newPrice > 0, "Price must be greater than zero");
-        require(listing.listingType == ListingType.FixedPrice, "Can only update fixed price listings");
+        require(
+            listing.listingType == ListingType.FixedPrice,
+            "Can only update fixed price listings"
+        );
 
         listing.price = newPrice;
         emit ListingUpdated(tokenId, newPrice);
     }
 
-    function cancelListing(uint256 tokenId) external whenNotPaused nonReentrant {
+    function cancelListing(uint256 tokenId)
+        external
+        whenNotPaused
+        nonReentrant
+    {
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
         require(listing.seller == msg.sender, "Not the seller");
 
         if (listing.listingType == ListingType.Auction) {
-            require(address(auctionContract) != address(0), "Auction contract not set");
-            auctionContract.cancelAuction(listing.auctionId);
-            emit AuctionCancelled(tokenId, listing.auctionId);
+            require(
+                address(auctionContract) != address(0),
+                "Auction contract not set"
+            );
+            auctionContract.cancelAuction(tokenId, msg.sender);
         }
 
         listing.isActive = false;
         emit ListingCancelled(tokenId);
     }
 
-    function buyCar(uint256 tokenId) external payable whenNotPaused nonReentrant {
+    function buyCar(uint256 tokenId)
+        external
+        payable
+        whenNotPaused
+        nonReentrant
+    {
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
-        require(listing.listingType == ListingType.FixedPrice, "Not a fixed price listing");
+        require(
+            listing.listingType == ListingType.FixedPrice,
+            "Not a fixed price listing"
+        );
         require(msg.value >= listing.price, "Insufficient payment");
 
         _processSale(listing, msg.sender, listing.price);
 
-        // Refund excess payment
         if (msg.value > listing.price) {
             payable(msg.sender).transfer(msg.value - listing.price);
         }
     }
 
-    function finishAuction(uint256 tokenId) external whenNotPaused nonReentrant {
-        require(address(auctionContract) != address(0), "Auction contract not set");
+    function endAuction(uint256 tokenId) external whenNotPaused nonReentrant {
+        require(
+            address(auctionContract) != address(0),
+            "Auction contract not set"
+        );
         Listing storage listing = listings[tokenId];
         require(listing.isActive, "Listing is not active");
-        require(listing.listingType == ListingType.Auction, "Not an auction listing");
+        require(
+            listing.listingType == ListingType.Auction,
+            "Not an auction listing"
+        );
 
-        auctionContract.finishAuction(listing.auctionId);
-        // The actual transfer of NFT and funds should be handled by the Auction contract
-        // Here we just update our listing status
+        auctionContract.endAuction(tokenId);
         listing.isActive = false;
+
+        emit AuctionEnded(tokenId);
     }
 
-    function _processSale(Listing storage listing, address buyer, uint256 price) internal {
+    function _processSale(
+        Listing storage listing,
+        address buyer,
+        uint256 price
+    ) internal {
         address seller = listing.seller;
         uint256 tokenId = listing.tokenId;
 
@@ -185,16 +235,17 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
         vintageCarNFT.transferFrom(seller, buyer, tokenId);
 
-        (, , , string memory vin, , , ,) = vintageCarNFT.getCarDetails(tokenId);
-        carVerificationOracle.transferOwnership(vin, buyer);
-
         payable(feeRecipient).transfer(feeAmount);
         payable(seller).transfer(sellerAmount);
 
         emit CarSold(tokenId, seller, buyer, price);
     }
 
-    function getListing(uint256 tokenId) external view returns (Listing memory) {
+    function getListing(uint256 tokenId)
+        external
+        view
+        returns (Listing memory)
+    {
         return listings[tokenId];
     }
 
@@ -219,13 +270,11 @@ contract VintageCarMarketplace is ReentrancyGuard, Ownable, Pausable, ERC721Hold
 
     function updateContractAddresses(
         address _vintageCarNFT,
-        address _carVerificationOracle,
         address _auctionContract
     ) external onlyOwner {
-        require(_vintageCarNFT != address(0) && _carVerificationOracle != address(0), "Invalid addresses");
+        require(_vintageCarNFT != address(0), "Invalid NFT contract address");
         vintageCarNFT = IVintageCarNFT(_vintageCarNFT);
-        carVerificationOracle = ICarVerificationOracle(_carVerificationOracle);
-        auctionContract = IAuction(_auctionContract);
+        auctionContract = INFTAuction(_auctionContract);
         emit AuctionContractUpdated(_auctionContract);
     }
 
