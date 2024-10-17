@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./AuctionLib.sol";
 import "./VintageCarNFT.sol";
 
-contract NFTAuction is ReentrancyGuard {
+contract NFTAuction is ReentrancyGuard, IERC721Receiver {
     using AuctionLib for *;
 
     VintageCarNFT public nftContract;
@@ -121,6 +122,16 @@ contract NFTAuction is ReentrancyGuard {
         } else {
             nftContract.safeTransferFrom(address(this), auction.seller, _nftId);
         }
+    }
+
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    ) external pure override returns (bytes4) {
+        // This function simply returns a specific selector to indicate the contract can receive NFTs
+        return IERC721Receiver.onERC721Received.selector;
     }
 
     receive() external payable {}
