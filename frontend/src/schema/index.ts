@@ -12,6 +12,8 @@ export const addCarFormSchema = z.object({
 			message: "Year must be between 1886 and current year",
 		}
 	),
+    color: z.string().min(1, "Color is required"),
+    mileage: z.string().min(1, "Mileage is required"),
 	vin: z.string().min(6, "VIN must be at least 6 characters"),
     description: z.string().min(20, "Description too short"),
     engineCondition: z.string().min(1, "Condition is required"),

@@ -174,6 +174,36 @@ const VehicleDetailsStep = ({
 				/>
 			</div>
 			<div className="grid grid-cols-2 gap-4">
+				
+
+				<FormField
+					control={form.control}
+					name="mileage"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Mileage</FormLabel>
+							<FormControl>
+								<Input type="number" placeholder="Mileage" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="color"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Color</FormLabel>
+							<FormControl>
+								<Input placeholder="Color" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</div>
+			<div className="grid grid-cols-2 gap-4">
 				<FormField
 					control={form.control}
 					name="exteriorCondition"

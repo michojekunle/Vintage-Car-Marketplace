@@ -29,6 +29,8 @@ interface IAddCarValues {
   model: string;
   year: string;
   vin: string;
+  color: string;
+  mileage: string;
   description: string;
   engineCondition: string;
   exteriorCondition: string;
@@ -39,6 +41,8 @@ type FieldProp =
   | "model"
   | "year"
   | "vin"
+  | "color"
+  | "mileage"
   | "description"
   | "engineCondition"
   | "exteriorCondition";
