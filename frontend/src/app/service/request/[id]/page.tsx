@@ -16,8 +16,8 @@ import {
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCarStore } from "../../../../../stores/useCarStore";
-import { toast, useToast } from "@/hooks/use-toast";
 import useServiceStore from "../../../../../stores/useServiceStore";
+import { toast } from "sonner";
 
 const ServiceRequest = () => {
     const [loading, setLoading] = useState(true);
@@ -33,7 +33,6 @@ const ServiceRequest = () => {
     const { selectedCar } = useCarStore();
     const router = useRouter();
     const { carId } = useParams();
-    const { toast } = useToast();
 
     useEffect(() => {
         // Fetch car details and available mechanics based on carId if needed
@@ -42,11 +41,7 @@ const ServiceRequest = () => {
 
     const handleServiceRequest = async () => {
         if (!selectedMechanic || !serviceDescription) {
-            toast({
-                title: "Validation Error",
-                description: "Please select a mechanic and provide a service description.",
-                variant: "destructive",
-            });
+            toast.error("Please select a mechanic and provide a service description.")
             return;
         }
     
@@ -83,19 +78,11 @@ const ServiceRequest = () => {
                 serviceStore.addServiceRequest(newServiceRequest);
     
                 // Show success toast
-                toast({
-                    title: "Service request submitted",
-                    description: `Estimated cost: ${cost} ETH.`,
-                    variant: "success",
-                });
+                toast.success(` Service request submitted! Estimated cost: ${cost} ETH.`)
                 router.push("/dashboard"); // Redirect to main user dashboard page
             }
         } catch (error: any) {
-            toast({
-                title: "Error",
-                description: "Failed to submit the service request.",
-                variant: "destructive",
-            });
+            toast.error("Failed to submit the service request.")
         } finally {
             setButtonLoading(false);
         }
