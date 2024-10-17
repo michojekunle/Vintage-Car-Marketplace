@@ -104,3 +104,11 @@ interface IListCarDialog {
   loading: boolean;
   form: UseFormReturn<ListCarFormValues, undefined>;
 }
+
+interface IListing {
+    tokenId: number
+    seller: string
+    price: number
+    isActive: boolean
+    listingType: number
+}

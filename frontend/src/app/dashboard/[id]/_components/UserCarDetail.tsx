@@ -31,6 +31,8 @@ import {
 } from "@/app/contracts/VintageCarNFT";
 import { CORRECT_CHAIN_ID } from "@/hooks/useNFTApproval";
 import { parseEther } from "viem";
+import { ZeroAddress } from "ethers";
+import { useGetListings } from "@/hooks/useGetListings";
 
 type ListingFormValues = z.infer<typeof listingFormSchema>;
 
@@ -42,34 +44,18 @@ const defaultValues: Partial<ListingFormValues> = {
 
 export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
   const router = useRouter();
-  const { chainId } = useAccount();
+  const { chainId, address } = useAccount();
   const { connectAsync } = useConnect();
   const { writeContractAsync } = useWriteContract();
   const [loading, setLoading] = useState(true);
   const [listTxloading, setListTxLoading] = useState(false);
+  const [isCheckingListed, setIsCheckingListed] = useState(true);
   const [isListed, setIsListed] = useState(false);
   const [carDetail, setCarDetail] = useState<any | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { getCarDetail } = useGetOwnedCars();
-  //   const {
-  //     approveCarNft,
-  //     approvalError,
-  //     approvalSuccess,
-  //     isApprovalPending,
-  //     approvalTxHash,
-  //   } = useNFTApproval();
-  //   const {
-  //     listCarWithFixedPrice,
-  //     listCarWithAuction,
-  //     islistPending,
-  //     listDataHash,
-  //     listError,
-  //   } = useListCar();
-  //   const { isLoading: isConfirming, isSuccess: isConfirmed } =
-  //     useWaitForTransactionReceipt({
-  //       hash: listDataHash,
-  //     });
+  const { getListing } = useGetListings();
 
   const form = useForm<ListingFormValues>({
     resolver: zodResolver(listingFormSchema),
@@ -84,37 +70,22 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
         setLoading(false);
       }
     };
-
     fetchCarDetail();
   }, [tokenId, getCarDetail]);
 
-  //   const toastIdRef = useRef<string | number>(0);
-
-  //   useEffect(() => {
-  //     const handleTransactionStatus = () => {
-  //       if (islistPending) {
-  //         if (!toastIdRef.current) {
-  //           toastIdRef.current = toast.loading(
-  //             "Waiting for approval from wallet..."
-  //           );
-  //         }
-  //       } else if (isConfirming) {
-  //         toast.dismiss(toastIdRef.current);
-  //         toastIdRef.current = toast.loading(
-  //           "Waiting for confirmation on the blockchain..."
-  //         );
-  //       } else if (isConfirmed) {
-  //         toast.success("Listing successful!", { id: toastIdRef.current });
-  //         setIsListed(true);
-  //         setIsDialogOpen(false);
-  //         toastIdRef.current = 0; // Reset after success
-  //       } else if (listError) {
-  //         setIsListed(true);
-  //         toastIdRef.current = 0; // Reset after error
-  //       }
-  //     };
-  //     handleTransactionStatus();
-  //   }, [islistPending, isConfirming, isConfirmed, listError]);
+  useEffect(() => {
+    const checkCarListed = async () => {
+      if (tokenId) {
+        const detail: IListing = await getListing(tokenId);
+        console.log(detail);
+		if(detail.seller !== ZeroAddress && detail.seller === address){
+			setIsListed(true);			
+		}
+        setIsCheckingListed(false);
+      }
+    };
+    checkCarListed();
+  }, [tokenId, getListing]);
 
   const handleFixedPriceList = async (price: number) => {
     try {
@@ -158,7 +129,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
 
         console.log(approveTransactionReceipt);
 
-        if (approveTransactionReceipt.status === 'success') {
+        if (approveTransactionReceipt.status === "success") {
           console.log(
             "Approve transaction confirmed, proceeding with listing..."
           );
@@ -187,6 +158,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           if (listingTransactionReceipt.status === "success") {
             console.log("Status", listingTransactionReceipt.status);
             toast.success("Listing Transaction Successful!");
+			setIsListed(true);
             setListTxLoading(false);
           }
         } else {
@@ -205,8 +177,12 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
     }
   };
 
-    const handleAuctionList = async (startingPrice: number, buyoutPrice: number, duration: number) => {
-     try {
+  const handleAuctionList = async (
+    startingPrice: number,
+    buyoutPrice: number,
+    duration: number
+  ) => {
+    try {
       setListTxLoading(true);
       if (chainId !== CORRECT_CHAIN_ID) {
         try {
@@ -247,7 +223,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
 
         console.log(approveTransactionReceipt);
 
-        if (approveTransactionReceipt.status === 'success') {
+        if (approveTransactionReceipt.status === "success") {
           console.log(
             "Approve transaction confirmed, proceeding with listing..."
           );
@@ -261,7 +237,12 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
             address: VINTAGE_CAR_MARKETPLACE_ADDRESS as `0x${string}`,
             abi: VINTAGE_CAR_MARKETPLACE_ABI,
             functionName: "createAuctionListing",
-			args: [tokenId, parseEther(`${startingPrice}`), parseEther(`${buyoutPrice}`), duration],
+            args: [
+              tokenId,
+              parseEther(`${startingPrice}`),
+              parseEther(`${buyoutPrice}`),
+              duration,
+            ],
           });
 
           console.log(listingTxResponse);
@@ -292,7 +273,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
       console.log(error);
       setListTxLoading(false);
     }
-    };
+  };
 
   const onSubmit = (data: ListingFormValues) => {
     if (data.listingType === "auction") {
@@ -401,7 +382,15 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
                       : "text-amber-600 bg-amber-100"
                   } py-1 mt-2 px-4 inline-block rounded-full`}
                 >
-                  <strong>{isListed ? "Listed" : "Not Listed"}</strong>
+                  <strong>
+                    {isCheckingListed ? (
+                      <Loader2 className="w-6 h-6 text-amber-600 animate-spin" />
+                    ) : isListed ? (
+                      "Listed"
+                    ) : (
+                      "Not Listed"
+                    )}
+                  </strong>
                 </p>
               </div>
               <div className="pt-4">
