@@ -1,4 +1,3 @@
-import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 import { config } from "@/app/wagmi";
 import { multicall } from "@wagmi/core";
@@ -6,7 +5,9 @@ import axios from "axios";
 import {
 	VINTAGE_CAR_NFT_ABI,
 	VINTAGE_CAR_NFT_ADDRESS,
-} from "@/app/contracts/VintageCarNFT";
+} from "@/contracts/VintageCarNFT";
+import { toast } from "sonner";
+import { useOwnCarStore } from "../../stores/useOwnCarsStore";
 
 type Attributes = {
 	trait_type: string;
@@ -15,17 +16,23 @@ type Attributes = {
 const CORRECT_CHAIN_ID = 84532;
 
 export function useGetOwnedCars() {
-	const { address } = useAccount();
+	const setCarsLoading = useOwnCarStore(state => state.setFetchCarsLoading)
 
 	const getAllOwnedTokens = async () => {
-		const result = await readContract(config, {
-			abi: VINTAGE_CAR_NFT_ABI,
-			address: VINTAGE_CAR_NFT_ADDRESS,
-			functionName: "getNFTsOwnedBy",
-			args: [address],
-			chainId: CORRECT_CHAIN_ID,
-		});
-		return result;
+		setCarsLoading(true)
+		try {
+			const result = await readContract(config, {
+				abi: VINTAGE_CAR_NFT_ABI,
+				address: VINTAGE_CAR_NFT_ADDRESS,
+				functionName: "getNFTsOwnedBy",
+				args: ['0x6c8fcDeb117a1d40Cd2c2eB6ECDa58793FD636b1'],
+				chainId: CORRECT_CHAIN_ID,
+			});
+			return result;
+		} catch (error) {
+			setCarsLoading(false)
+			toast.error(`Error fetching owned tokens: ${error}`)
+		}
 	};
 
 	const getAllcarsDetails = async () => {
@@ -49,6 +56,7 @@ export function useGetOwnedCars() {
 						const response = await axios.get(uri?.result as string);
 						const data = response.data;
                         console.log({data})
+						setCarsLoading(false)
 						return {
 							id: Number(allTokensOwned[index]),
 							name: data.name,
@@ -73,6 +81,7 @@ export function useGetOwnedCars() {
 							allImages: data.properties.files,
 						};
 					} catch (error) {
+						setCarsLoading(false)
 						console.error("Error fetching metadata:", error);
 						return null;
 					}
@@ -82,6 +91,7 @@ export function useGetOwnedCars() {
 
 			return carData.filter((car) => car);
 		}
+		setCarsLoading(false)
 		return [];
 	};
 
