@@ -1,12 +1,10 @@
 import React from "react";
 import UserCarDetail from "./_components/UserCarDetail";
 
-const page = () => {
+export default function Page({ params: { id } }: { params: { id: string } }) {
   return (
     <div>
-      <UserCarDetail />
+      <UserCarDetail tokenId={parseInt(id)}/>
     </div>
   );
 };
-
-export default page;
