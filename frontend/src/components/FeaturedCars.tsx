@@ -59,18 +59,29 @@ export const FeaturedCars = ({
   const fetchNFTs = async () => {
     setLoading(true); // Set loading to true when fetching starts
     try {
+      console.log("Initializing provider...");
+  
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-
+  
+      console.log("Fetching total supply...");
       const totalSupply = await contract.totalSupply();
+      console.log(`Total NFTs in contract: ${totalSupply}`);
+  
       const nftData: NFT[] = [];
-
+  
       for (let i = 0; i < totalSupply; i++) {
+        console.log(`Fetching token at index: ${i}`);
+        
         const tokenId = await contract.tokenByIndex(i);
+        console.log(`Fetched Token ID: ${tokenId}`);
+  
         const tokenURI = await contract.tokenURI(tokenId);
-
+        console.log(`Token URI: ${tokenURI}`);
+  
         const metadata = await fetch(tokenURI).then((res) => res.json());
-
+        console.log("Metadata fetched:", metadata);
+  
         nftData.push({
           id: tokenId.toString(),
           name: metadata.name,
@@ -78,7 +89,7 @@ export const FeaturedCars = ({
           image: metadata.image,
         });
       }
-
+  
       setNfts(nftData);
     } catch (error) {
       console.error("Error fetching NFTs:", error);
@@ -86,6 +97,7 @@ export const FeaturedCars = ({
       setLoading(false); // Set loading to false when fetching ends
     }
   };
+  
 
   const handleClick = (id: number) => {
     router.push(`/car-details/?id=${id}`);
