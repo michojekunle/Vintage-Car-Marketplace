@@ -8,53 +8,40 @@ import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useReadContract, useAccount } from "wagmi";
 import { abi } from "../../abi/CarNFTabi";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useGetOwnedCars } from "@/hooks/useGetOwnedCars";
+import { useOwnCarStore, OwnCar } from "../../../stores/useOwnCarsStore";
 // import useDashboardStore from "@/stores/useDashboardStore";
 
 export default function Dashboard() {
   const router = useRouter();
   const sortedCars = featuredCars.toSorted((a, b) => b.reviews - a.reviews);
-  const contractAddress = "0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16";
   const { address } = useAccount();
-  const [carsOwned, setCarsOwned] = useState<number[]>([]);
-  // const {isLoading, carsOwned, fetchCarsOwned, isError} = useDashboardStore();
+  const [imageError, setImageError] = useState(false);
+  const { getAllcarsDetails } = useGetOwnedCars();
+  const setOwnCars = useOwnCarStore((state) => state.setOwnCars);
+  const ownCars = useOwnCarStore((state) => state.ownCars);
+  const carsLoading = useOwnCarStore((state) => state.fetchCarsLoading);
 
   const handleClick = (id: number) => {
     router.push(`/dashboard/${id}`);
   };
-  const { data: fetchedCarsOwned, isError, isLoading } = useReadContract({
-    abi,
-    address: contractAddress,
-    functionName: "getNFTsOwnedBy",
-    args: ['0x6c8fcDeb117a1d40Cd2c2eB6ECDa58793FD636b1'],
-  });
+
+  console.log("from state", ownCars);
+  
 
   useEffect(() => {
-    if (isError) {
-      console.error("Error fetching car details:", carsOwned, isError);
-      toast({
-        title: "Error fetching car details",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    }
-    if (fetchedCarsOwned) {
-      setCarsOwned(fetchedCarsOwned as number[]);
-      console.log("Car details:", fetchedCarsOwned);
-      console.log("Car set:", carsOwned);
-    }
-  })
-
-  useEffect(() => {
-    if (!address) {
-      toast({
-        title: "Please connect your wallet",
-      });
-    }
-  }, [address]);
-  // useEffect(() => {
-  //   fetchCarsOwned(); // Fetch cars owned on component mount
-  // }, []);
+    // if (address) {
+      const getAllCars = async () => {
+        const cardata = await getAllcarsDetails();
+        setOwnCars(cardata);
+        console.log("from here", cardata);
+      };
+      getAllCars();
+    // } else {
+    //   toast.error("Please connect your wallet");
+    // }
+  }, []);
 
   return (
     <div className="mt-8">
@@ -68,33 +55,49 @@ export default function Dashboard() {
               Cars Listed
             </TabsTrigger>
           </TabsList>
-          {isLoading ? (
+          {carsLoading ? (
             <div className="flex justify-center items-center min-h-[70vh] bg-gray-100">
               <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
             </div>
           ) : (
             <div>
               <TabsContent value="bought">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
-                  {featuredCars.map((car) => (
-                    <CarCard
-                      key={car.id}
-                      {...car}
-                      onClick={() => handleClick(car.id)}
-                    />
-                  ))}
-                </div>
+                {ownCars.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
+                    {ownCars.map((car) => (
+                      <div onClick={() => handleClick(car.id)}>
+                        <CarCard
+                          key={car.id}
+                          {...car}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center min-h-[70vh] bg-gray-100">
+                    <p className="text-gray-500">No cars found</p>
+                  </div>
+                )}
               </TabsContent>
               <TabsContent value="listed">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {sortedCars.map((car) => (
-                    <CarCard
-                      key={car.id}
-                      {...car}
-                      onClick={() => handleClick(car.id)}
-                    />
-                  ))}
-                </div>
+                {ownCars.filter((car) => car.price).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {ownCars
+                      .filter((car) => car.price)
+                      .map((car) => (
+                        <div onClick={() => handleClick(car.id)}>
+                          <CarCard
+                            key={car.id}
+                            {...car}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center min-h-[70vh] bg-gray-100">
+                    <p className="text-gray-500">No cars found</p>
+                  </div>
+                )}
               </TabsContent>
             </div>
           )}

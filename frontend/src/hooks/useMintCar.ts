@@ -5,7 +5,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
 	VINTAGE_CAR_NFT_ABI,
 	VINTAGE_CAR_NFT_ADDRESS,
-} from "@/app/contracts/VintageCarNFT";
+} from "@/contracts/VintageCarNFT";
 import { toast } from "sonner";
 const CORRECT_CHAIN_ID = 84532;
 

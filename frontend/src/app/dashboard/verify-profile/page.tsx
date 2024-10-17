@@ -26,13 +26,7 @@ export default function UserVerification() {
       try {
         if (!isCompletelyDone) return;
         if (!formattedScanData.idNumber || !isSuccessfullyMatched) {
-          toast({
-            title: "Please complete the FaceTec scan first",
-            variant: "destructive",
-            duration: 5000,
-            description:
-              "You must complete the FaceTec scan before verifying your profile.",
-          });
+          toast.error("Please complete the FaceTec scan first");
           return setVerificationStatus("failed");
         }
 
@@ -60,11 +54,7 @@ export default function UserVerification() {
         const data = response.data;
         console.log({ data });
         setVerificationStatus("success");
-        toast({
-          title: "Profile Verified",
-          variant: "default",
-          description: "Your profile has been successfully verified.",
-        });
+        toast.success("Profile Verified");
       } catch (error) {
         console.error(error);
         setVerificationStatus("failed");
