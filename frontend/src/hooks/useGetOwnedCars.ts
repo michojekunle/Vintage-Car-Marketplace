@@ -6,7 +6,7 @@ import axios from "axios";
 import {
   VINTAGE_CAR_NFT_ABI,
   VINTAGE_CAR_NFT_ADDRESS,
-} from "@/app/contracts/VintageCarNFT";
+} from "@/contracts/VintageCarNFT";
 import { formatCarData } from "@/lib/utils";
 
 const CORRECT_CHAIN_ID = 84532;
@@ -44,7 +44,7 @@ export function useGetOwnedCars() {
           try {
             const response = await axios.get(uri?.result as string);
             const data = response.data;
-            return formatCarData(allTokensOwned[index], data)
+            return formatCarData(allTokensOwned[index], data);
           } catch (error) {
             console.error("Error fetching metadata:", error);
             return null;
@@ -67,12 +67,12 @@ export function useGetOwnedCars() {
         args: [tokenId],
       });
 
-	  let carData;
+      let carData;
       try {
         const response = await axios.get(uri as string);
         const data = response.data;
         carData = formatCarData(tokenId, data);
-		return carData;
+        return carData;
       } catch (error) {
         console.error("Error fetching metadata:", error);
         return null;

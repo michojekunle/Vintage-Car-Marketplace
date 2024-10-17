@@ -5,7 +5,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
   VINTAGE_CAR_NFT_ABI,
   VINTAGE_CAR_NFT_ADDRESS,
-} from "@/app/contracts/VintageCarNFT";
+} from "@/contracts/VintageCarNFT";
 import { toast } from "sonner";
 export const CORRECT_CHAIN_ID = 84532;
 
@@ -40,7 +40,7 @@ export function useNFTApproval() {
   const wrapWithConnectionAndChainCheck = (writeFunction: any) => {
     return async (...args: any) => {
       if (await checkConnectionAndChain()) {
-          await writeFunction(...args);
+        await writeFunction(...args);
       }
     };
   };

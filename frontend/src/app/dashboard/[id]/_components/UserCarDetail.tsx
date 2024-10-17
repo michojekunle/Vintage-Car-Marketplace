@@ -5,11 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useAccount,
-  useSwitchChain,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, useSwitchChain, useWriteContract } from "wagmi";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -21,18 +17,18 @@ import { listingFormSchema } from "@/schema";
 // import { useListCar } from "@/hooks/useListCar";
 import { useGetOwnedCars } from "@/hooks/useGetOwnedCars";
 // import { useNFTApproval } from "@/hooks/useNFTApproval";
-import { VINTAGE_CAR_AUCTION_ADDRESS } from "@/app/contracts/VintageCarAuction";
+import { VINTAGE_CAR_AUCTION_ADDRESS } from "@/contracts/VintageCarAuction";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/app/wagmi";
 import { baseSepolia } from "viem/chains";
 import {
   VINTAGE_CAR_MARKETPLACE_ABI,
   VINTAGE_CAR_MARKETPLACE_ADDRESS,
-} from "@/app/contracts/VintageCarMarketplace";
+} from "@/contracts/VintageCarMarketplace";
 import {
   VINTAGE_CAR_NFT_ABI,
   VINTAGE_CAR_NFT_ADDRESS,
-} from "@/app/contracts/VintageCarNFT";
+} from "@/contracts/VintageCarNFT";
 import { CORRECT_CHAIN_ID } from "@/hooks/useNFTApproval";
 import { parseEther } from "viem";
 import { ZeroAddress } from "ethers";
@@ -106,7 +102,9 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           await switchChainAsync({
             chainId: baseSepolia.id,
           });
-          toast.info(`Successfully switched chains, proceeding with transaction...`);
+          toast.info(
+            `Successfully switched chains, proceeding with transaction...`
+          );
         } catch (error) {
           toast.success(`An error occured: ${error}`);
           setListTxLoading(false);
@@ -202,7 +200,9 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           await switchChainAsync({
             chainId: baseSepolia.id,
           });
-          toast.info(`Successfully switched chains, proceeding with transaction...`);
+          toast.info(
+            `Successfully switched chains, proceeding with transaction...`
+          );
         } catch (error) {
           toast.error(`An error occured: ${error}`);
           setListTxLoading(false);
@@ -345,7 +345,9 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
         await switchChainAsync({
           chainId: baseSepolia.id,
         });
-        toast.info(`Successfully switched chains, proceeding with transaction...`);
+        toast.info(
+          `Successfully switched chains, proceeding with transaction...`
+        );
       } catch (error) {
         toast.success(`An error occured: ${error}`);
         setListTxLoading(false);

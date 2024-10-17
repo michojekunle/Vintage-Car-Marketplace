@@ -1,21 +1,24 @@
 // import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 import { config } from "@/app/wagmi";
-import { VINTAGE_CAR_MARKETPLACE_ABI, VINTAGE_CAR_MARKETPLACE_ADDRESS } from "@/app/contracts/VintageCarMarketplace";
+import {
+  VINTAGE_CAR_MARKETPLACE_ABI,
+  VINTAGE_CAR_MARKETPLACE_ADDRESS,
+} from "@/contracts/VintageCarMarketplace";
 
 const CORRECT_CHAIN_ID = 84532;
 
 export function useGetListings() {
-//   const { address } = useAccount();
+  //   const { address } = useAccount();
 
   const getListing = async (tokenId: number) => {
-    const result = await readContract(config, {
+    const result = (await readContract(config, {
       address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
       abi: VINTAGE_CAR_MARKETPLACE_ABI,
       functionName: "getListing",
       args: [tokenId],
       chainId: CORRECT_CHAIN_ID,
-    }) as IListing;
+    })) as IListing;
     return result;
   };
 
