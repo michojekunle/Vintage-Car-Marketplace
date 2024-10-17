@@ -80,10 +80,10 @@ export default function Dashboard() {
                 )}
               </TabsContent>
               <TabsContent value="listed">
-                {ownCars.filter((car) => car.price).length > 0 ? (
+                {ownCars.filter((car) => car.listed).length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {ownCars
-                      .filter((car) => car.price)
+                      .filter((car) => car.listed)
                       .map((car) => (
                         <div onClick={() => handleClick(car.id)}>
                           <CarCard
