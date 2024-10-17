@@ -38,6 +38,7 @@
     "ethers": "^6.13.4",
     "framer-motion": "^11.11.7",
     "lucide-react": "^0.451.0",
+    "merkletreejs": "^0.4.0",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",

@@ -1,0 +1,68 @@
+[
+    {
+      "type": "function",
+      "name": "startQuiz",
+      "stateMutability": "nonpayable",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "submitQuiz",
+      "stateMutability": "nonpayable",
+      "inputs": [
+        {
+          "name": "_answerHashes",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "_proofs",
+          "type": "bytes32[][]"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "event",
+      "name": "QuizStarted",
+      "inputs": [
+        {
+          "name": "participant",
+          "type": "address",
+          "indexed": true
+        },
+        {
+          "name": "startTime",
+          "type": "uint256",
+          "indexed": false
+        },
+        {
+          "name": "endTime",
+          "type": "uint256",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "name": "QuizSubmitted",
+      "inputs": [
+        {
+          "name": "participant",
+          "type": "address",
+          "indexed": true
+        },
+        {
+          "name": "score",
+          "type": "uint8",
+          "indexed": false
+        },
+        {
+          "name": "passed",
+          "type": "bool",
+          "indexed": false
+        }
+      ]
+    }
+  ]
+  
