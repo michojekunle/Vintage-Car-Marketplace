@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -49,6 +49,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
   const { writeContractAsync } = useWriteContract();
   const [loading, setLoading] = useState(true);
   const [listTxloading, setListTxLoading] = useState(false);
+  const [listing, setListing] = useState<IListing>();
   const [isCheckingListed, setIsCheckingListed] = useState(true);
   const [isListed, setIsListed] = useState(false);
   const [carDetail, setCarDetail] = useState<any | null>(null);
@@ -78,9 +79,14 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
       if (tokenId) {
         const detail: IListing = await getListing(tokenId);
         console.log(detail);
-		if(detail.seller !== ZeroAddress && detail.seller === address){
-			setIsListed(true);			
-		}
+		setListing(detail);
+        if (
+          detail.seller !== ZeroAddress &&
+          detail.seller === address &&
+          detail.isActive
+        ) {
+          setIsListed(true);
+        }
         setIsCheckingListed(false);
       }
     };
@@ -158,8 +164,9 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           if (listingTransactionReceipt.status === "success") {
             console.log("Status", listingTransactionReceipt.status);
             toast.success("Listing Transaction Successful!");
-			setIsListed(true);
+            setIsListed(true);
             setListTxLoading(false);
+            setIsDialogOpen(false);
           }
         } else {
           console.error("Listing transaction failed or was reverted!");
@@ -257,7 +264,9 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           if (listingTransactionReceipt.status === "success") {
             console.log("Status", listingTransactionReceipt.status);
             toast.success("Listing Transaction Successful!");
+            setIsListed(true);
             setListTxLoading(false);
+            setIsDialogOpen(false);
           }
         } else {
           console.error("Listing transaction failed or was reverted!");
@@ -277,13 +286,35 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
 
   const onSubmit = (data: ListingFormValues) => {
     if (data.listingType === "auction") {
-      // Auction logic here
-      //   handleAuctionList()
+      if (data.enableBuyout) {
+        if (!data.buyoutPrice)
+          return form.setError("buyoutPrice", {
+            type: "manual",
+            message: "Buyout Price is required",
+          });
+      }
+      if (!data.startingPrice)
+        return form.setError("startingPrice", {
+          type: "manual",
+          message: "Starting Price is required",
+        });
 
-      setIsDialogOpen(false);
-      return toast.success(
-        "Coming soon... Listing with auction work in progress..."
-      );
+      if (!data.duration || !data.durationUnit)
+        return form.setError("duration", {
+          type: "manual",
+          message: "Auction duration is required",
+        });
+
+	  const duration = useCallback(() => {
+		if(data.durationUnit === 'days') return Number(data.duration) * 24 * 60 * 60;
+		if(data.durationUnit === 'hours') return Number(data.duration) * 60 * 60;
+		if(data.durationUnit === 'minutes') return Number(data.duration) * 60;
+		return Number(data.duration);
+	  }, [data.duration, data.durationUnit]);	
+
+	  const buyoutPrice = data.enableBuyout ? Number(data.buyoutPrice) : 0;
+
+      handleAuctionList(Number(data.startingPrice), buyoutPrice, duration());
     }
 
     if (data.listingType === "normalSale" && data.salePrice) {
@@ -296,7 +327,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
     }
   };
 
-  const handleUnlist = () => {
+  const handleUnlist = (listing: IListing) => {
     console.log("Unlist clicked");
     toast.warning("Unlist clicked");
   };
@@ -395,7 +426,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
               </div>
               <div className="pt-4">
                 {isListed ? (
-                  <UnlistCarDialog handleUnlist={handleUnlist} />
+                  <UnlistCarDialog handleUnlist={() => handleUnlist(listing!)} />
                 ) : (
                   <ListCarDialog
                     form={form}
