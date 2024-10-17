@@ -3,13 +3,13 @@ import { useAccount, useSwitchChain, useWriteContract } from "wagmi";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
-	VINTAGE_CAR_NFT_ABI,
-	VINTAGE_CAR_NFT_ADDRESS,
-} from "@/contracts/VintageCarNFT";
+  VINTAGE_CAR_MARKETPLACE_ABI,
+  VINTAGE_CAR_MARKETPLACE_ADDRESS,
+} from "@/contracts/VintageCarMarketplace";
 import { toast } from "sonner";
 const CORRECT_CHAIN_ID = 84532;
 
-export function useMintCar() {
+export function useListCar() {
   const { address, isConnected, chain } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { switchChain } = useSwitchChain();
@@ -46,21 +46,42 @@ export function useMintCar() {
   };
 
   const {
-    writeContract: mintCarRaw,
-    data: mintDataHash,
-    isPending: isMintPending,
-    error: mintError,
+    writeContract: listCarRaw,
+    data: listDataHash,
+    isPending: islistPending,
+    error: listError,
   } = useWriteContract();
 
-  const mintCar = wrapWithConnectionAndChainCheck(
-    (vin: string, tokenURI: string) =>
-      mintCarRaw({
-        address: VINTAGE_CAR_NFT_ADDRESS,
-        abi: VINTAGE_CAR_NFT_ABI,
-        functionName: "mintCar",
-        args: [vin, tokenURI],
+  const listCarWithFixedPrice = wrapWithConnectionAndChainCheck(
+    (tokenId: number, price: number) =>
+      listCarRaw({
+        address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
+        abi: VINTAGE_CAR_MARKETPLACE_ABI,
+        functionName: "createFixedPriceListing",
+        args: [tokenId, price],
       })
   );
 
-  return { mintCar, mintDataHash, isMintPending, mintError };
+  const listCarWithAuction = wrapWithConnectionAndChainCheck(
+    (
+      tokenId: number,
+      startingPrice: number,
+      buyoutPrice: number,
+      duration: number
+    ) =>
+      listCarRaw({
+        address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
+        abi: VINTAGE_CAR_MARKETPLACE_ABI,
+        functionName: "createAuctionListing",
+        args: [tokenId, startingPrice, buyoutPrice, duration],
+      })
+  );
+
+  return {
+    listCarWithFixedPrice,
+    listCarWithAuction,
+    listDataHash,
+    islistPending,
+    listError,
+  };
 }

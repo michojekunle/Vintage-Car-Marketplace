@@ -2,7 +2,6 @@
 pragma solidity ^0.8.27;
 
 library AuctionLib {
-    
     error NotOwner(address sender);
     error InvalidStartPrice();
     error AuctionNotActive();
@@ -35,7 +34,10 @@ library AuctionLib {
     }
 
     // Ensure the bid amount is higher than the current highest bid
-    function validateBidAmount(uint256 currentBid, uint256 amount) internal pure {
+    function validateBidAmount(
+        uint256 currentBid,
+        uint256 amount
+    ) internal pure {
         if (amount <= currentBid) revert BidTooLow(currentBid, amount);
     }
 
@@ -55,7 +57,10 @@ library AuctionLib {
     }
 
     // Handle refunding the previous highest bidder
-    function refundPreviousBidder(address payable previousBidder, uint256 previousBid) internal {
+    function refundPreviousBidder(
+        address payable previousBidder,
+        uint256 previousBid
+    ) internal {
         if (previousBidder != address(0)) {
             (bool sent, ) = previousBidder.call{value: previousBid}("");
             if (!sent) revert TransferFailed();
@@ -68,8 +73,11 @@ library AuctionLib {
         if (!sent) revert TransferFailed();
     }
 
-    // Ensure the contract is approved by the nft owner    
-    function validateApproval(address approvedAddress, address contractAddress) internal pure {
+    // Ensure the contract is approved by the nft owner
+    function validateApproval(
+        address approvedAddress,
+        address contractAddress
+    ) internal pure {
         if (approvedAddress != contractAddress) revert NotApprovedForTransfer();
     }
 }

@@ -3,13 +3,13 @@ import { useAccount, useSwitchChain, useWriteContract } from "wagmi";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
-	VINTAGE_CAR_NFT_ABI,
-	VINTAGE_CAR_NFT_ADDRESS,
+  VINTAGE_CAR_NFT_ABI,
+  VINTAGE_CAR_NFT_ADDRESS,
 } from "@/contracts/VintageCarNFT";
 import { toast } from "sonner";
-const CORRECT_CHAIN_ID = 84532;
+export const CORRECT_CHAIN_ID = 84532;
 
-export function useMintCar() {
+export function useNFTApproval() {
   const { address, isConnected, chain } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { switchChain } = useSwitchChain();
@@ -40,27 +40,34 @@ export function useMintCar() {
   const wrapWithConnectionAndChainCheck = (writeFunction: any) => {
     return async (...args: any) => {
       if (await checkConnectionAndChain()) {
-        return writeFunction(...args);
+        await writeFunction(...args);
       }
     };
   };
 
   const {
-    writeContract: mintCarRaw,
-    data: mintDataHash,
-    isPending: isMintPending,
-    error: mintError,
+    writeContract: approvalCarRaw,
+    data: approvalTxHash,
+    isPending: isApprovalPending,
+    isSuccess: approvalSuccess,
+    error: approvalError,
   } = useWriteContract();
 
-  const mintCar = wrapWithConnectionAndChainCheck(
-    (vin: string, tokenURI: string) =>
-      mintCarRaw({
+  const approveCarNft = wrapWithConnectionAndChainCheck(
+    (address: string, tokenId: number) =>
+      approvalCarRaw({
         address: VINTAGE_CAR_NFT_ADDRESS,
         abi: VINTAGE_CAR_NFT_ABI,
-        functionName: "mintCar",
-        args: [vin, tokenURI],
+        functionName: "approve",
+        args: [address, tokenId],
       })
   );
 
-  return { mintCar, mintDataHash, isMintPending, mintError };
+  return {
+    approveCarNft,
+    approvalTxHash,
+    isApprovalPending,
+    approvalSuccess,
+    approvalError,
+  };
 }
