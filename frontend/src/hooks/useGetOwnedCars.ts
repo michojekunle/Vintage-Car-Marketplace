@@ -9,22 +9,12 @@ import {
 import { formatCarData } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOwnCarStore } from "../../stores/useOwnCarsStore";
+import { useAccount } from "wagmi";
 
 const CORRECT_CHAIN_ID = 84532;
 
 export function useGetOwnedCars() {
   const { address } = useAccount();
-
-  const getAllOwnedTokens = async () => {
-    const result = await readContract(config, {
-      abi: VINTAGE_CAR_NFT_ABI,
-      address: VINTAGE_CAR_NFT_ADDRESS,
-      functionName: "getNFTsOwnedBy",
-      args: [address],
-      chainId: CORRECT_CHAIN_ID,
-    });
-    return result;
-  };
   
 	const setCarsLoading = useOwnCarStore(state => state.setFetchCarsLoading)
 
@@ -35,7 +25,7 @@ export function useGetOwnedCars() {
 				abi: VINTAGE_CAR_NFT_ABI,
 				address: VINTAGE_CAR_NFT_ADDRESS,
 				functionName: "getNFTsOwnedBy",
-				args: ['0x6c8fcDeb117a1d40Cd2c2eB6ECDa58793FD636b1'],
+				args: [address],
 				chainId: CORRECT_CHAIN_ID,
 			});
 			return result;
