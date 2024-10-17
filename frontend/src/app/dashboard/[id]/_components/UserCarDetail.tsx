@@ -5,7 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAccount, useConnect, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useSwitchChain,
+  useWriteContract,
+} from "wagmi";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -18,7 +22,7 @@ import { listingFormSchema } from "@/schema";
 import { useGetOwnedCars } from "@/hooks/useGetOwnedCars";
 // import { useNFTApproval } from "@/hooks/useNFTApproval";
 import { VINTAGE_CAR_AUCTION_ADDRESS } from "@/app/contracts/VintageCarAuction";
-import { injected, waitForTransactionReceipt } from "@wagmi/core";
+import { waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/app/wagmi";
 import { baseSepolia } from "viem/chains";
 import {
@@ -45,10 +49,11 @@ const defaultValues: Partial<ListingFormValues> = {
 export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
   const router = useRouter();
   const { chainId, address } = useAccount();
-  const { connectAsync } = useConnect();
+  const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
   const [loading, setLoading] = useState(true);
   const [listTxloading, setListTxLoading] = useState(false);
+  const [isUnlisting, setIsUnlisting] = useState(false);
   const [listing, setListing] = useState<IListing>();
   const [isCheckingListed, setIsCheckingListed] = useState(true);
   const [isListed, setIsListed] = useState(false);
@@ -78,8 +83,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
     const checkCarListed = async () => {
       if (tokenId) {
         const detail: IListing = await getListing(tokenId);
-        console.log(detail);
-		setListing(detail);
+        setListing(detail);
         if (
           detail.seller !== ZeroAddress &&
           detail.seller === address &&
@@ -98,10 +102,11 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
       setListTxLoading(true);
       if (chainId !== CORRECT_CHAIN_ID) {
         try {
-          await connectAsync({
+          toast.info(`Incorrect chainId, switching to supported chainId...`);
+          await switchChainAsync({
             chainId: baseSepolia.id,
-            connector: injected(),
           });
+          toast.info(`Successfully switched chains, proceeding with transaction...`);
         } catch (error) {
           toast.success(`An error occured: ${error}`);
           setListTxLoading(false);
@@ -121,8 +126,8 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
         console.log(
           `Approve transaction sent successfully: ${approveResponse}`
         );
-        toast.success(
-          "Approve transaction confirmed, proceeding with listing..."
+        toast.info(
+          "Approve transaction sent successfully, confirming transaction..."
         );
 
         // Step 2: Wait until the transaction is mined
@@ -193,12 +198,13 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
       setListTxLoading(true);
       if (chainId !== CORRECT_CHAIN_ID) {
         try {
-          await connectAsync({
+          toast.info(`Incorrect chainId, switching to supported chainId...`);
+          await switchChainAsync({
             chainId: baseSepolia.id,
-            connector: injected(),
           });
+          toast.info(`Successfully switched chains, proceeding with transaction...`);
         } catch (error) {
-          toast.success(`An error occured: ${error}`);
+          toast.error(`An error occured: ${error}`);
           setListTxLoading(false);
         }
       }
@@ -216,8 +222,8 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
         console.log(
           `Approve transaction sent successfully: ${approveResponse}`
         );
-        toast.success(
-          "Approve transaction confirmed, proceeding with listing..."
+        toast.info(
+          "Approve transaction sent successfully, confirming transaction..."
         );
 
         // Step 2: Wait until the transaction is mined
@@ -234,7 +240,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           console.log(
             "Approve transaction confirmed, proceeding with listing..."
           );
-          toast.success(
+          toast.info(
             "Approve transaction confirmed, proceeding with listing..."
           );
 
@@ -305,14 +311,16 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           message: "Auction duration is required",
         });
 
-	  const duration = useCallback(() => {
-		if(data.durationUnit === 'days') return Number(data.duration) * 24 * 60 * 60;
-		if(data.durationUnit === 'hours') return Number(data.duration) * 60 * 60;
-		if(data.durationUnit === 'minutes') return Number(data.duration) * 60;
-		return Number(data.duration);
-	  }, [data.duration, data.durationUnit]);	
+      const duration = useCallback(() => {
+        if (data.durationUnit === "days")
+          return Number(data.duration) * 24 * 60 * 60;
+        if (data.durationUnit === "hours")
+          return Number(data.duration) * 60 * 60;
+        if (data.durationUnit === "minutes") return Number(data.duration) * 60;
+        return Number(data.duration);
+      }, [data.duration, data.durationUnit]);
 
-	  const buyoutPrice = data.enableBuyout ? Number(data.buyoutPrice) : 0;
+      const buyoutPrice = data.enableBuyout ? Number(data.buyoutPrice) : 0;
 
       handleAuctionList(Number(data.startingPrice), buyoutPrice, duration());
     }
@@ -327,9 +335,66 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
     }
   };
 
-  const handleUnlist = (listing: IListing) => {
-    console.log("Unlist clicked");
-    toast.warning("Unlist clicked");
+  const handleUnlist = async (listing: IListing) => {
+    if (!listing.isActive) return toast.error("Listing already inactive!");
+    if (listing.seller !== address)
+      return toast.error("You're not the owner of the listing!");
+    if (chainId !== CORRECT_CHAIN_ID) {
+      try {
+        toast.info(`Incorrect chainId, switching to supported chainId...`);
+        await switchChainAsync({
+          chainId: baseSepolia.id,
+        });
+        toast.info(`Successfully switched chains, proceeding with transaction...`);
+      } catch (error) {
+        toast.success(`An error occured: ${error}`);
+        setListTxLoading(false);
+      }
+    }
+
+    try {
+      setIsUnlisting(true);
+      console.log("Listing", listing);
+      console.log("Unlist clicked");
+      toast.info(`Sending transaction...`);
+
+      const unlistResponse = await writeContractAsync({
+        chainId: baseSepolia.id,
+        address: VINTAGE_CAR_MARKETPLACE_ADDRESS as `0x${string}`,
+        abi: VINTAGE_CAR_MARKETPLACE_ABI,
+        functionName: "cancelListing",
+        args: [tokenId],
+      });
+
+      // Check if the unlist transaction was successful
+      if (unlistResponse) {
+        console.log(`Unlist transaction sent successfully: ${unlistResponse}`);
+        toast.info(
+          "Unlist transaction sent successfully, confirming transaction..."
+        );
+
+        // Step 2: Wait until the transaction is mined
+        const unlistTransactionReceipt = await waitForTransactionReceipt(
+          config,
+          {
+            hash: unlistResponse,
+          }
+        );
+
+        console.log(unlistTransactionReceipt);
+
+        if (unlistTransactionReceipt.status === "success") {
+          console.log("Unlisting Transaction successful.");
+          toast.success("Unlisting Transaction successful.");
+          setIsUnlisting(false);
+          setIsListed(false);
+        }
+      }
+      setIsUnlisting(false);
+    } catch (error) {
+      setIsUnlisting(false);
+      return toast.error("Unlisting car failed!");
+    }
   };
 
   if (loading) {
@@ -354,7 +419,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="w-full flex-1 flex justify-center items-center bg-[#fbf8ed]">
+            <div className="w-full flex-1 min-h-[380px] flex justify-center items-center bg-[#fbf8ed] py-2">
               <Image
                 width={600}
                 height={400}
@@ -426,7 +491,10 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
               </div>
               <div className="pt-4">
                 {isListed ? (
-                  <UnlistCarDialog handleUnlist={() => handleUnlist(listing!)} />
+                  <UnlistCarDialog
+                    handleUnlist={() => handleUnlist(listing!)}
+                    loading={isUnlisting}
+                  />
                 ) : (
                   <ListCarDialog
                     form={form}
