@@ -311,14 +311,14 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
           message: "Auction duration is required",
         });
 
-      const duration = useCallback(() => {
+      const duration = () => {
         if (data.durationUnit === "days")
           return Number(data.duration) * 24 * 60 * 60;
         if (data.durationUnit === "hours")
           return Number(data.duration) * 60 * 60;
         if (data.durationUnit === "minutes") return Number(data.duration) * 60;
         return Number(data.duration);
-      }, [data.duration, data.durationUnit]);
+      };
 
       const buyoutPrice = data.enableBuyout ? Number(data.buyoutPrice) : 0;
 
@@ -439,25 +439,25 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
               ) : null}
               <div className="text-sm text-gray-600 space-y-2">
                 <p>
-                  <strong>VIN:</strong> {carDetail?.vin || "nil"}
+                  <strong>VIN:</strong> {carDetail?.vin || "Nil"}
                 </p>
                 <p>
-                  <strong>Make:</strong> {carDetail?.make || "nil"}
+                  <strong>Make:</strong> {carDetail?.make || "Nil"}
                 </p>
                 <p>
-                  <strong>Model:</strong> {carDetail?.model || "nil"}
+                  <strong>Model:</strong> {carDetail?.model || "Nil"}
                 </p>
                 <p>
-                  <strong>Year:</strong> {carDetail?.year || "nil"}
+                  <strong>Year:</strong> {carDetail?.year || "Nil"}
                 </p>
                 <p className="flex items-center gap-1">
                   <strong>Engine Condition:</strong>{" "}
-                  {carDetail?.exteriorCondition || "nil"}
+                  {carDetail?.exteriorCondition || "Nil"}
                   <Check className="text-green-500 w-4 h-4" />
                 </p>
                 <p className="flex items-center gap-1">
                   <strong>Exterior Condition:</strong>{" "}
-                  {carDetail?.engineCondition || "nil"}
+                  {carDetail?.engineCondition || "Nil"}
                   <Check className="text-green-500 w-4 h-4" />
                 </p>
                 <p>
