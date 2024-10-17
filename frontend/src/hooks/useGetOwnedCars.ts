@@ -1,4 +1,3 @@
-import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 import { config } from "@/app/wagmi";
 import { multicall } from "@wagmi/core";
@@ -8,6 +7,8 @@ import {
   VINTAGE_CAR_NFT_ADDRESS,
 } from "@/contracts/VintageCarNFT";
 import { formatCarData } from "@/lib/utils";
+import { toast } from "sonner";
+import { useOwnCarStore } from "../../stores/useOwnCarsStore";
 
 const CORRECT_CHAIN_ID = 84532;
 
@@ -24,6 +25,25 @@ export function useGetOwnedCars() {
     });
     return result;
   };
+  
+	const setCarsLoading = useOwnCarStore(state => state.setFetchCarsLoading)
+
+	const getAllOwnedTokens = async () => {
+		setCarsLoading(true)
+		try {
+			const result = await readContract(config, {
+				abi: VINTAGE_CAR_NFT_ABI,
+				address: VINTAGE_CAR_NFT_ADDRESS,
+				functionName: "getNFTsOwnedBy",
+				args: ['0x6c8fcDeb117a1d40Cd2c2eB6ECDa58793FD636b1'],
+				chainId: CORRECT_CHAIN_ID,
+			});
+			return result;
+		} catch (error) {
+			setCarsLoading(false)
+			toast.error(`Error fetching owned tokens: ${error}`)
+		}
+	};
 
   const getAllcarsDetails = async () => {
     const allTokensOwned = (await getAllOwnedTokens()) as [];

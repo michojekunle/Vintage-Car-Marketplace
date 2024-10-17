@@ -8,19 +8,19 @@ interface ISearchInput {
 }
 
 interface ICarCard {
-	id: number;
-	image: string;
-	name: string;
-	make: string;
-	model: string;
-	listed: boolean;
-	year: number;
-	rating: number;
-	reviews: number;
-	price: number;
-	condition?: string | undefined;
-	serviceHistory?: string[]; // Optional service history
-	onClick?: () => void;
+  id: number;
+  image: string;
+  name: string;
+  make: string;
+  model: string;
+  listed: boolean;
+  year: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  condition?: string | undefined;
+  serviceHistory?: string[]; // Optional service history
+  onClick?: () => void;
 }
 
 interface IAddCarValues {
@@ -69,6 +69,7 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
+  listings: Listing[];
 }
 
 interface IFilterCar {
@@ -111,4 +112,46 @@ interface IListing {
     price: number
     isActive: boolean
     listingType: number
+}
+
+interface Car {
+  id: number;
+  listed: boolean;
+  name: string;
+  make: string;
+  model: string;
+  year: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  image: string;
+  condition: string | undefined;
+  serviceHistory?: string[] | null; // Array of strings to represent service records
+}
+
+interface CarStore {
+  selectedCar: Car | null;
+  setSelectedCar: (car: Car) => void;
+  listings: Listing[];
+  setListings: (listings: Listing[]) => void;
+  auctions: Listing[];
+  setAuctions: (auctions: Listing[]) => void;
+  fetchListings: () => Promise<void>;
+}
+
+enum ListingType {
+  FixedPrice,
+  Auction,
+}
+
+interface Listing {
+  tokenId: string;
+  seller: string;
+  price: any;
+  isActive: boolean;
+  listingType: ListingType;
+}
+
+interface ILiveAuction {
+  auctions: Listing[];
 }
