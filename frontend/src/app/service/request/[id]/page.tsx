@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useCarStore } from "../../../../../stores/useCarStore";
-import useServiceStore from "../../../../../stores/useServiceStore";
+import { useCarStore } from "../../../../stores/useCarStore";
+import useServiceStore from "../../../../stores/useServiceStore";
 import { toast } from "sonner";
 
 const ServiceRequest = () => {

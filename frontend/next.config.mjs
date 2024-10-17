@@ -7,7 +7,7 @@ const nextConfig = {
             hostname: "gateway.pinata.cloud",
           },
         ],
-      },
+    },
 };
 
 export default nextConfig;

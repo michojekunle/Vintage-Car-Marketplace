@@ -5,6 +5,7 @@ import { CarCard } from "./CarCard";
 import { useRouter } from "next/navigation";
 import { ArchiveX } from "lucide-react";
 import { CustomSlider } from "./CustomSlider";
+import { useOwnCarStore } from "../../stores/useOwnCarsStore";
 import {
   Pagination,
   PaginationContent,
@@ -23,8 +24,12 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
+  listings,
 }: IFeatured) => {
   const route = useRouter();
+  const ownCars = useOwnCarStore((state) => state.ownCars);
+
+  console.log({ listings });
 
   const handleClick = (id: number) => {
     route.push(`/car-details/?id=${id}`);
@@ -65,13 +70,13 @@ export const FeaturedCars = ({
         {cars.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-              {cars.map((car) => (
-                <CarCard
-                  key={car.id}
-                  {...car}
-                  onClick={() => handleClick(car.id)}
-                />
-              ))}
+            {ownCars.map((car) => (
+                      <div onClick={() => handleClick(car.id)} key={car.id}>
+                        <CarCard
+                          {...car}
+                        />
+                      </div>
+                    ))}
             </div>
             <div className="mt-8 w-full flex justify-between items-center">
               <p className="text-sm text-gray-600 mb-4">
