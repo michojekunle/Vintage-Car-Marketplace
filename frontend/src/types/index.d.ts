@@ -1,5 +1,3 @@
-// declare module "wagmi";
-
 interface ISearchInput {
   placeholder: string;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -8,20 +6,23 @@ interface ISearchInput {
 }
 
 interface ICarCard {
-	id: number;
-	image: string;
-	name: string;
-	make: string;
-	model: string;
-	listed: boolean;
-	year: number;
-	rating: number;
-	reviews: number;
-	price: number;
-	condition?: string | undefined;
-	serviceHistory?: string[]; // Optional service history
-	onClick?: () => void;
+  id: number;
+  image: string;
+  name: string;
+  make: string;
+  model: string;
+  listed: boolean;
+  year: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  condition?: string; // Optional condition (e.g., "New", "Used")
+  serviceHistory?: string[]; // Optional service history (e.g., ["Oil change", "Brake replacement"])
+  onClick?: () => void; // Optional onClick handler for car card interaction
+  children?: React.ReactNode; // Include children prop
 }
+
+
 
 interface IAddCarValues {
   make: string;
@@ -70,6 +71,7 @@ interface IFeatured {
   itemsPerPage: number;
   totalCars: number;
 }
+
 
 interface IFilterCar {
   searchTerm: string;
