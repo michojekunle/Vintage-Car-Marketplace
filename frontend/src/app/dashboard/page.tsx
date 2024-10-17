@@ -1,23 +1,15 @@
 "use client";
-
-import { featuredCars } from "@/lib/constants";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CarCard } from "../../components/CarCard";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useReadContract, useAccount } from "wagmi";
-import { abi } from "../../abi/CarNFTabi";
-import { toast } from "sonner";
 import { useGetOwnedCars } from "@/hooks/useGetOwnedCars";
-import { useOwnCarStore, OwnCar } from "../../../stores/useOwnCarsStore";
+import { useOwnCarStore } from "../../../stores/useOwnCarsStore";
 // import useDashboardStore from "@/stores/useDashboardStore";
 
 export default function Dashboard() {
   const router = useRouter();
-  const sortedCars = featuredCars.toSorted((a, b) => b.reviews - a.reviews);
-  const { address } = useAccount();
-  const [imageError, setImageError] = useState(false);
   const { getAllcarsDetails } = useGetOwnedCars();
   const setOwnCars = useOwnCarStore((state) => state.setOwnCars);
   const ownCars = useOwnCarStore((state) => state.ownCars);
@@ -34,11 +26,10 @@ export default function Dashboard() {
     // if (address) {
       const getAllCars = async () => {
         const cardata = await getAllcarsDetails();
-        setOwnCars(cardata);
+        setOwnCars(cardata as any); // Type assertion to fix the type mismatch
         console.log("from here", cardata);
       };
       getAllCars();
-    // } else {
     //   toast.error("Please connect your wallet");
     // }
   }, []);
@@ -65,9 +56,8 @@ export default function Dashboard() {
                 {ownCars.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
                     {ownCars.map((car) => (
-                      <div onClick={() => handleClick(car.id)}>
+                      <div onClick={() => handleClick(car.id)} key={car.id}>
                         <CarCard
-                          key={car.id}
                           {...car}
                         />
                       </div>
@@ -85,9 +75,8 @@ export default function Dashboard() {
                     {ownCars
                       .filter((car) => car.listed)
                       .map((car) => (
-                        <div onClick={() => handleClick(car.id)}>
+                        <div onClick={() => handleClick(car.id)} key={car.id}>
                           <CarCard
-                            key={car.id}
                             {...car}
                           />
                         </div>

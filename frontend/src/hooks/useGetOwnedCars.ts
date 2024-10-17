@@ -1,4 +1,3 @@
-import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 import { config } from "@/app/wagmi";
 import { multicall } from "@wagmi/core";
@@ -17,9 +16,7 @@ type Attributes = {
 const CORRECT_CHAIN_ID = 84532;
 
 export function useGetOwnedCars() {
-	const { address } = useAccount();
 	const setCarsLoading = useOwnCarStore(state => state.setFetchCarsLoading)
-	const setOwnCars = useOwnCarStore(state => state.setOwnCars)
 
 	const getAllOwnedTokens = async () => {
 		setCarsLoading(true)

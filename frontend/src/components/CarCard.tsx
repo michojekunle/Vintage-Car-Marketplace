@@ -1,5 +1,4 @@
 'use client'
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
