@@ -7,7 +7,7 @@ const config: HardhatUserConfig = {
   networks: {
     "base-sepolia": {
       url: "https://sepolia.base.org",
-      accounts: [process.env.PRIVATE_KEY! || ""],
+      accounts: [process.env.PRIVATE_KEY!],
     },
   },
   etherscan: {
@@ -29,6 +29,9 @@ const config: HardhatUserConfig = {
   //     runs: 1000
   //   }
   // }
+  sourcify: {
+	enabled: true
+  }  
 };
 
 export default config;
