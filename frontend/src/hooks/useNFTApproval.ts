@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useAccount, useSwitchChain, useWriteContract } from "wagmi";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";

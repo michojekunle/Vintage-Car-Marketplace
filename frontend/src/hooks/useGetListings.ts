@@ -1,4 +1,4 @@
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 import { config } from "@/app/wagmi";
 import { VINTAGE_CAR_MARKETPLACE_ABI, VINTAGE_CAR_MARKETPLACE_ADDRESS } from "@/app/contracts/VintageCarMarketplace";

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -393,7 +393,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
       setIsUnlisting(false);
     } catch (error) {
       setIsUnlisting(false);
-      return toast.error("Unlisting car failed!");
+      return toast.error(`Unlisting car failed: ${error}`);
     }
   };
 
