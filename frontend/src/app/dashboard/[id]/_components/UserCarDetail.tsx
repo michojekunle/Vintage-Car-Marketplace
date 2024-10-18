@@ -409,7 +409,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 pb-8">
         <Button
           variant="ghost"
           className="text-primary-action hover:underline flex items-center gap-2 px-0 mb-4"
