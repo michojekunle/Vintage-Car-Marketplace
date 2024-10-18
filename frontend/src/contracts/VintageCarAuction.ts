@@ -1,5 +1,5 @@
 export const VINTAGE_CAR_AUCTION_ADDRESS =
-  "0x36520821D722A4c4fc966cc5A41fc7f1669dED6B";
+  "0x54889D2021721c8f979760807dbC4d9FE2617D02";
 
 export const VINTAGE_CAR_AUCTION_ABI = [
   {
@@ -196,6 +196,18 @@ export const VINTAGE_CAR_AUCTION_ABI = [
       { internalType: "contract VintageCarNFT", name: "", type: "address" },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "operator", type: "address" },
+      { internalType: "address", name: "from", type: "address" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+      { internalType: "bytes", name: "data", type: "bytes" },
+    ],
+    name: "onERC721Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
     type: "function",
   },
   {

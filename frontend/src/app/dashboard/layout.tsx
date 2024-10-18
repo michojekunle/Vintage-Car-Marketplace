@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 import Sidebar from "./_components/sidebar";
@@ -8,21 +8,26 @@ import DashboardHeader from "./_components/header";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import useWalletConnection from "@/hooks/useWalletConnection";
+import MobileSidebar from "./_components/mobileSidebar";
 // import { FaceTecProvider } from "@/facetec/context/FacetecContext";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { address } = useAccount();
   const { isConnected, isReady } = useWalletConnection();
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
       <Sidebar />
 
+      <MobileSidebar isOpen={isOpen} toggleSidebar={toggleSidebar}/>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <DashboardHeader />
+        <DashboardHeader isOpen={isOpen} toggleSidebar={toggleSidebar}/>
         {/* Main content area */}
         {/* <FaceTecProvider> */}
         {!isReady ? (
