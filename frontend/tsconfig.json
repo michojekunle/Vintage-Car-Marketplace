@@ -3,7 +3,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "typeRoots": ["./node_modules/@types", "./node_modules/wagmi"],
+    "typeRoots": ["./node_modules/@types"],
     "target": "es2015",
     "strict": true,
     "noEmit": true,

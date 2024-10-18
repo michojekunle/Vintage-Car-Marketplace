@@ -269,7 +269,7 @@ const CarDetails: React.FC = () => {
                     List Car
                   </Button>
                 </div>
-              )}
+              )
             </motion.div>
           </div>
         </motion.div>
