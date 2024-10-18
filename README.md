@@ -217,56 +217,37 @@ The following individuals contributed their expertise and time to make this proj
 
 ##### FRONTEND TEAM
 
-***1. Abdulrahman Olalekan*** - [click here](https://github.com/RahmanC)
+1. [Abolare Roheemah](https://github.com/AbolareRoheemah)
 
-***2. Emeka-Iheonu Chimaobi*** - [click here](https://github.com/ceasermikes002)
+2. [Emeka-Iheonu Chimaobi](https://github.com/ceasermikes002)
 
-***3. Michael Ojekunle*** - [click here](https://github.com/michojekunle)
+3. [Abdulrahman Olalekan](https://github.com/RahmanC)
 
-***4. Yusuf Roqib*** - [click here](https://github.com/yusufroqib)
+4. [Yusuf Roqib](https://github.com/yusufroqib)
 
-***5. Abolare Roheemah*** - [click here](https://github.com/AbolareRoheemah)
+5. [Michael Ojekunle](https://github.com/michojekunle)
 
 ##### SMART CONTRACT TEAM
 
-***6. Donald Nwokoro*** - [click here](https://github.com/DonGuillotine)
+6. [Donald Nwokoro](https://github.com/DonGuillotine)
 
-***7. Rose Wachuka*** - [click here](https://github.com/ro61zzy)
+7. [Rose Wachuka](https://github.com/ro61zzy)
 
-***8. Chisom Amadi*** -  [click here](https://github.com/Tchisom17)
+8. [Chisom Amadi](https://github.com/Tchisom17)
 
-***9. Michael John*** - [click here](https://github.com/Micjohn01)
+9. [Michael Johnclick here](https://github.com/Micjohn01)
 
 ## Deployed Smart Contract Addresses
 
-**1. Marketplace Contract**
+1. Marketplace Contract: [0x6782c1E2bb9fEeD99A4ac155F8521250601b383e](https://sepolia.basescan.org/address/0x6782c1E2bb9fEeD99A4ac155F8521250601b383e)
 
-***Contract Name: VintageCarMarketplace***
+2. Auction Contract: [0x54889D2021721c8f979760807dbC4d9FE2617D02](https://sepolia.basescan.org/address/0x54889D2021721c8f979760807dbC4d9FE2617D02)
 
-***Contract Address: [0x6782c1E2bb9fEeD99A4ac155F8521250601b383e](https://sepolia.basescan.org/address/0x6782c1E2bb9fEeD99A4ac155F8521250601b383e)***
+3. Vintage Car NFT Contract: [0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16](https://sepolia.basescan.org/address/0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16)
 
-**2. Auction Contract**
-***Contract Name: NFTAuction***
+4. Seller Verification Contract: [0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77](https://sepolia.basescan.org/address/0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77#code)
 
-***Contract Address: [0x54889D2021721c8f979760807dbC4d9FE2617D02](https://sepolia.basescan.org/address/0x54889D2021721c8f979760807dbC4d9FE2617D02)***
-
-**3. Vintage Car NFT Contract**
-
-***Contract Name: VintageCarNFT***
-
-***Contract Address: [0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16](https://sepolia.basescan.org/address/0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16)***
-
-**4. Seller Verification Contract**
-
-***Contract Name: SellerVerification***
-
-***Contract Address: [0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77](https://sepolia.basescan.org/address/0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77#code)***
-
-**5. Car Verification Oracle Contract**
-
-***Contract Name: CarVerificationOracle***
-
-***Contract Address: [0xa7E07d5db90FD4F5915dF139F871ADe5B430527c](https://sepolia.basescan.org/address/0xa7E07d5db90FD4F5915dF139F871ADe5B430527c)***
+5. Car Verification Oracle Contract: [0xa7E07d5db90FD4F5915dF139F871ADe5B430527c](https://sepolia.basescan.org/address/0xa7E07d5db90FD4F5915dF139F871ADe5B430527c)
 
 ## License
 This project is licensed under the MIT License.
