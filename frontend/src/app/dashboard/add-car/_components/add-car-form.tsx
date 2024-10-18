@@ -173,7 +173,7 @@ export default function AddCarForm() {
 									type="button"
 									onClick={() => {
 										if (currentStep === 4) {
-											router.push("/dashboard/my-cars");
+											router.push("/dashboard");
 										} else {
 											setCurrentStep((prev) => Math.min(4, prev + 1));
 										}

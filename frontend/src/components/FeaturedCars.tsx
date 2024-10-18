@@ -4,9 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArchiveX, Loader } from "lucide-react"; // Import Loader icon
 import { ethers } from "ethers";
-import Image from "next/image";
 import ABI from '../ABIs/vintageCarNFTContractABI.json';
-
+import { useOwnCarStore } from "../../stores/useOwnCarsStore";
 import {
   Pagination,
   PaginationContent,
@@ -47,6 +46,7 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
+  listings,
 }: IFeatured) => {
   const router = useRouter();
   const [nfts, setNfts] = useState<NFT[]>([]);
@@ -97,8 +97,9 @@ export const FeaturedCars = ({
       setLoading(false); // Set loading to false when fetching ends
     }
   };
-  
+  const ownCars = useOwnCarStore((state) => state.ownCars);
 
+  console.log({ listings });
   const handleClick = (id: number) => {
     router.push(`/car-details/?id=${id}`);
   };
@@ -145,36 +146,13 @@ export const FeaturedCars = ({
         ) : nfts.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-              {nfts.map((nft) => (
-                <CarCard
-                  key={nft.id}
-                  id={nft.id} // Ensure to include id here
-                  image={nft.image} // Include image
-                  name={nft.name} // Include name
-                  make={nft.make || "Unknown Make"} // Add make if available, otherwise default
-                  model={nft.model || "Unknown Model"} // Add model if available, otherwise default
-                  year={nft.year || 0} // Add year if available, otherwise default
-                  rating={nft.rating || 0} // Add rating if available, otherwise default
-                  reviews={nft.reviews || 0} // Add reviews if available, otherwise default
-                  condition={nft.condition || "Unknown Condition"} // Add condition if available, otherwise default
-                  price={nft.price || 0} // Add price if available, otherwise default
-                  serviceHistory={nft.serviceHistory || ['No History']} // Add serviceHistory if available, otherwise default
-                  listed={nft.listed || false} // Add listed status if available, otherwise default
-                  className="border p-4 rounded shadow cursor-pointer"
-                  onClick={() => handleClick(nft.id)}
-                >
-                  <Image
-                    src={nft.image}
-                    alt={nft.name}
-                    width={200}
-                    height={200}
-                    className="w-full h-64 object-cover rounded"
-                  />
-                  <h3 className="text-xl font-bold mt-2">{nft.name}</h3>
-                  <p className="text-gray-600">{nft.description}</p>
-                </CarCard>
-              ))}
-
+            {ownCars.map((car) => (
+                      <div onClick={() => handleClick(car.id)} key={car.id}>
+                        <CarCard
+                          {...car}
+                        />
+                      </div>
+                    ))}
             </div>
             <div className="mt-8 w-full flex justify-between items-center">
               <p className="text-sm text-gray-600 mb-4">

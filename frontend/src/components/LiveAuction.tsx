@@ -15,8 +15,10 @@ import Image from "next/image";
 import { liveAuctions } from "@/lib/constants";
 import CountdownTimer from "./CountdownTimer";
 
-export const LiveAuction = () => {
+export const LiveAuction = ({ auctions }: ILiveAuction) => {
   const MotionCard = motion(Card);
+
+  console.log({ auctions });
   return (
     <section id="auctions" className="py-12 px-4 sm:px-10 md:px-16">
       <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">

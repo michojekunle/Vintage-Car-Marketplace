@@ -20,9 +20,13 @@ export interface OwnCar {
 interface OwnCarStore {
 	ownCars: OwnCar[];
 	setOwnCars: (car: OwnCar[]) => void;
+	fetchCarsLoading: boolean;
+	setFetchCarsLoading: (loadingState: boolean) => void;
 }
 
 export const useOwnCarStore = create<OwnCarStore>((set) => ({
 	ownCars: [],
 	setOwnCars: (car) => set({ ownCars: car }),
+	fetchCarsLoading: false,
+	setFetchCarsLoading: (loadingState: boolean) => set({ fetchCarsLoading: loadingState })
 }));

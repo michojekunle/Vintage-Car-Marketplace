@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Verified, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useCarStore } from "../../../stores/useCarStore";
 import { ethers } from "ethers";
+import { useCarStore } from "@/stores/useCarStore";
 import Link from "next/link";
 import carMarketplaceAbi from "../../ABIs/marketPlaceContractABI.json";
 
@@ -164,12 +164,17 @@ const CarDetails: React.FC = () => {
                 <p><strong>Year:</strong> {selectedCar.year}</p>
                 <p className={`flex items-center gap-1`}>
                   <strong>Condition:</strong>{" "}
-                  <span className={textColor}>{selectedCar.condition}</span>
+
+                  <span className={`${textColor}`}>
+                    {selectedCar.condition}
+                  </span>
                   <Verified className={`w-4 h-4 ${iconColor}`} />
                 </p>
                 <p>
                   <strong>Service History:</strong>{" "}
-                  {selectedCar.serviceHistory ? selectedCar.serviceHistory.join(", ") : "No service history available"}
+                  {selectedCar.serviceHistory
+                    ? selectedCar.serviceHistory.join(", ")
+                    : "No service history available"}
                 </p>
               </div>
 

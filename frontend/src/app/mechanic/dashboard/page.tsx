@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 // import { useRouter } from "next/navigation";
-import useServiceStore from "../../../../stores/useServiceStore";
+import useServiceStore from "../../../stores/useServiceStore";
 
 const MechanicDashboard = () => {
   const { serviceRequests, fetchServiceRequests, updateServiceRequest } = useServiceStore();
