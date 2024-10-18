@@ -36,7 +36,6 @@ const CarDetails: React.FC = () => {
     );
   }
 
-
   // Early return if not mounted or car details are missing
   if (!isMounted || !selectedCar) return null;
 
@@ -72,7 +71,6 @@ const CarDetails: React.FC = () => {
     return provider.getSigner(); // Return the signer instance
   };
 
-
   // Buy car function with transaction handling
   const handleBuyNow = async () => {
     try {
@@ -81,10 +79,6 @@ const CarDetails: React.FC = () => {
       const tx = await contract.buyCar(selectedCar.id, {
         value: ethers.parseEther(selectedCar.price.toString()),
       });
-      // const gasEstimate = await contract.estimateGas.buyCar(selectedCar.id, {
-      //   value: ethers.parseEther(selectedCar.price.toString()),
-      // });
-      // console.log("Estimated Gas:", gasEstimate);
 
       await tx.wait();
       alert("Car purchased successfully!");
@@ -234,42 +228,7 @@ const CarDetails: React.FC = () => {
                     VintageChain
                   </Link>
                 </p>
-                <Button
-                  className="w-full bg-amber-700 text-white mt-2"
-                  onClick={() =>
-                    router.push(`/service/request/${selectedCar.id}`)
-                  }
-                >
-                  Schedule a Service
-                </Button>
-                <div className="border-t border-gray-200 pt-2">
-                  <p className="text-sm text-gray-600">
-                    Available Mechanics:
-                  </p>
-                  <ul className="list-disc list-inside">
-                    <li>Mechanic A - $50/hour</li>
-                    <li>Mechanic B - $60/hour</li>
-                    <li>Mechanic C - $55/hour</li>
-                  </ul>
-                </div>
               </div>
-              : (
-              <div className="border-t border-gray-200 pt-4">
-                <h3 className="text-xl font-semibold text-red-600">
-                  Service Unavailable
-                </h3>
-                <p className="text-sm text-gray-600">
-                  This car is currently not listed for sale, so mechanic
-                  services are unavailable.
-                </p>
-                <Button
-                  className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-full hover:bg-primary-action hover:text-white transition"
-                  onClick={handleListCarButtonClick}
-                >
-                  List Car
-                </Button>
-              </div>
-              )
             </motion.div>
           </div>
         </motion.div>
