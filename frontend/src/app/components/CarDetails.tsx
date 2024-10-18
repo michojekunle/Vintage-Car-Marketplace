@@ -12,7 +12,7 @@ import Link from "next/link";
 import carMarketplaceAbi from "../../ABIs/marketPlaceContractABI.json";
 
 // Use the contract address from environment variables
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT_ADDRESS as string;
+const CONTRACT_ADDRESS = "0x6782c1E2bb9fEeD99A4ac155F8521250601b383e";
 
 const CarDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
