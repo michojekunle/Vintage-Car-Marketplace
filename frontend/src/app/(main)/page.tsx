@@ -54,7 +54,7 @@ const Home = () => {
   const totalPages = Math.ceil(filteredCars?.length / ITEMS_PER_PAGE);
 
   const paginatedCars = useMemo(() => {
-    if (!filteredCars || filteredCars.length === 0) return [];
+    if (!filteredCars || filteredCars?.length === 0) return [];
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredCars?.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -81,7 +81,6 @@ const Home = () => {
         totalPages={totalPages}
         itemsPerPage={ITEMS_PER_PAGE}
         totalCars={filteredCars.length}
-        listings={listings}
       />
       <LiveAuction auctions={auctions} />
       <UserRoles />
