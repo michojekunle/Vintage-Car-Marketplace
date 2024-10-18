@@ -20,10 +20,9 @@ const MotionCard = motion(Card);
 export const LiveAuction: React.FC = () => {
   const { auctions, fetchAuctions, placeBid } = useAuctionStore();
 
-  console.log({ auctions });
   useEffect(() => {
     fetchAuctions();
-  }, [fetchAuctions]);
+  }, []);
 
   const handlePlaceBid = async (tokenId: bigint, currentBid: bigint) => {
     const bidAmount = currentBid + BigInt(1e18);
@@ -33,13 +32,15 @@ export const LiveAuction: React.FC = () => {
   return (
     <section className="py-16 bg-gray-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8 text-center">Live Auction</h2>
+        <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
+          Live Auction
+        </h3>
         <p className="text-center mb-12 max-w-2xl mx-auto">
           Experience the thrill of bidding on rare and valuable classic cars.
           Our live auction platform allows you to participate in real-time
           bidding wars for the most sought-after vehicles.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {auctions && auctions?.length > 0 ? (
             auctions?.map((auction) => (
               <MotionCard
@@ -49,9 +50,14 @@ export const LiveAuction: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <CardHeader>
-                  <CardTitle>
-                    {auction?.metadata?.name || `Car #${auction?.tokenId}`}
-                  </CardTitle>
+                  <div className="flex items-center justify-between gap-3">
+                    <CardTitle className="text-base capitalize">
+                      {auction?.metadata?.name || `Car #${auction?.tokenId}`}
+                    </CardTitle>
+                    <CountdownTimer
+                      initialTime={auction.auctionEndTime.toString()}
+                    />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <Image
@@ -67,9 +73,6 @@ export const LiveAuction: React.FC = () => {
                       {(Number(auction.highestBid) / 1e18).toFixed(2)} ETH
                     </span>
                   </div>
-                  <CountdownTimer
-                    initialTime={auction.auctionEndTime.toString()}
-                  />
                 </CardContent>
                 <CardFooter>
                   <Button
@@ -84,7 +87,7 @@ export const LiveAuction: React.FC = () => {
               </MotionCard>
             ))
           ) : (
-            <div className="flex flex-col gap-2 items-center">
+            <div className="flex flex-col gap-2 items-center self-center">
               <ArchiveX size={44} className="text-red-400" />
               <p className="text-center text-lg font-medium text-text-body">
                 No cars found.

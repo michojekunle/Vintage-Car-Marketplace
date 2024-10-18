@@ -59,20 +59,21 @@ const fetchActiveAuctions = async (
         contracts: auctionCalls,
       });
 
-      const batchAuctions = auctionResults.map((result: any, index) => ({
-        tokenId: BigInt(startIndex + index),
-        seller: result.result[0],
-        startingPrice: result.result[2],
-        highestBid: result.result[3],
-        highestBidder: result.result[4],
-        auctionEndTime: result.result[5],
-        buyoutPrice: result.result[6],
-        active: result.result[7],
-      }));
-      // .filter((auction: IAuction) => auction.active);
+      const batchAuctions = auctionResults
+        .map((result: any, index) => ({
+          tokenId: BigInt(startIndex + index),
+          seller: result.result[0],
+          startingPrice: result.result[2],
+          highestBid: result.result[3],
+          highestBidder: result.result[4],
+          auctionEndTime: result.result[5],
+          buyoutPrice: result.result[6],
+          active: result.result[7],
+        }))
+        .filter((auction: IAuction) => auction.active);
 
       // Fetch metadata for active auctions
-      const metadataCalls = batchAuctions.map((auction) => ({
+      const metadataCalls = batchAuctions?.map((auction) => ({
         address: VINTAGE_CAR_NFT_ADDRESS,
         abi: VINTAGE_CAR_NFT_ABI,
         functionName: "tokenURI",
@@ -84,7 +85,7 @@ const fetchActiveAuctions = async (
       });
 
       const auctionsWithMetadata = await Promise.all(
-        batchAuctions.map(async (auction, index) => {
+        batchAuctions?.map(async (auction, index) => {
           const tokenURI: any = metadataResults[index].result;
           try {
             const response = await fetch(tokenURI);
