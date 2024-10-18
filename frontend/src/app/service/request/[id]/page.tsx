@@ -20,81 +20,31 @@ import useServiceStore from "../../../../stores/useServiceStore";
 import { toast } from "sonner";
 
 const ServiceRequest = () => {
-    const [loading, setLoading] = useState(true);
-    const [buttonLoading, setButtonLoading] = useState(false);
-    const [selectedMechanic, setSelectedMechanic] = useState<string | null>(null);
-    const [serviceDescription, setServiceDescription] = useState("");
-    const [mechanics, setMechanics] = useState([
-        { name: "Mechanic A", rate: 50 },
-        { name: "Mechanic B", rate: 60 },
-        { name: "Mechanic C", rate: 55 },
-    ]);
-    const [estimatedCost, setEstimatedCost] = useState<number | null>(null);
-    const { selectedCar } = useCarStore();
-    const router = useRouter();
-    const { carId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [selectedMechanic, setSelectedMechanic] = useState<string | null>(null);
+  const [serviceDescription, setServiceDescription] = useState("");
+  const [mechanics, setMechanics] = useState([
+    { name: "Mechanic A", rate: 50 },
+    { name: "Mechanic B", rate: 60 },
+    { name: "Mechanic C", rate: 55 },
+  ]);
+  const [estimatedCost, setEstimatedCost] = useState<number | null>(null);
+  const { selectedCar } = useCarStore();
+  const router = useRouter();
+  const { carId } = useParams();
 
   useEffect(() => {
     // Fetch car details and available mechanics based on carId if needed
     setLoading(false);
   }, [carId]);
 
-    const handleServiceRequest = async () => {
-        if (!selectedMechanic || !serviceDescription) {
-            toast.error("Please select a mechanic and provide a service description.")
-            return;
-        }
-    
-        setButtonLoading(true);
-    
-        try {
-            // Estimate cost based on mechanic's rate
-            const estimatedHours = 2; // Can be made dynamic based on user input
-            const selectedMechanicObj = mechanics.find(
-                (m) => m.name === selectedMechanic
-            );
-    
-            if (selectedMechanicObj) {
-                const cost = selectedMechanicObj.rate * estimatedHours;
-                setEstimatedCost(cost);
-    
-                //unique ID for the service request
-                const requestId = Date.now(); // 
-    
-                // Create the service request object
-                const newServiceRequest = {
-                    id: requestId,
-                    carName: selectedCar?.name || "Unknown Car", // Get the car name
-                    carModel: selectedCar?.model || "Unknown Model", // Get the car model
-                    requestDate: new Date().toISOString(),
-                    serviceType: serviceDescription,
-                    payment: cost,
-                    isCompleted: false,
-                    user: "CurrentUser"
-                };
-    
-                // Store the service request in Zustand
-                const serviceStore = useServiceStore.getState();
-                serviceStore.addServiceRequest(newServiceRequest);
-    
-                // Show success toast
-                toast.success(` Service request submitted! Estimated cost: ${cost} ETH.`)
-                router.push("/dashboard"); // Redirect to main user dashboard page
-            }
-        } catch (error: any) {
-            toast.error("Failed to submit the service request.")
-        } finally {
-            setButtonLoading(false);
-        }
-    };
-    
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
-            </div>
-        );
+  const handleServiceRequest = async () => {
+    if (!selectedMechanic || !serviceDescription) {
+      toast.error(
+        "Please select a mechanic and provide a service description."
+      );
+      return;
     }
 
     setButtonLoading(true);
@@ -110,8 +60,8 @@ const ServiceRequest = () => {
         const cost = selectedMechanicObj.rate * estimatedHours;
         setEstimatedCost(cost);
 
-        //unique ID for the service request
-        const requestId = Date.now(); //
+        // Unique ID for the service request
+        const requestId = Date.now();
 
         // Create the service request object
         const newServiceRequest = {
@@ -130,19 +80,13 @@ const ServiceRequest = () => {
         serviceStore.addServiceRequest(newServiceRequest);
 
         // Show success toast
-        toast({
-          title: "Service request submitted",
-          description: `Estimated cost: ${cost} ETH.`,
-          variant: "success",
-        });
+        toast.success(
+          `Service request submitted! Estimated cost: ${cost} ETH.`
+        );
         router.push("/dashboard"); // Redirect to main user dashboard page
       }
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: "Failed to submit the service request.",
-        variant: "destructive",
-      });
+      toast.error("Failed to submit the service request.");
     } finally {
       setButtonLoading(false);
     }

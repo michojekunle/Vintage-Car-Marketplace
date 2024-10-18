@@ -48,7 +48,7 @@ const fetchActiveAuctions = async (
 
     while (hasMore) {
       const startIndex = batch * BATCH_SIZE;
-      const auctionCalls = Array.from({ length: BATCH_SIZE }, (_, i) => ({
+      const auctionCalls: any = Array.from({ length: BATCH_SIZE }, (_, i) => ({
         address: VINTAGE_CAR_AUCTION_ADDRESS,
         abi: VINTAGE_CAR_AUCTION_ABI,
         functionName: "auctions",
@@ -73,7 +73,7 @@ const fetchActiveAuctions = async (
         .filter((auction: IAuction) => auction.active);
 
       // Fetch metadata for active auctions
-      const metadataCalls = batchAuctions?.map((auction) => ({
+      const metadataCalls: any = batchAuctions?.map((auction) => ({
         address: VINTAGE_CAR_NFT_ADDRESS,
         abi: VINTAGE_CAR_NFT_ABI,
         functionName: "tokenURI",

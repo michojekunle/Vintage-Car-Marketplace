@@ -22,19 +22,22 @@ const fetchActiveListings = async (set: (state: Partial<CarStore>) => void) => {
 
     while (hasMore) {
       const startIndex = batch * BATCH_SIZE;
-      const marketplaceCalls = Array.from({ length: BATCH_SIZE }, (_, i) => ({
-        address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
-        abi: VINTAGE_CAR_MARKETPLACE_ABI,
-        functionName: "listings",
-        args: [BigInt(startIndex + i)],
-      }));
+      const marketplaceCalls: any = Array.from(
+        { length: BATCH_SIZE },
+        (_, i) => ({
+          address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
+          abi: VINTAGE_CAR_MARKETPLACE_ABI,
+          functionName: "listings",
+          args: [BigInt(startIndex + i)],
+        })
+      );
 
-      const marketplaceResults = await multicall(config, {
+      const marketplaceResults: any = await multicall(config, {
         contracts: marketplaceCalls,
       });
 
       const batchListings = marketplaceResults
-        .map((result: any, index) => ({
+        .map((result: any, index: number) => ({
           tokenId: BigInt(startIndex + index),
           seller: result.result[1],
           price: result.result[2],
@@ -44,19 +47,21 @@ const fetchActiveListings = async (set: (state: Partial<CarStore>) => void) => {
         .filter((listing: any) => listing.isActive);
 
       // Fetch metadata for active listings
-      const metadataCalls = batchListings.map((listing) => ({
-        address: VINTAGE_CAR_NFT_ADDRESS,
-        abi: VINTAGE_CAR_NFT_ABI,
-        functionName: "tokenURI",
-        args: [listing.tokenId],
-      }));
+      const metadataCalls: any = batchListings.map(
+        (listing: { tokenId: any }) => ({
+          address: VINTAGE_CAR_NFT_ADDRESS,
+          abi: VINTAGE_CAR_NFT_ABI,
+          functionName: "tokenURI",
+          args: [listing.tokenId],
+        })
+      );
 
       const metadataResults = await multicall(config, {
         contracts: metadataCalls,
       });
 
       const listingsWithMetadata = await Promise.all(
-        batchListings.map(async (listing, index) => {
+        batchListings.map(async (listing: { tokenId: any }, index: number) => {
           const tokenURI: any = metadataResults[index].result;
           try {
             const response = await fetch(tokenURI);

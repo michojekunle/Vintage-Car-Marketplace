@@ -7,22 +7,8 @@ import { useCarStore } from "@/stores/useCarStore";
 
 const MotionCard = motion(Card);
 
-interface Listing {
-  tokenId: bigint;
-  seller: string;
-  price: bigint;
-  isActive: boolean;
-  listingType: number;
-  metadata?: {
-    name?: string;
-    description?: string;
-    image?: string;
-    attributes?: Array<{ trait_type: string; value: string }>;
-  };
-}
-
 interface ICarCard {
-  car: Listing;
+  car: any;
   onClick?: () => void;
 }
 
@@ -34,7 +20,7 @@ export const HomeCarCard: React.FC<ICarCard> = ({ car, onClick }) => {
 
   const getAttributeValue = (traitType: string) => {
     const attribute = car?.metadata?.attributes?.find(
-      (attr) => attr.trait_type === traitType
+      (attr: { trait_type: string }) => attr.trait_type === traitType
     );
     return attribute ? attribute.value : "N/A";
   };
