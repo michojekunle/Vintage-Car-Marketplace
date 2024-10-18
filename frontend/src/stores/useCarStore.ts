@@ -19,7 +19,8 @@ export const useCarStore = create<CarStore>((set) => ({
   setAuctions: (auctions) => set({ auctions }),
   fetchListings: async () => {
     try {
-      const provider = await getProvider();
+      // Use a read-only provider by default
+      const provider = await getProvider(false); // Don't request accounts here
       const marketplaceContract = new ethers.Contract(
         MARKETPLACE_ADDRESS,
         marketplaceAbi,
