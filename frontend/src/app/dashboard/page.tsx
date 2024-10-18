@@ -20,7 +20,6 @@ export default function Dashboard() {
   };
 
   console.log("from state", ownCars);
-  
 
   useEffect(() => {
     // if (address) {
