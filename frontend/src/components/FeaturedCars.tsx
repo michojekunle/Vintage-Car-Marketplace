@@ -5,7 +5,6 @@ import { CarCard } from "./CarCard";
 import { useRouter } from "next/navigation";
 import { ArchiveX } from "lucide-react";
 import { CustomSlider } from "./CustomSlider";
-import { useOwnCarStore } from "../../stores/useOwnCarsStore";
 import {
   Pagination,
   PaginationContent,
@@ -24,16 +23,14 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
-  listings,
 }: IFeatured) => {
   const route = useRouter();
-  // const ownCars = useOwnCarStore((state) => state.ownCars);
 
-  console.log({ listings });
-
-  const handleClick = (id: number) => {
-    route.push(`/car-details/?id=${id}`);
+  const handleClick = (tokenId: string) => {
+    route.push(`/car-details/?id=${tokenId}`);
   };
+
+  console.log({ cars });
 
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
   const endIndex = Math.min(startIndex + itemsPerPage - 1, totalCars);
@@ -44,7 +41,7 @@ export const FeaturedCars = ({
         <div className="mb-12 max-w-md mx-auto">
           <div className="pt-6">
             <h4 className="text-lg font-semibold text-secondary-action mb-4">
-              Price Range
+              Price Range (ETH)
             </h4>
             <CustomSlider
               min={0}
@@ -67,12 +64,12 @@ export const FeaturedCars = ({
         <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
           Featured Listings
         </h3>
-        {cars.length > 0 ? (
+        {cars?.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-              {cars.map((car) => (
-                <div onClick={() => handleClick(car.id)} key={car.id}>
-                  <CarCard {...car} />
+              {cars?.map((car) => (
+                <div onClick={() => handleClick(car.tokenId)} key={car.tokenId}>
+                  <CarCard image={car.attributes.image} {...car} />
                 </div>
               ))}
             </div>

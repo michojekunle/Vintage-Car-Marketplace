@@ -22,7 +22,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchListings();
-  }, []);
+  }, [fetchListings]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMake, setSelectedMake] = useState("");
@@ -31,23 +31,33 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredCars = useMemo(() => {
-    return featuredCars.filter((car) => {
-      const matchesSearch = car.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const matchesMake = selectedMake === "" || car.make === selectedMake;
-      const matchesModel = selectedModel === "" || car.model === selectedModel;
+    if (!listings || listings.length === 0) return [];
+
+    return listings?.filter((car) => {
+      const matchesSearch = car?.metadata?.name
+        ?.toLowerCase()
+        ?.includes(searchTerm.toLowerCase());
+      const matchesMake =
+        selectedMake === "" ||
+        car?.metadata?.attributes?.find((attr) => attr.trait_type === "Make")
+          ?.value === selectedMake;
+      const matchesModel =
+        selectedModel === "" ||
+        car?.metadata?.attributes?.find((attr) => attr.trait_type === "Model")
+          ?.value === selectedModel;
       const matchesPrice =
-        car.price >= priceRange[0] && car.price <= priceRange[1];
+        car?.price >= priceRange[0] && car?.price <= priceRange[1];
       return matchesSearch && matchesMake && matchesModel && matchesPrice;
     });
-  }, [searchTerm, selectedMake, selectedModel, priceRange]);
+  }, [listings, searchTerm, selectedMake, selectedModel, priceRange]);
 
-  const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredCars?.length / ITEMS_PER_PAGE);
 
   const paginatedCars = useMemo(() => {
+    if (!filteredCars || filteredCars.length === 0) return [];
+
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredCars.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    return filteredCars?.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredCars, currentPage]);
 
   return (
