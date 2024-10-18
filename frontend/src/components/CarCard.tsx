@@ -1,9 +1,9 @@
-// CarCard.tsx
-// import { Star } from "lucide-react";
+"use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
 import { useCarStore } from "@/stores/useCarStore";
+import { OwnCar } from "../../stores/useOwnCarsStore";
 
 const MotionCard = motion(Card);
 
@@ -16,13 +16,15 @@ export const CarCard = ({
   year,
   rating,
   reviews,
-  condition,
+  engineCondition,
   price,
   serviceHistory,
   listed,
-  onClick,
-}: ICarCard) => {
-  const setSelectedCar = useCarStore((state) => state.setSelectedCar);
+}: // onClick,
+OwnCar) => {
+  const setSelectedCar = useCarStore(
+    (state: { setSelectedCar: any }) => state.setSelectedCar
+  );
 
   const handleClick = () => {
     setSelectedCar({
@@ -31,7 +33,7 @@ export const CarCard = ({
       make,
       model,
       serviceHistory,
-      condition,
+      engineCondition,
       year,
       rating,
       reviews,
@@ -40,9 +42,9 @@ export const CarCard = ({
       id: id,
     });
 
-    if (onClick) {
-      onClick();
-    }
+    // if (onClick) {
+    //   onClick();
+    // }
   };
 
   return (
@@ -87,14 +89,14 @@ export const CarCard = ({
             ({reviews} reviews)
           </span>
         </div> */}
-        <p className="text-primary-action font-bold">{price} ETH</p>
+        {price && <p className="text-primary-action font-bold">{price} ETH</p>}
       </div>
       <p
         className={`absolute py-1 px-2 rounded-md right-2 top-2 text-xs font-semibold ${
-          listed ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          listed ? "bg-green-100 text-green-800" : "bg-red-100 text-amber-600"
         }`}
       >
-        {listed ? "Listed" : "Sold"}
+        {listed ? "Listed" : "Owned"}
       </p>
     </MotionCard>
   );

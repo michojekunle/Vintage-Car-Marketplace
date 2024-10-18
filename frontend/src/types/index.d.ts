@@ -28,6 +28,8 @@ interface IAddCarValues {
   model: string;
   year: string;
   vin: string;
+  color: string;
+  mileage: string;
   description: string;
   engineCondition: string;
   exteriorCondition: string;
@@ -38,6 +40,8 @@ type FieldProp =
   | "model"
   | "year"
   | "vin"
+  | "color"
+  | "mileage"
   | "description"
   | "engineCondition"
   | "exteriorCondition";
@@ -98,7 +102,16 @@ interface IListCarDialog {
   isDialogOpen: boolean;
   onSubmit: (values: ListCarFormValues) => void;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
   form: UseFormReturn<ListCarFormValues, undefined>;
+}
+
+interface IListing {
+    tokenId: number
+    seller: string
+    price: number
+    isActive: boolean
+    listingType: number
 }
 
 interface Car {
@@ -130,6 +143,7 @@ enum ListingType {
   FixedPrice,
   Auction,
 }
+
 interface Listing {
   tokenId: string;
   seller: string;

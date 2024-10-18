@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-// import "./AuctionLib.sol";
-// import "./VintageCarNFT.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./AuctionLib.sol";
+import "./VintageCarNFT.sol";
 
-contract NFTAuction is ReentrancyGuard {
+contract NFTAuction is ReentrancyGuard, IERC721Receiver {
     using AuctionLib for *;
 
     VintageCarNFT public nftContract;
@@ -42,15 +43,21 @@ contract NFTAuction is ReentrancyGuard {
         uint256 _nftId,
         uint256 _startingPrice,
         uint256 _buyoutPrice,
-        uint256 _duration
+        uint256 _duration,
+        address _nftOwner
     ) external nonReentrant {
-        AuctionLib.validateOwner(nftContract.ownerOf(_nftId), msg.sender);
+        AuctionLib.validateOwner(nftContract.ownerOf(_nftId), _nftOwner);
         AuctionLib.validateStartPrice(_startingPrice);
 
-        nftContract.safeTransferFrom(msg.sender, address(this), _nftId);
+        // if (nftContract.getApproved(_nftId)) != address(this) {
+        //     revert AuctionLib.NotApprovedForTransfer();
+        // };
+        AuctionLib.validateApproval(nftContract.getApproved(_nftId), address(this));
+
+        nftContract.safeTransferFrom(_nftOwner, address(this), _nftId);
 
         auctions[_nftId] = Auction({
-            seller: payable(msg.sender),
+            seller: payable(_nftOwner),
             nftId: _nftId,
             startingPrice: _startingPrice,
             highestBid: 0,
@@ -60,7 +67,7 @@ contract NFTAuction is ReentrancyGuard {
             active: true
         });
 
-        emit AuctionCreated(_nftId, msg.sender, _startingPrice, _buyoutPrice, block.timestamp + _duration);
+        emit AuctionCreated(_nftId, _nftOwner, _startingPrice, _buyoutPrice, block.timestamp + _duration);
     }
 
     function placeBid(uint256 _nftId) external payable nonReentrant {
@@ -91,14 +98,14 @@ contract NFTAuction is ReentrancyGuard {
         _endAuction(_nftId);
     }
 
-    function cancelAuction(uint256 _nftId) external nonReentrant {
+    function cancelAuction(uint256 _nftId, address _nftOwner) external nonReentrant {
         Auction storage auction = auctions[_nftId];
 
-        AuctionLib.validateSeller(auction.seller, msg.sender);
+        AuctionLib.validateSeller(auction.seller, _nftOwner);
         AuctionLib.validateNoBids(auction.highestBid);
 
         auction.active = false;
-        nftContract.safeTransferFrom(address(this), msg.sender, _nftId);
+        nftContract.safeTransferFrom(address(this), _nftOwner, _nftId);
 
         emit AuctionCancelled(_nftId);
     }
@@ -115,6 +122,16 @@ contract NFTAuction is ReentrancyGuard {
         } else {
             nftContract.safeTransferFrom(address(this), auction.seller, _nftId);
         }
+    }
+
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    ) external pure override returns (bytes4) {
+        // This function simply returns a specific selector to indicate the contract can receive NFTs
+        return IERC721Receiver.onERC721Received.selector;
     }
 
     receive() external payable {}
