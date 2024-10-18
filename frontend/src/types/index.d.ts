@@ -61,7 +61,7 @@ interface INavLinks {
 }
 
 interface IFeatured {
-  cars: ICarCard[];
+  cars: IListing[];
   priceRange: number[];
   setPriceRange: (priceRange: number[]) => void;
   currentPage: number;
@@ -69,7 +69,6 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
-  listings: IListing[];
 }
 
 interface IFilterCar {

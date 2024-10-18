@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { CarCard } from "./CarCard";
 import { useRouter } from "next/navigation";
 import { ArchiveX } from "lucide-react";
 import { CustomSlider } from "./CustomSlider";
@@ -13,8 +12,34 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { HomeCarCard } from "./HomeCarCard";
 
-export const FeaturedCars = ({
+interface Listing {
+  tokenId: bigint;
+  seller: string;
+  price: bigint;
+  isActive: boolean;
+  listingType: number;
+  metadata?: {
+    name?: string;
+    description?: string;
+    image?: string;
+    attributes?: Array<{ trait_type: string; value: string }>;
+  };
+}
+
+interface IFeatured {
+  cars: Listing[];
+  priceRange: number[];
+  setPriceRange: (range: number[]) => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
+  itemsPerPage: number;
+  totalCars: number;
+}
+
+export const FeaturedCars: React.FC<IFeatured> = ({
   cars,
   priceRange,
   setPriceRange,
@@ -23,14 +48,12 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
-}: IFeatured) => {
-  const route = useRouter();
+}) => {
+  const router = useRouter();
 
-  const handleClick = (tokenId: string) => {
-    route.push(`/car-details/?id=${tokenId}`);
+  const handleClick = (tokenId: bigint) => {
+    router.push(`/car-details/?id=${tokenId.toString()}`);
   };
-
-  console.log({ cars });
 
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
   const endIndex = Math.min(startIndex + itemsPerPage - 1, totalCars);
@@ -64,13 +87,15 @@ export const FeaturedCars = ({
         <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
           Featured Listings
         </h3>
-        {cars?.length > 0 ? (
+        {cars && cars.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-              {cars?.map((car) => (
-                <div onClick={() => handleClick(car.tokenId)} key={car.tokenId}>
-                  <CarCard image={car.attributes.image} {...car} />
-                </div>
+              {cars.map((car) => (
+                <HomeCarCard
+                  key={car.tokenId.toString()}
+                  car={car}
+                  onClick={() => handleClick(car.tokenId)}
+                />
               ))}
             </div>
             <div className="mt-8 w-full flex justify-between items-center">
@@ -82,7 +107,6 @@ export const FeaturedCars = ({
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious
-                        size={"default"}
                         onClick={() =>
                           setCurrentPage(Math.max(currentPage - 1, 1))
                         }
@@ -94,9 +118,8 @@ export const FeaturedCars = ({
                       />
                     </PaginationItem>
                     {[...Array(totalPages)].map((_, index) => (
-                      <PaginationItem key={index} className="cursor-pointer ">
+                      <PaginationItem key={index} className="cursor-pointer">
                         <PaginationLink
-                          size={"default"}
                           className="hover:bg-amber-100"
                           onClick={() => setCurrentPage(index + 1)}
                           isActive={currentPage === index + 1}
@@ -107,7 +130,6 @@ export const FeaturedCars = ({
                     ))}
                     <PaginationItem>
                       <PaginationNext
-                        size={"default"}
                         onClick={() =>
                           setCurrentPage(Math.min(currentPage + 1, totalPages))
                         }

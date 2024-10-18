@@ -11,13 +11,12 @@ import {
   UserRoles,
   LiveAuction,
 } from "@/components";
-import { featuredCars } from "@/lib/constants";
 import { TopMechanics } from "@/components/TopMechanics";
 import { useCarStore } from "@/stores/useCarStore";
 
 const ITEMS_PER_PAGE = 8;
 
-const Home = () => {
+const Home: React.FC = () => {
   const { listings, auctions, fetchListings } = useCarStore();
 
   useEffect(() => {
@@ -30,35 +29,38 @@ const Home = () => {
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredCars = useMemo(() => {
-    if (!listings || listings.length === 0) return [];
-
+  const filteredListings = useMemo(() => {
     return listings?.filter((car) => {
-      const matchesSearch = car?.metadata?.name
+      const matchesSearch = car.metadata?.name
         ?.toLowerCase()
-        ?.includes(searchTerm.toLowerCase());
+        .includes(searchTerm.toLowerCase());
       const matchesMake =
         selectedMake === "" ||
-        car?.metadata?.attributes?.find((attr) => attr.trait_type === "Make")
-          ?.value === selectedMake;
+        car.metadata?.attributes
+          ?.find((attr) => attr.trait_type === "Make")
+          ?.value.toLowerCase() === selectedMake.toLowerCase();
       const matchesModel =
         selectedModel === "" ||
-        car?.metadata?.attributes?.find((attr) => attr.trait_type === "Model")
-          ?.value === selectedModel;
+        car.metadata?.attributes
+          ?.find((attr) => attr.trait_type === "Model")
+          ?.value.toLowerCase() === selectedModel.toLowerCase();
+      const carPrice = Number(car.price) / 1e18;
       const matchesPrice =
-        car?.price >= priceRange[0] && car?.price <= priceRange[1];
+        carPrice >= priceRange[0] && carPrice <= priceRange[1];
       return matchesSearch && matchesMake && matchesModel && matchesPrice;
     });
   }, [listings, searchTerm, selectedMake, selectedModel, priceRange]);
 
-  const totalPages = Math.ceil(filteredCars?.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
 
-  const paginatedCars = useMemo(() => {
-    if (!filteredCars || filteredCars?.length === 0) return [];
-
+  const paginatedListings: any = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredCars?.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredCars, currentPage]);
+    return filteredListings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredListings, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedMake, selectedModel, priceRange]);
 
   return (
     <div className="w-screen overflow-x-hidden">
@@ -73,14 +75,14 @@ const Home = () => {
         setSelectedModel={setSelectedModel}
       />
       <FeaturedCars
-        cars={paginatedCars}
+        cars={paginatedListings}
         priceRange={priceRange}
         setPriceRange={setPriceRange}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
         itemsPerPage={ITEMS_PER_PAGE}
-        totalCars={filteredCars.length}
+        totalCars={filteredListings.length}
       />
       <LiveAuction auctions={auctions} />
       <UserRoles />
