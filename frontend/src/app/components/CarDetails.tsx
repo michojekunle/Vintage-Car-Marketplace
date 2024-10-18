@@ -199,7 +199,7 @@ const CarDetails: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <p className="text-lg font-semibold text-gray-700">
-                  Buyout Price: {Number(selectedCar.price) / 1e18} ETH ETH
+                  Buyout Price: {Number(selectedCar.price) / 1e18} ETH
                 </p>
                 <Button
                   className="w-full bg-primary-action text-white"
