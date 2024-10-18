@@ -1,86 +1,102 @@
-import { ethers } from "ethers";
 import { create } from "zustand";
-import { abi as marketplaceAbi } from "@/abi/marketPlace.json";
-import { getProvider } from "@/services/provider";
+import { multicall } from "@wagmi/core";
+import { config } from "@/app/wagmi";
 
-const multicallAbi = [
-  "function tryAggregate(bool requireSuccess, tuple(address target, bytes callData)[] calls) public returns (tuple(bool success, bytes returnData)[])",
-];
+import {
+  VINTAGE_CAR_MARKETPLACE_ABI,
+  VINTAGE_CAR_MARKETPLACE_ADDRESS,
+} from "@/contracts/VintageCarMarketplace";
 
-const MARKETPLACE_ADDRESS = "0x887136e9Db3CDC8C1d45644e48DAD5DcdB71170d";
-const MULTICALL_ADDRESS = "0x7F41b9A82BE6eB20EFD4C1030255FeaE0A442913";
+import {
+  VINTAGE_CAR_NFT_ABI,
+  VINTAGE_CAR_NFT_ADDRESS,
+} from "@/contracts/VintageCarNFT";
+
+const BATCH_SIZE = 1000;
+
+const fetchActiveListings = async (set: (state: Partial<CarStore>) => void) => {
+  try {
+    let allListings: any[] = [];
+    let batch = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      const startIndex = batch * BATCH_SIZE;
+      const marketplaceCalls: any = Array.from(
+        { length: BATCH_SIZE },
+        (_, i) => ({
+          address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
+          abi: VINTAGE_CAR_MARKETPLACE_ABI,
+          functionName: "listings",
+          args: [BigInt(startIndex + i)],
+        })
+      );
+
+      const marketplaceResults: any = await multicall(config, {
+        contracts: marketplaceCalls,
+      });
+
+      const batchListings = marketplaceResults
+        .map((result: any, index: number) => ({
+          tokenId: BigInt(startIndex + index),
+          seller: result.result[1],
+          price: result.result[2],
+          isActive: result.result[3],
+          listingType: Number(result.result[4]),
+        }))
+        .filter((listing: any) => listing.isActive);
+
+      // Fetch metadata for active listings
+      const metadataCalls: any = batchListings.map(
+        (listing: { tokenId: any }) => ({
+          address: VINTAGE_CAR_NFT_ADDRESS,
+          abi: VINTAGE_CAR_NFT_ABI,
+          functionName: "tokenURI",
+          args: [listing.tokenId],
+        })
+      );
+
+      const metadataResults = await multicall(config, {
+        contracts: metadataCalls,
+      });
+
+      const listingsWithMetadata = await Promise.all(
+        batchListings.map(async (listing: { tokenId: any }, index: number) => {
+          const tokenURI: any = metadataResults[index].result;
+          try {
+            const response = await fetch(tokenURI);
+            const metadata = await response.json();
+            return { ...listing, metadata };
+          } catch (error) {
+            console.error(
+              `Error fetching metadata for token ${listing.tokenId}:`,
+              error
+            );
+            return listing;
+          }
+        })
+      );
+
+      allListings = [...allListings, ...listingsWithMetadata];
+
+      if (batchListings.length < BATCH_SIZE) {
+        hasMore = false;
+      }
+
+      batch++;
+    }
+
+    set({ listings: allListings });
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    set({ listings: [] });
+  }
+};
 
 export const useCarStore = create<CarStore>((set) => ({
   selectedCar: null,
   setSelectedCar: (car) => set({ selectedCar: car }),
   listings: [],
   setListings: (listings) => set({ listings }),
-  auctions: [],
-  setAuctions: (auctions) => set({ auctions }),
-  fetchListings: async () => {
-    try {
-      // Use a read-only provider by default
-      const provider = await getProvider(false); // Don't request accounts here
-      const marketplaceContract = new ethers.Contract(
-        MARKETPLACE_ADDRESS,
-        marketplaceAbi,
-        provider
-      );
-      const multicallContract = new ethers.Contract(
-        MULTICALL_ADDRESS,
-        multicallAbi,
-        provider
-      );
-
-      const totalSupply = await marketplaceContract.totalSupply();
-      const calls = [];
-
-      for (let i = 0; i < totalSupply.toNumber(); i++) {
-        calls.push({
-          target: MARKETPLACE_ADDRESS,
-          callData: marketplaceContract.interface.encodeFunctionData(
-            "getListing",
-            [i]
-          ),
-        });
-      }
-
-      const multicallResult = await multicallContract.tryAggregate(
-        false,
-        calls
-      );
-
-      const listings: Listing[] = multicallResult
-        .map((result: any, index: number) => {
-          if (result[0]) {
-            const decodedResult =
-              marketplaceContract.interface.decodeFunctionResult(
-                "getListing",
-                result[1]
-              );
-            return {
-              tokenId: index.toString(),
-              ...decodedResult,
-            };
-          }
-          return null;
-        })
-        .filter(
-          (listing: { isActive: boolean }): listing is Listing =>
-            listing !== null && listing.isActive
-        );
-
-      // auctions
-      const auctionListings = listings.filter(
-        (listing) => listing.listingType === 1
-      );
-
-      set({
-        listings: listings.filter((listing) => listing.listingType === 0),
-      });
-      set({ auctions: auctionListings });
-    } catch (error) {
-      console.error("Failed to fetch listings:", error);
-    }
-  },
+  fetchListings: () => fetchActiveListings(set),
 }));

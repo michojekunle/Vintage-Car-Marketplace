@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 // import { useRouter } from "next/navigation";
-import useServiceStore from "../../../stores/useServiceStore";
+import useServiceStore from "@/stores/useServiceStore";
 
 const MechanicDashboard = () => {
-  const { serviceRequests, fetchServiceRequests, updateServiceRequest } = useServiceStore();
+  const { serviceRequests, fetchServiceRequests, updateServiceRequest } =
+    useServiceStore();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   // const router = useRouter();
@@ -55,12 +56,24 @@ const MechanicDashboard = () => {
         ) : serviceRequests.length > 0 ? (
           serviceRequests.map((request: any) => (
             <div key={request.id} className="p-4 bg-white shadow-md rounded-lg">
-              <h3 className="text-lg font-bold">Service Request for {request.carModel}</h3>
-              <p className="text-gray-600">Service Type: {request.serviceType}</p>
-              <p className="text-gray-600">Proposed Payment: {request.payment} ETH</p>
-              <p className="text-gray-600">Status: {request.isCompleted ? "Completed" : "Pending"}</p>
+              <h3 className="text-lg font-bold">
+                Service Request for {request.carModel}
+              </h3>
+              <p className="text-gray-600">
+                Service Type: {request.serviceType}
+              </p>
+              <p className="text-gray-600">
+                Proposed Payment: {request.payment} ETH
+              </p>
+              <p className="text-gray-600">
+                Status: {request.isCompleted ? "Completed" : "Pending"}
+              </p>
               <Button
-                className={`mt-4 ${request.isCompleted ? "bg-gray-300" : "bg-primary-action text-white"}`}
+                className={`mt-4 ${
+                  request.isCompleted
+                    ? "bg-gray-300"
+                    : "bg-primary-action text-white"
+                }`}
                 onClick={() => handleAcceptRequest(request.id)}
                 disabled={request.isCompleted}
               >

@@ -1,9 +1,9 @@
-'use client'
+"use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
 import { useCarStore } from "@/stores/useCarStore";
-import { OwnCar } from "../../stores/useOwnCarsStore"
+import { OwnCar } from "../../stores/useOwnCarsStore";
 
 const MotionCard = motion(Card);
 
@@ -20,9 +20,11 @@ export const CarCard = ({
   price,
   serviceHistory,
   listed,
-  // onClick,
-}: OwnCar) => {
-  const setSelectedCar = useCarStore((state: { setSelectedCar: any; }) => state.setSelectedCar);
+}: // onClick,
+OwnCar) => {
+  const setSelectedCar = useCarStore(
+    (state: { setSelectedCar: any }) => state.setSelectedCar
+  );
 
   const handleClick = () => {
     setSelectedCar({
@@ -44,7 +46,6 @@ export const CarCard = ({
     //   onClick();
     // }
   };
-  
 
   return (
     <MotionCard

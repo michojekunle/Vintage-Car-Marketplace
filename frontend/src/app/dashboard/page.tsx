@@ -23,12 +23,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     // if (address) {
-      const getAllCars = async () => {
-        const cardata = await getAllcarsDetails();
-        setOwnCars(cardata as any); // Type assertion to fix the type mismatch
-        console.log("from here", cardata);
-      };
-      getAllCars();
+    const getAllCars = async () => {
+      const cardata = await getAllcarsDetails();
+      setOwnCars(cardata as any); // Type assertion to fix the type mismatch
+      console.log("from here", cardata);
+    };
+    getAllCars();
     //   toast.error("Please connect your wallet");
     // }
   }, []);
@@ -36,12 +36,21 @@ export default function Dashboard() {
   return (
     <div className="">
       <div className="container">
-        <Tabs defaultValue="bought" className="text-md font-bold text-left mb-6">
+        <Tabs
+          defaultValue="bought"
+          className="text-md font-bold text-left mb-6"
+        >
           <TabsList className="grid w-[220px] sm:w-[300px] grid-cols-2 mb-10">
-            <TabsTrigger className="text-sm lg:text-md text-left mb-6 " value="bought">
+            <TabsTrigger
+              className="text-sm lg:text-md text-left mb-6 "
+              value="bought"
+            >
               All Cars
             </TabsTrigger>
-            <TabsTrigger className="text-sm lg:text-md text-left mb-6" value="listed">
+            <TabsTrigger
+              className="text-sm lg:text-md text-left mb-6"
+              value="listed"
+            >
               Cars Listed
             </TabsTrigger>
           </TabsList>
@@ -56,9 +65,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2">
                     {ownCars.map((car) => (
                       <div onClick={() => handleClick(car.id)} key={car.id}>
-                        <CarCard
-                          {...car}
-                        />
+                        <CarCard {...car} />
                       </div>
                     ))}
                   </div>
@@ -75,9 +82,7 @@ export default function Dashboard() {
                       .filter((car) => car.listed)
                       .map((car) => (
                         <div onClick={() => handleClick(car.id)} key={car.id}>
-                          <CarCard
-                            {...car}
-                          />
+                          <CarCard {...car} />
                         </div>
                       ))}
                   </div>
@@ -93,4 +98,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-};
+}

@@ -60,7 +60,7 @@ interface INavLinks {
 }
 
 interface IFeatured {
-  cars: ICarCard[];
+  cars: IListing[];
   priceRange: number[];
   setPriceRange: (priceRange: number[]) => void;
   currentPage: number;
@@ -68,7 +68,6 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
-  listings: Listing[];
 }
 
 
@@ -107,11 +106,17 @@ interface IListCarDialog {
 }
 
 interface IListing {
-    tokenId: number
-    seller: string
-    price: number
-    isActive: boolean
-    listingType: number
+  tokenId: number;
+  seller: string;
+  price: number;
+  isActive: boolean;
+  listingType: number;
+  metadata?: {
+    name?: string;
+    description?: string;
+    image?: string;
+    attributes?: Array<{ trait_type: string; value: string }>;
+  };
 }
 
 interface Car {
@@ -130,12 +135,10 @@ interface Car {
 }
 
 interface CarStore {
-  selectedCar: Car | null;
-  setSelectedCar: (car: Car) => void;
-  listings: Listing[];
-  setListings: (listings: Listing[]) => void;
-  auctions: Listing[];
-  setAuctions: (auctions: Listing[]) => void;
+  selectedCar: any | null;
+  setSelectedCar: (car: any) => void;
+  listings: IListing[];
+  setListings: (listings: IListing[]) => void;
   fetchListings: () => Promise<void>;
 }
 
