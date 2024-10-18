@@ -34,7 +34,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="mt-8">
+    <div className="">
       <div className="container">
         <Tabs defaultValue="bought" className="text-md font-bold text-left mb-6">
           <TabsList className="grid w-[220px] sm:w-[300px] grid-cols-2 mb-10">
