@@ -139,8 +139,6 @@ interface CarStore {
   setSelectedCar: (car: any) => void;
   listings: IListing[];
   setListings: (listings: IListing[]) => void;
-  auctions: any[];
-  setAuctions: (auctions: any[]) => void;
   fetchListings: () => Promise<void>;
 }
 

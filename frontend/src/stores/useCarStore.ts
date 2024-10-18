@@ -93,7 +93,5 @@ export const useCarStore = create<CarStore>((set) => ({
   setSelectedCar: (car) => set({ selectedCar: car }),
   listings: [],
   setListings: (listings) => set({ listings }),
-  auctions: [],
-  setAuctions: (auctions) => set({ auctions }),
   fetchListings: () => fetchActiveListings(set),
 }));

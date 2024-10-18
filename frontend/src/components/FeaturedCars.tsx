@@ -87,7 +87,7 @@ export const FeaturedCars: React.FC<IFeatured> = ({
         <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
           Featured Listings
         </h3>
-        {cars && cars.length > 0 ? (
+        {cars && cars?.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
               {cars.map((car) => (
