@@ -91,7 +91,7 @@ export default function UserCarDetail({ tokenId }: { tokenId?: number }) {
       }
     };
     checkCarListed();
-  }, [tokenId, getListing]);
+  }, [tokenId, getListing, address]);
 
   const handleFixedPriceList = async (price: number) => {
     try {
