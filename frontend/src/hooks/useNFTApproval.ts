@@ -10,7 +10,7 @@ import { toast } from "sonner";
 export const CORRECT_CHAIN_ID = 84532;
 
 export function useNFTApproval() {
-  const { address, isConnected, chain } = useAccount();
+  const { isConnected, chain } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { switchChain } = useSwitchChain();
 
@@ -35,7 +35,7 @@ export function useNFTApproval() {
       }
     }
     return true;
-  }, [isConnected, openConnectModal, chain, switchChain, address]);
+  }, [isConnected, openConnectModal, chain, switchChain]);
 
   const wrapWithConnectionAndChainCheck = (writeFunction: any) => {
     return async (...args: any) => {

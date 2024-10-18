@@ -41,15 +41,6 @@ const Sidebar = () => {
         </Link>
         <nav className="flex-1 overflow-y-auto">
           <ul className="p-4 space-y-2">
-            {/* <li>
-							<Link
-								href="/dashboard"
-								className={`flex items-center p-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900 ${pathname === 'your-cars' ? 'bg-amber-100': ''}`}
-							>
-								<Home className="w-5 h-5 mr-3" />
-								Dashboard
-							</Link>
-						</li> */}
             <li>
               <Link
                 href="/dashboard"
