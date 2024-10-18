@@ -181,7 +181,7 @@ We aim to implement a system that tracks all previous ownership, transactions, a
 
 **2. Social Features**
 
-***Follow Sellers:*** Users can follow favorite sellers and mechanics, receiving updates on new listings and auctions.
+***Follow Sellers:*** Users can follow favourite sellers and mechanics, receiving updates on new listings and auctions.
 
 ***Auction Alerts:*** Buyers can set alerts for auctions based on criteria like car model, year, or location.
 
@@ -242,6 +242,37 @@ The following individuals contributed their expertise and time to make this proj
 ***8. Chisom Amadi*** -  [click here](https://github.com/Tchisom17)
 
 ***9. Michael John*** - [click here](https://github.com/Micjohn01)
+
+## Deployed Smart Contract Addresses
+
+**1. Marketplace Contract**
+
+***Contract Name: VintageCarMarketplace***
+
+***Contract Address: 0x6782c1E2bb9fEeD99A4ac155F8521250601b383e***
+
+**2. Auction Contract**
+***Contract Name: NFTAuction***
+
+***Contract Address: 0x54889D2021721c8f979760807dbC4d9FE2617D02***
+
+**3. Vintage Car NFT Contract**
+
+***Contract Name: VintageCarNFT***
+
+***Contract Address: 0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16***
+
+**4. Seller Verification Contract**
+
+***Contract Name: SellerVerification***
+
+***Contract Address: 0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77***
+
+**5. Car Verification Oracle Contract**
+
+***Contract Name: CarVerificationOracle***
+
+***Contract Address: 0xa7E07d5db90FD4F5915dF139F871ADe5B430527c***
 
 ## License
 This project is licensed under the MIT License.
