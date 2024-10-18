@@ -36,10 +36,10 @@ const CarDetails: React.FC = () => {
     );
   }
 
+
   // Early return if not mounted or car details are missing
   if (!isMounted || !selectedCar) return null;
 
-  // Helper function to navigate to the car listing page
   const handleListCarButtonClick = () => {
     router.push("/list-your-car");
   };
@@ -71,7 +71,7 @@ const CarDetails: React.FC = () => {
     await provider.send("eth_requestAccounts", []); // Request access to accounts
     return provider.getSigner(); // Return the signer instance
   };
-  
+
 
   // Buy car function with transaction handling
   const handleBuyNow = async () => {
@@ -164,7 +164,6 @@ const CarDetails: React.FC = () => {
                 <p><strong>Year:</strong> {selectedCar.year}</p>
                 <p className={`flex items-center gap-1`}>
                   <strong>Condition:</strong>{" "}
-
                   <span className={`${textColor}`}>
                     {selectedCar.condition}
                   </span>
@@ -191,37 +190,86 @@ const CarDetails: React.FC = () => {
                 </div>
               </div>
               {selectedCar.listed ? (
-            <div className="border-t border-gray-200 pt-4">
-              <h3 className="text-xl font-semibold text-gray-800">Book a Mechanic</h3>
-              <p className="text-sm text-gray-600">
-                Schedule a service with a verified mechanic on{" "}
-                <Link href={"/"} className="text-primary-action font-semibold">
-                  VintageChain
-                </Link>
-              </p>
-              <Button
-                className="w-full bg-amber-700 text-white mt-2"
-                onClick={() => router.push(`/service/request/${selectedCar.id}`)}
-              >
-                Schedule a Service
-              </Button>
-            </div>
-          ) : (
-            <div className="border-t border-gray-200 pt-4">
-              <h3 className="text-xl font-semibold text-red-600">
-                Service Unavailable
-              </h3>
-              <p className="text-sm text-gray-600">
-                This car is not listed for sale, so mechanic services are unavailable.
-              </p>
-              <Button
-                className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-md hover:bg-primary-action-light"
-                onClick={handleListCarButtonClick}
-              >
-                List Car Now
-              </Button>
-            </div>
-          )}
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="text-xl font-semibold text-gray-800">Book a Mechanic</h3>
+                  <p className="text-sm text-gray-600">
+                    Schedule a service with a verified mechanic on{" "}
+                    <Link href={"/"} className="text-primary-action font-semibold">
+                      VintageChain
+                    </Link>
+                  </p>
+                  <Button
+                    className="w-full bg-amber-700 text-white mt-2"
+                    onClick={() => router.push(`/service/request/${selectedCar.id}`)}
+                  >
+                    Schedule a Service
+                  </Button>
+                </div>
+              ) : (
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="text-xl font-semibold text-red-600">
+                    Service Unavailable
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    This car is not listed for sale, so mechanic services are unavailable.
+                  </p>
+                  <Button
+                    className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-md hover:bg-primary-action-light"
+                    onClick={handleListCarButtonClick}
+                  >
+                    List Car Now
+                  </Button>
+                </div>
+              )}
+              <div className="border-t border-gray-200 pt-4">
+                <h3 className="text-xl font-semibold text-gray-800">
+                  Book a Mechanic
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Schedule a service for your car with a verified mechanic on{" "}
+                  <Link
+                    href={"/"}
+                    className="text-primary-action font-semibold"
+                  >
+                    VintageChain
+                  </Link>
+                </p>
+                <Button
+                  className="w-full bg-amber-700 text-white mt-2"
+                  onClick={() =>
+                    router.push(`/service/request/${selectedCar.id}`)
+                  }
+                >
+                  Schedule a Service
+                </Button>
+                <div className="border-t border-gray-200 pt-2">
+                  <p className="text-sm text-gray-600">
+                    Available Mechanics:
+                  </p>
+                  <ul className="list-disc list-inside">
+                    <li>Mechanic A - $50/hour</li>
+                    <li>Mechanic B - $60/hour</li>
+                    <li>Mechanic C - $55/hour</li>
+                  </ul>
+                </div>
+              </div>
+              : (
+              <div className="border-t border-gray-200 pt-4">
+                <h3 className="text-xl font-semibold text-red-600">
+                  Service Unavailable
+                </h3>
+                <p className="text-sm text-gray-600">
+                  This car is currently not listed for sale, so mechanic
+                  services are unavailable.
+                </p>
+                <Button
+                  className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-full hover:bg-primary-action hover:text-white transition"
+                  onClick={handleListCarButtonClick}
+                >
+                  List Car
+                </Button>
+              </div>
+              )
             </motion.div>
           </div>
         </motion.div>

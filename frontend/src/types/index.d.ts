@@ -16,12 +16,11 @@ interface ICarCard {
   rating: number;
   reviews: number;
   price: number;
+  serviceHistory?: string[]; // Optional service history (e.g., ["Oil change", "Brake replacement"])
+  onClick?: () => void; // Optional onClick handler for car card interaction
+  children?: React.ReactNode; // Include children prop
   condition?: string | undefined;
-  serviceHistory?: string[]; // Optional service history
-  onClick?: () => void;
 }
-
-
 
 interface IAddCarValues {
   make: string;
