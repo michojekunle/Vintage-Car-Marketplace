@@ -20,7 +20,6 @@ export default function Dashboard() {
   };
 
   console.log("from state", ownCars);
-  
 
   useEffect(() => {
     // if (address) {
@@ -38,11 +37,11 @@ export default function Dashboard() {
     <div className="mt-8">
       <div className="container">
         <Tabs defaultValue="bought" className="text-md font-bold text-left mb-6">
-          <TabsList className="grid w-[25%] grid-cols-2 mb-10">
-            <TabsTrigger className="text-md font-bold text-left mb-6" value="bought">
-              Cars Bought
+          <TabsList className="grid w-[220px] sm:w-[300px] grid-cols-2 mb-10">
+            <TabsTrigger className="text-sm lg:text-md text-left mb-6 " value="bought">
+              All Cars
             </TabsTrigger>
-            <TabsTrigger className="text-md font-bold text-left mb-6" value="listed">
+            <TabsTrigger className="text-sm lg:text-md text-left mb-6" value="listed">
               Cars Listed
             </TabsTrigger>
           </TabsList>

@@ -54,9 +54,11 @@ export function useGetOwnedCars() {
           try {
             const response = await axios.get(uri?.result as string);
             const data = response.data;
+		        setCarsLoading(false);
             return formatCarData(allTokensOwned[index], data);
           } catch (error) {
             console.error("Error fetching metadata:", error);
+		        setCarsLoading(false);
             return null;
           }
         })

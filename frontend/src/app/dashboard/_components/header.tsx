@@ -30,9 +30,9 @@ const DashboardHeader = ({ isOpen, toggleSidebar } : { isOpen: boolean, toggleSi
   return (
     <header className="flex items-center justify-between h-16 px-4 bg-white dark:bg-gray-800 shadow-md">
       <div className="flex items-center">
-        <Button variant="ghost" size="icon" className="lg:hidden mr-2">
+        <div className="lg:hidden mr-2">
           <button
-            className="fixed top-4 left-4 z-50 p-2 rounded-md bg-white dark:bg-gray-800 shadow-md"
+            className={`fixed top-3 ${isOpen ? 'left-64 ml-3' : "left-4"} z-50 p-2 rounded-md bg-white dark:bg-gray-800 shadow-md transition `}
             onClick={toggleSidebar}
             aria-label="Toggle Menu"
           >
@@ -42,8 +42,8 @@ const DashboardHeader = ({ isOpen, toggleSidebar } : { isOpen: boolean, toggleSi
               <Menu className="w-6 h-6 text-gray-800 dark:text-gray-200" />
             )}
           </button>
-        </Button>
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+        </div>
+        <h2 className="ml-10 lg:ml-0 text-xl font-semibold text-gray-800 dark:text-gray-200">
           My Cars
         </h2>
       </div>
