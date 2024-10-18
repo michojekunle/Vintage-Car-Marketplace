@@ -15,6 +15,7 @@ import {
 const BATCH_SIZE = 1000;
 
 const fetchActiveListings = async (set: (state: Partial<CarStore>) => void) => {
+  set({ loading: true });
   try {
     let allListings: any[] = [];
     let batch = 0;
@@ -87,9 +88,11 @@ const fetchActiveListings = async (set: (state: Partial<CarStore>) => void) => {
     }
 
     set({ listings: allListings });
+    set({ loading: false });
   } catch (error) {
     console.error("Error fetching listings:", error);
     set({ listings: [] });
+    set({ loading: false });
   }
 };
 
@@ -98,5 +101,7 @@ export const useCarStore = create<CarStore>((set) => ({
   setSelectedCar: (car) => set({ selectedCar: car }),
   listings: [],
   setListings: (listings) => set({ listings }),
+  loading: false,
+  setLoading: (loading) => set({ loading }),
   fetchListings: () => fetchActiveListings(set),
 }));

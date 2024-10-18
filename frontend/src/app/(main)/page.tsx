@@ -17,7 +17,7 @@ import { useCarStore } from "@/stores/useCarStore";
 const ITEMS_PER_PAGE = 8;
 
 const Home: React.FC = () => {
-  const { listings, fetchListings } = useCarStore();
+  const { listings, fetchListings, loading } = useCarStore();
 
   useEffect(() => {
     fetchListings();
@@ -83,6 +83,7 @@ const Home: React.FC = () => {
         totalPages={totalPages}
         itemsPerPage={ITEMS_PER_PAGE}
         totalCars={filteredListings.length}
+        loading={loading}
       />
       <LiveAuction />
       <UserRoles />

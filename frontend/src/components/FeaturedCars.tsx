@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { ArchiveX } from "lucide-react";
+import { ArchiveX, Loader2 } from "lucide-react";
 import { CustomSlider } from "./CustomSlider";
 import {
   Pagination,
@@ -37,6 +37,7 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
+  loading?: boolean;
 }
 
 export const FeaturedCars: React.FC<IFeatured> = ({
@@ -48,6 +49,7 @@ export const FeaturedCars: React.FC<IFeatured> = ({
   totalPages,
   itemsPerPage,
   totalCars,
+  loading,
 }) => {
   const router = useRouter();
 
@@ -87,7 +89,11 @@ export const FeaturedCars: React.FC<IFeatured> = ({
         <h3 className="text-lg lg:text-2xl font-bold mb-5 text-text-header text-center">
           Featured Listings
         </h3>
-        {cars && cars?.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[10vh]">
+            <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
+          </div>
+        ) : cars?.length > 0 && !loading ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
               {cars.map((car) => (
