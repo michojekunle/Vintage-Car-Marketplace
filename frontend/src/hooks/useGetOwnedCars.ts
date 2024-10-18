@@ -3,19 +3,19 @@ import { config } from "@/app/wagmi";
 import { multicall } from "@wagmi/core";
 import axios from "axios";
 import {
-	VINTAGE_CAR_NFT_ABI,
-	VINTAGE_CAR_NFT_ADDRESS,
+  VINTAGE_CAR_NFT_ABI,
+  VINTAGE_CAR_NFT_ADDRESS,
 } from "@/contracts/VintageCarNFT";
+import { formatCarData } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOwnCarStore } from "../../stores/useOwnCarsStore";
+import { useAccount } from "wagmi";
 
-type Attributes = {
-	trait_type: string;
-	value: string;
-};
 const CORRECT_CHAIN_ID = 84532;
 
 export function useGetOwnedCars() {
+  const { address } = useAccount();
+  
 	const setCarsLoading = useOwnCarStore(state => state.setFetchCarsLoading)
 
 	const getAllOwnedTokens = async () => {
@@ -25,7 +25,7 @@ export function useGetOwnedCars() {
 				abi: VINTAGE_CAR_NFT_ABI,
 				address: VINTAGE_CAR_NFT_ADDRESS,
 				functionName: "getNFTsOwnedBy",
-				args: ['0x6c8fcDeb117a1d40Cd2c2eB6ECDa58793FD636b1'],
+				args: [address],
 				chainId: CORRECT_CHAIN_ID,
 			});
 			return result;
@@ -35,65 +35,61 @@ export function useGetOwnedCars() {
 		}
 	};
 
-	const getAllcarsDetails = async () => {
-		const allTokensOwned = (await getAllOwnedTokens()) as [];
-		if (allTokensOwned.length > 0) {
-			const contractsData: any[] = allTokensOwned.map((id) => ({
-				address: VINTAGE_CAR_NFT_ADDRESS,
-				abi: VINTAGE_CAR_NFT_ABI,
-				functionName: "tokenURI",
-				args: [id],
-			}));
+  const getAllcarsDetails = async () => {
+    const allTokensOwned = (await getAllOwnedTokens()) as [];
+    if (allTokensOwned.length > 0) {
+      const contractsData: any[] = allTokensOwned.map((id) => ({
+        address: VINTAGE_CAR_NFT_ADDRESS,
+        abi: VINTAGE_CAR_NFT_ABI,
+        functionName: "tokenURI",
+        args: [id],
+      }));
 
-			const uris = await multicall(config, {
-				contracts: contractsData,
-			});
-			console.log({ uris });
+      const uris = await multicall(config, {
+        contracts: contractsData,
+      });
 
-			const carData = await Promise.all(
-				uris?.map(async (uri, index) => {
-					try {
-						const response = await axios.get(uri?.result as string);
-						const data = response.data;
-                        console.log({data})
-						setCarsLoading(false)
-						return {
-							id: Number(allTokensOwned[index]),
-							name: data.name,
-							make: data.attributes.find(
-								(attribute: Attributes) => attribute.trait_type === "Make"
-							).value,
-							model: data.attributes.find(
-								(attribute: Attributes) => attribute.trait_type === "Model"
-							).value,
-							year: data.attributes.find(
-								(attribute: Attributes) => attribute.trait_type === "Year"
-							).value,
-							image: data.image,
-							exteriorCondition: data.attributes.find(
-								(attribute: Attributes) =>
-									attribute.trait_type === "Exterior Condition"
-							).value,
-							engineCondition: data.attributes.find(
-								(attribute: Attributes) =>
-									attribute.trait_type === "Engine Condition"
-							).value,
-							allImages: data.properties.files,
-						};
-					} catch (error) {
-						setCarsLoading(false)
-						console.error("Error fetching metadata:", error);
-						return null;
-					}
-				})
-			);
-            console.log({carData})
+      const carData = await Promise.all(
+        uris?.map(async (uri, index) => {
+          try {
+            const response = await axios.get(uri?.result as string);
+            const data = response.data;
+            return formatCarData(allTokensOwned[index], data);
+          } catch (error) {
+            console.error("Error fetching metadata:", error);
+            return null;
+          }
+        })
+      );
+      console.log({ carData });
 
-			return carData.filter((car) => car);
-		}
-		setCarsLoading(false)
-		return [];
-	};
+      return carData.filter((car) => car);
+    }
+    return [];
+  };
 
-	return { getAllOwnedTokens, getAllcarsDetails };
+  const getCarDetail = async (tokenId: number) => {
+    if (tokenId >= 0) {
+      const uri = await readContract(config, {
+        address: VINTAGE_CAR_NFT_ADDRESS,
+        abi: VINTAGE_CAR_NFT_ABI,
+        functionName: "tokenURI",
+        args: [tokenId],
+      });
+
+      let carData;
+      try {
+        const response = await axios.get(uri as string);
+        const data = response.data;
+        carData = formatCarData(tokenId, data);
+        return carData;
+      } catch (error) {
+        console.error("Error fetching metadata:", error);
+        return null;
+      }
+    }
+    return [];
+  };
+
+  return { getAllOwnedTokens, getAllcarsDetails, getCarDetail };
 }
