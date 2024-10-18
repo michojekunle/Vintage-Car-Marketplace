@@ -250,9 +250,9 @@
     readable-stream "^3.6.2"
 
 "@metamask/object-multiplex@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@metamask/object-multiplex/-/object-multiplex-2.0.0.tgz"
-  integrity sha512-+ItrieVZie3j2LfYE0QkdW3dsEMfMEp419IGx1zyeLqjRZ14iQUPRO0H6CGgfAAoC0x6k2PfCAGRwJUA9BMrqA==
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@metamask/object-multiplex/-/object-multiplex-2.1.0.tgz"
+  integrity sha512-4vKIiv0DQxljcXwfpnbsXcfa5glMj5Zg9mqn4xpIWqkv6uJ2ma5/GtUfLFSxhlxnR8asRMv8dDmWya1Tc1sDFA==
   dependencies:
     once "^1.4.0"
     readable-stream "^3.6.2"
@@ -300,10 +300,10 @@
   resolved "https://registry.npmjs.org/@metamask/safe-event-emitter/-/safe-event-emitter-3.1.1.tgz"
   integrity sha512-ihb3B0T/wJm1eUuArYP4lCTSEoZsClHhuWyfo/kMX3m/odpqNcPfsz5O2A3NT7dXCAgWPGDQGPqygCpgeniKMw==
 
-"@metamask/sdk-communication-layer@0.28.2":
-  version "0.28.2"
-  resolved "https://registry.npmjs.org/@metamask/sdk-communication-layer/-/sdk-communication-layer-0.28.2.tgz"
-  integrity sha512-kGx6qgP482DecPILnIS38bgxIjNransR3/Jh5Lfg9BXJLaXpq/MEGrjHGnJHAqCyfRymnd5cgexHtXJvQtRWQA==
+"@metamask/sdk-communication-layer@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.npmjs.org/@metamask/sdk-communication-layer/-/sdk-communication-layer-0.29.2.tgz"
+  integrity sha512-Xfa1DXOg0bfvMqXa3o/Y43bm2kHYyD4YdR0XiuhL70NJzPcUPM53I1O7aSg83ogRHsHI4LM7dEEMEo6w6uQgdg==
   dependencies:
     bufferutil "^4.0.8"
     date-fns "^2.29.3"
@@ -311,22 +311,22 @@
     utf-8-validate "^5.0.2"
     uuid "^8.3.2"
 
-"@metamask/sdk-install-modal-web@0.28.1":
-  version "0.28.1"
-  resolved "https://registry.npmjs.org/@metamask/sdk-install-modal-web/-/sdk-install-modal-web-0.28.1.tgz"
-  integrity sha512-mHkIjWTpYQMPDMtLEEtTVXhae4pEjy7jDBfV7497L0U3VCPQrBl/giZBwA6AgKEX1emYcM2d1WRHWR9N4YhyJA==
+"@metamask/sdk-install-modal-web@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.npmjs.org/@metamask/sdk-install-modal-web/-/sdk-install-modal-web-0.29.2.tgz"
+  integrity sha512-AOiRpv0pIxIyWYTuBWRymdTVwdZrsVNGNFv0I7RlBU0s1hQ6lapEq2eeIv30d9E88mS/DI6F3R0ArSg0So7W2g==
   dependencies:
     qr-code-styling "^1.6.0-rc.1"
 
-"@metamask/sdk@0.28.4":
-  version "0.28.4"
-  resolved "https://registry.npmjs.org/@metamask/sdk/-/sdk-0.28.4.tgz"
-  integrity sha512-RjWBKPNesjeua2SXIDF9IvYALOSsOQyqHv5DPPK0Voskytk7y+2n/33ocbC1BH5hTLI4hDPH+BuCpXJRWs3/Yg==
+"@metamask/sdk@0.29.2":
+  version "0.29.2"
+  resolved "https://registry.npmjs.org/@metamask/sdk/-/sdk-0.29.2.tgz"
+  integrity sha512-2BqKTMelIK2i+HjqzOmfN02Bfp3fyOOlqj812q/i7+RfQeNmwGBxoSvsd/rsoT00VmYymzDyY8kWFR84+/i2Tw==
   dependencies:
     "@metamask/onboarding" "^1.0.1"
     "@metamask/providers" "16.1.0"
-    "@metamask/sdk-communication-layer" "0.28.2"
-    "@metamask/sdk-install-modal-web" "0.28.1"
+    "@metamask/sdk-communication-layer" "0.29.2"
+    "@metamask/sdk-install-modal-web" "0.29.2"
     "@types/dom-screen-wake-lock" "^1.0.0"
     "@types/uuid" "^10.0.0"
     bowser "^2.9.0"
@@ -1713,20 +1713,20 @@
   resolved "https://registry.npmjs.org/@vanilla-extract/sprinkles/-/sprinkles-1.6.3.tgz"
   integrity sha512-oCHlQeYOBIJIA2yWy2GnY5wE2A7hGHDyJplJo4lb+KEIBcJWRnDJDg8ywDwQS5VfWJrBBO3drzYZPFpWQjAMiQ==
 
-"@wagmi/connectors@5.1.15":
-  version "5.1.15"
-  resolved "https://registry.npmjs.org/@wagmi/connectors/-/connectors-5.1.15.tgz"
-  integrity sha512-Bz5EBpn8hAYFuxCWoXviwABk2VlLRuQTpJ7Yd/hu4HuuXnTdCN27cfvT+Fy2sWbwpLnr1e29LJGAUCIyYkHz7g==
+"@wagmi/connectors@5.2.0":
+  version "5.2.0"
+  resolved "https://registry.npmjs.org/@wagmi/connectors/-/connectors-5.2.0.tgz"
+  integrity sha512-djj4vhGdc0wslD2q3jj4myojQJdHssgUJ3WEicYhuLRlBH4yssWclt4QUKGbLoaNE/ciJMKa2Qe2bLx5Vo+urg==
   dependencies:
     "@coinbase/wallet-sdk" "4.0.4"
-    "@metamask/sdk" "0.28.4"
+    "@metamask/sdk" "0.29.2"
     "@safe-global/safe-apps-provider" "0.18.3"
     "@safe-global/safe-apps-sdk" "9.1.0"
     "@walletconnect/ethereum-provider" "2.17.0"
     "@walletconnect/modal" "2.7.0"
     cbw-sdk "npm:@coinbase/wallet-sdk@3.9.3"
 
-"@wagmi/core@2.13.8":
+"@wagmi/core@^2.13.8", "@wagmi/core@2.13.8":
   version "2.13.8"
   resolved "https://registry.npmjs.org/@wagmi/core/-/core-2.13.8.tgz"
   integrity sha512-bX84cpLq3WWQgGthJlSgcWPAOdLzrP/W0jnbz5XowkCUn6j/T77WyxN5pBb+HmLoJf3ei9tkX9zWhMpczTc3cA==
@@ -4993,9 +4993,9 @@ postcss@^8, postcss@^8.4.23:
     source-map-js "^1.2.1"
 
 preact@^10.16.0:
-  version "10.24.2"
-  resolved "https://registry.npmjs.org/preact/-/preact-10.24.2.tgz"
-  integrity sha512-1cSoF0aCC8uaARATfrlz4VCBqE8LwZwRfLgkxJOQwAlQt6ayTmi0D9OF7nXid1POI5SZidFuG9CnlXbDfLqY/Q==
+  version "10.24.3"
+  resolved "https://registry.npmjs.org/preact/-/preact-10.24.3.tgz"
+  integrity sha512-Z2dPnBnMUfyQfSQ+GBdsGa16hz35YmLmtTLhM169uW944hYL6xzTYkJjC07j+Wosz733pMWx0fgON3JNw1jJQA==
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -5050,13 +5050,13 @@ punycode@^2.1.0:
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
 qr-code-styling@^1.6.0-rc.1:
-  version "1.6.0-rc.1"
-  resolved "https://registry.npmjs.org/qr-code-styling/-/qr-code-styling-1.6.0-rc.1.tgz"
-  integrity sha512-ModRIiW6oUnsP18QzrRYZSc/CFKFKIdj7pUs57AEVH20ajlglRpN3HukjHk0UbNMTlKGuaYl7Gt6/O5Gg2NU2Q==
+  version "1.7.2"
+  resolved "https://registry.npmjs.org/qr-code-styling/-/qr-code-styling-1.7.2.tgz"
+  integrity sha512-/D1nzJHOlALJ0ePYg25oO/yEAb4FaWOfW/R05It2h4nxojND0bc3dUNOGFT+bI6vlzR7mtqcS3i/ycc6w1MyAA==
   dependencies:
-    qrcode-generator "^1.4.3"
+    qrcode-generator "^1.4.4"
 
-qrcode-generator@^1.4.3:
+qrcode-generator@^1.4.4:
   version "1.4.4"
   resolved "https://registry.npmjs.org/qrcode-generator/-/qrcode-generator-1.4.4.tgz"
   integrity sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==
@@ -6016,7 +6016,6 @@ uuid@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npmjs.org/uuid/-/uuid-10.0.0.tgz"
   integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
-
 uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
@@ -6060,7 +6059,7 @@ wagmi@^2.12.17:
   resolved "https://registry.npmjs.org/wagmi/-/wagmi-2.12.17.tgz"
   integrity sha512-WkofyvOX6XGOXrs8W0NvnzbLGIb9Di8ECqpMDW32nqwTKRxfolfN4GI/AlAMs9fjx4h3k8LGTfqa6UGLb063yg==
   dependencies:
-    "@wagmi/connectors" "5.1.15"
+    "@wagmi/connectors" "5.2.0"
     "@wagmi/core" "2.13.8"
     use-sync-external-store "1.2.0"
 
