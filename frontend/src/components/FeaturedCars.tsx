@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { ArchiveX, Loader } from "lucide-react"; // Import Loader icon
 import { ethers } from "ethers";
 import Image from "next/image";
 import ABI from '../ABIs/vintageCarNFTContractABI.json';
-
+import { CustomSlider } from "./CustomSlider";
+import { useOwnCarStore } from "../../stores/useOwnCarsStore";
 import {
   Pagination,
   PaginationContent,
@@ -47,6 +49,7 @@ export const FeaturedCars = ({
   totalPages,
   itemsPerPage,
   totalCars,
+  listings,
 }: IFeatured) => {
   const router = useRouter();
   const [nfts, setNfts] = useState<NFT[]>([]);
@@ -98,6 +101,10 @@ export const FeaturedCars = ({
     }
   };
   
+  const ownCars = useOwnCarStore((state) => state.ownCars);
+
+  console.log({ listings });
+
 
   const handleClick = (id: number) => {
     router.push(`/car-details/?id=${id}`);
@@ -174,7 +181,14 @@ export const FeaturedCars = ({
                   <p className="text-gray-600">{nft.description}</p>
                 </CarCard>
               ))}
-
+<!--             {ownCars.map((car) => (
+                      <div onClick={() => handleClick(car.id)} key={car.id}>
+                        <CarCard
+                          {...car}
+                        />
+                      </div>
+                    ))}
+ -->
             </div>
             <div className="mt-8 w-full flex justify-between items-center">
               <p className="text-sm text-gray-600 mb-4">

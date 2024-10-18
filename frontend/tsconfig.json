@@ -4,6 +4,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./node_modules/wagmi"],
+    "target": "es2015",
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -23,6 +24,13 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/uploadToIPFS.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "scripts/uploadToIPFS.js",
+    "src/services/market-place.js"
+  ],
   "exclude": ["node_modules"]
 }

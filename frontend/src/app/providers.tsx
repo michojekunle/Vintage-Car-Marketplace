@@ -17,7 +17,7 @@ export function Providers({ children }: Readonly<IProviders>) {
           modalSize="compact"
           theme={lightTheme({
             accentColor: "#f59e0b",
-            accentColorForeground: "black",
+            accentColorForeground: "#ffffff",
             borderRadius: "small",
             fontStack: "system",
             overlayBlur: "small",

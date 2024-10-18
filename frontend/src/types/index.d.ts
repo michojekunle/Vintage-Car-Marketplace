@@ -16,13 +16,11 @@ interface ICarCard {
   rating: number;
   reviews: number;
   price: number;
-  condition?: string; // Optional condition (e.g., "New", "Used")
   serviceHistory?: string[]; // Optional service history (e.g., ["Oil change", "Brake replacement"])
   onClick?: () => void; // Optional onClick handler for car card interaction
   children?: React.ReactNode; // Include children prop
+  condition?: string | undefined;
 }
-
-
 
 interface IAddCarValues {
   make: string;
@@ -70,6 +68,7 @@ interface IFeatured {
   totalPages: number;
   itemsPerPage: number;
   totalCars: number;
+  listings: Listing[];
 }
 
 
@@ -103,5 +102,56 @@ interface IListCarDialog {
   isDialogOpen: boolean;
   onSubmit: (values: ListCarFormValues) => void;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
   form: UseFormReturn<ListCarFormValues, undefined>;
+}
+
+interface IListing {
+    tokenId: number
+    seller: string
+    price: number
+    isActive: boolean
+    listingType: number
+}
+
+interface Car {
+  id: number;
+  listed: boolean;
+  name: string;
+  make: string;
+  model: string;
+  year: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  image: string;
+  condition: string | undefined;
+  serviceHistory?: string[] | null; // Array of strings to represent service records
+}
+
+interface CarStore {
+  selectedCar: Car | null;
+  setSelectedCar: (car: Car) => void;
+  listings: Listing[];
+  setListings: (listings: Listing[]) => void;
+  auctions: Listing[];
+  setAuctions: (auctions: Listing[]) => void;
+  fetchListings: () => Promise<void>;
+}
+
+enum ListingType {
+  FixedPrice,
+  Auction,
+}
+
+interface Listing {
+  tokenId: string;
+  seller: string;
+  price: any;
+  isActive: boolean;
+  listingType: ListingType;
+}
+
+interface ILiveAuction {
+  auctions: Listing[];
 }
