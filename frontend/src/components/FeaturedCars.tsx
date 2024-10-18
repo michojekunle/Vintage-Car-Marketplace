@@ -27,7 +27,7 @@ export const FeaturedCars = ({
   listings,
 }: IFeatured) => {
   const route = useRouter();
-  const ownCars = useOwnCarStore((state) => state.ownCars);
+  // const ownCars = useOwnCarStore((state) => state.ownCars);
 
   console.log({ listings });
 
@@ -70,7 +70,7 @@ export const FeaturedCars = ({
         {cars.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-              {ownCars.map((car) => (
+              {cars.map((car) => (
                 <div onClick={() => handleClick(car.id)} key={car.id}>
                   <CarCard {...car} />
                 </div>

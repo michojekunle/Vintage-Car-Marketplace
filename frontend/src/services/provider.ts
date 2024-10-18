@@ -6,8 +6,6 @@ export const getProvider = async () => {
     return new ethers.BrowserProvider(window.ethereum);
   } else {
     // Fallback to a read-only provider
-    return new ethers.JsonRpcProvider(
-      process.env.NEXT_PUBLIC_JSON_RPC_PROVIDER
-    );
+    return new ethers.JsonRpcProvider(process.env.JSON_RPC_PROVIDER);
   }
 };
