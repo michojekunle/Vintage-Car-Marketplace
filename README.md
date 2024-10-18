@@ -127,7 +127,7 @@ The platform features a robust **reputation system** that tracks ratings and rev
 
 #### Blockchain Layer
 
-***Blockchain Protocol:*** Lisk is used for minting NFTs, managing transactions, and executing smart contracts.
+***Blockchain Protocol:*** Base is used for minting NFTs, managing transactions, and executing smart contracts.
 
 ***Smart Contracts:*** Written in **Solidity,** these contracts handle the auction system, payment processes, and NFT creation and ownership transfers.
 
@@ -198,19 +198,13 @@ We aim to implement a system that tracks all previous ownership, transactions, a
 **Steps to Install**
 
     1. Clone the repository:
-       bash
-       Copy code
        git clone https://github.com/michojekunle/Vintage-Car-Marketplace.git
 
     2. Install dependencies:
-       bash
-       Copy code
        cd vintage-car-marketplace
        npm install
 
     3. Start the application:
-       bash
-       Copy code
        npm run dev
 
 ## Contributions
@@ -249,30 +243,30 @@ The following individuals contributed their expertise and time to make this proj
 
 ***Contract Name: VintageCarMarketplace***
 
-***Contract Address: 0x6782c1E2bb9fEeD99A4ac155F8521250601b383e***
+***Contract Address: [0x6782c1E2bb9fEeD99A4ac155F8521250601b383e](https://sepolia.basescan.org/address/0x6782c1E2bb9fEeD99A4ac155F8521250601b383e)***
 
 **2. Auction Contract**
 ***Contract Name: NFTAuction***
 
-***Contract Address: 0x54889D2021721c8f979760807dbC4d9FE2617D02***
+***Contract Address: [0x54889D2021721c8f979760807dbC4d9FE2617D02](https://sepolia.basescan.org/address/0x54889D2021721c8f979760807dbC4d9FE2617D02)***
 
 **3. Vintage Car NFT Contract**
 
 ***Contract Name: VintageCarNFT***
 
-***Contract Address: 0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16***
+***Contract Address: [0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16](https://sepolia.basescan.org/address/0x9E2f97f35fB9ab4CFe00B45bEa3c47164Fff1C16)***
 
 **4. Seller Verification Contract**
 
 ***Contract Name: SellerVerification***
 
-***Contract Address: 0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77***
+***Contract Address: [0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77](https://sepolia.basescan.org/address/0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77#code)***
 
 **5. Car Verification Oracle Contract**
 
 ***Contract Name: CarVerificationOracle***
 
-***Contract Address: 0xa7E07d5db90FD4F5915dF139F871ADe5B430527c***
+***Contract Address: [0xa7E07d5db90FD4F5915dF139F871ADe5B430527c](https://sepolia.basescan.org/address/0xa7E07d5db90FD4F5915dF139F871ADe5B430527c)***
 
 ## License
 This project is licensed under the MIT License.
