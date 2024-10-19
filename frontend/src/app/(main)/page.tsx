@@ -44,18 +44,19 @@ const Home: React.FC = () => {
         car.metadata?.attributes
           ?.find((attr) => attr.trait_type === "Model")
           ?.value.toLowerCase() === selectedModel.toLowerCase();
-      const carPrice = Number(car.price) / 1e18;
+      const carPrice =
+        Number(car?.price) / 1e18 || Number(car?.startingPrice) / 1e18;
       const matchesPrice =
         carPrice >= priceRange[0] && carPrice <= priceRange[1];
       return matchesSearch && matchesMake && matchesModel && matchesPrice;
     });
   }, [listings, searchTerm, selectedMake, selectedModel, priceRange]);
 
-  const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredListings?.length / ITEMS_PER_PAGE);
 
   const paginatedListings: any = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredListings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    return filteredListings?.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredListings, currentPage]);
 
   useEffect(() => {
@@ -82,7 +83,7 @@ const Home: React.FC = () => {
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
         itemsPerPage={ITEMS_PER_PAGE}
-        totalCars={filteredListings.length}
+        totalCars={filteredListings?.length}
         loading={loading}
       />
       <LiveAuction />

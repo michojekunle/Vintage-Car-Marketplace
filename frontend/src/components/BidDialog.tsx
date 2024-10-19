@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { parseEther } from "viem";
 
 export const BidDialog = ({ auction }: any) => {
-  const [bidAmount, setBidAmount] = useState("");
+  const [bidAmount, setBidAmount] = useState<any>("");
   const [isLoading, setIsLoading] = useState(false);
   const { placeBid } = useAuctionStore();
   const { address } = useAccount();

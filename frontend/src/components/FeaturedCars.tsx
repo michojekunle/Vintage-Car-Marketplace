@@ -18,6 +18,7 @@ interface Listing {
   tokenId: bigint;
   seller: string;
   price: bigint;
+  startingPrice: bigint;
   isActive: boolean;
   listingType: number;
   metadata?: {

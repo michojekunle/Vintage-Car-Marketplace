@@ -107,7 +107,8 @@ interface IListCarDialog {
 interface IListing {
   tokenId: number;
   seller: string;
-  price: number;
+  price: bigint;
+  startingPrice: bigint;
   isActive: boolean;
   listingType: number;
   metadata?: {
