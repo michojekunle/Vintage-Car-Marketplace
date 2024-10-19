@@ -62,7 +62,7 @@ export const HomeCarCard: React.FC<ICarCard> = ({ car, onClick }) => {
           {getAttributeValue("Year")}
         </p>
         <p className="text-primary-action font-bold">
-          {Number(car?.price) / 1e18} ETH
+          {Number(car?.price) / 1e18 || Number(car?.startingPrice) / 1e18} ETH
         </p>
       </div>
       <p

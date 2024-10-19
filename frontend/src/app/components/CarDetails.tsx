@@ -10,6 +10,8 @@ import { ethers } from "ethers";
 import { useCarStore } from "@/stores/useCarStore";
 import Link from "next/link";
 import carMarketplaceAbi from "../../ABIs/marketPlaceContractABI.json";
+import BidDialog from "@/components/BidDialog";
+import CountdownTimer from "@/components/CountdownTimer";
 
 // Use the contract address from environment variables
 const CONTRACT_ADDRESS = "0x6782c1E2bb9fEeD99A4ac155F8521250601b383e";
@@ -96,30 +98,6 @@ const CarDetails: React.FC = () => {
     }
   };
 
-  // Place a bid on the car with user input
-  const handlePlaceBid = async () => {
-    const bidAmount = prompt("Enter your bid amount in ETH:");
-    if (!bidAmount) return;
-
-    try {
-      const signer = await getSigner();
-      const contract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        carMarketplaceAbi,
-        signer
-      );
-      const tx = await contract.placeBid(selectedCar.id, {
-        value: ethers.parseEther(bidAmount),
-      });
-
-      await tx.wait();
-      alert("Bid placed successfully!");
-    } catch (error) {
-      console.error("Failed to place a bid:", error);
-      alert("Transaction failed. Please try again.");
-    }
-  };
-
   const getAttributeValue = (traitType: string) => {
     const attribute = selectedCar?.metadata?.attributes?.find(
       (attr: { trait_type: string }) => attr.trait_type === traitType
@@ -174,7 +152,7 @@ const CarDetails: React.FC = () => {
                 {selectedCar?.metadata?.name}
               </h2>
               <p className="text-2xl text-primary-action font-bold">
-                {Number(selectedCar.price) / 1e18} ETH
+                {Number(selectedCar?.startingPrice) / 1e18} ETH
               </p>
               <div className="text-sm text-gray-600">
                 <p>
@@ -199,7 +177,7 @@ const CarDetails: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <p className="text-lg font-semibold text-gray-700">
-                  Buyout Price: {Number(selectedCar.price) / 1e18} ETH
+                  Buyout Price: {Number(selectedCar?.buyoutPrice) / 1e18} ETH
                 </p>
                 <Button
                   className="w-full bg-primary-action text-white"
@@ -207,17 +185,25 @@ const CarDetails: React.FC = () => {
                 >
                   Buy Now
                 </Button>
-                <div className="border-t border-gray-200 pt-2">
-                  <p className="text-lg font-semibold text-gray-700">
-                    Auction Ends In: 2 days 14 hrs
-                  </p>
-                  <Button
-                    className="w-full bg-amber-500 text-white"
-                    onClick={handlePlaceBid}
-                  >
-                    Place a Bid
-                  </Button>
-                </div>
+                {/* auction section */}
+
+                {selectedCar?.active && (
+                  <div className="border-t border-gray-200 pt-2">
+                    <div className="text-lg font-semibold text-gray-700">
+                      Auction Ends In:{" "}
+                      <CountdownTimer
+                        initialTime={selectedCar?.auctionEndTime.toString()}
+                      />
+                    </div>
+
+                    <p className="font-semibold text-lg py-3 text-gray-700">
+                      Current Bid:{" "}
+                      {(Number(selectedCar?.highestBid) / 1e18).toFixed(2)} ETH
+                    </p>
+
+                    <BidDialog auction={selectedCar} />
+                  </div>
+                )}
               </div>
               {selectedCar.listed ? (
                 <div className="border-t border-gray-200 pt-4">

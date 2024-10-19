@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { multicall } from "@wagmi/core";
+import {
+  multicall,
+  writeContract,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { config } from "@/app/wagmi";
 
 import {
@@ -14,7 +18,7 @@ import {
 
 const BATCH_SIZE = 100;
 
-interface IAuction {
+export interface IAuction {
   tokenId: bigint;
   seller: string;
   startingPrice: bigint;
@@ -35,12 +39,19 @@ interface AuctionStore {
   auctions: IAuction[];
   setAuctions: (auctions: IAuction[]) => void;
   fetchAuctions: () => Promise<void>;
-  placeBid: (tokenId: bigint, amount: bigint) => Promise<void>;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  placeBid: (
+    tokenId: bigint,
+    amount: any,
+    address: `0x${string}`
+  ) => Promise<void>;
 }
 
 const fetchActiveAuctions = async (
   set: (state: Partial<AuctionStore>) => void
 ) => {
+  set({ loading: true });
   try {
     let allAuctions: IAuction[] = [];
     let batch = 0;
@@ -111,9 +122,11 @@ const fetchActiveAuctions = async (
     }
 
     set({ auctions: allAuctions });
+    set({ loading: false });
   } catch (error) {
     console.error("Error fetching auctions:", error);
     set({ auctions: [] });
+    set({ loading: false });
   }
 };
 
@@ -121,12 +134,32 @@ export const useAuctionStore = create<AuctionStore>((set) => ({
   auctions: [],
   setAuctions: (auctions) => set({ auctions }),
   fetchAuctions: () => fetchActiveAuctions(set),
-  placeBid: async (tokenId, amount) => {
+  loading: false,
+  setLoading: (loading) => set({ loading }),
+  placeBid: async (tokenId, amount, bidderAddress) => {
     try {
-      console.log(`Placing bid of ${amount} on token ${tokenId}`);
+      if (!bidderAddress) {
+        throw new Error("Bidder address is required");
+      }
+
+      const { hash }: any = await writeContract(config, {
+        address: VINTAGE_CAR_AUCTION_ADDRESS,
+        abi: VINTAGE_CAR_AUCTION_ABI,
+        functionName: "placeBid",
+        args: [tokenId],
+        value: amount,
+        account: bidderAddress,
+      });
+
+      await waitForTransactionReceipt(config, { hash });
+
+      console.log(
+        `Bid placed successfully for token ${tokenId} by ${bidderAddress}`
+      );
       await fetchActiveAuctions(set);
     } catch (error) {
       console.error("Error placing bid:", error);
+      throw error;
     }
   },
 }));

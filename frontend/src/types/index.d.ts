@@ -70,7 +70,6 @@ interface IFeatured {
   totalCars: number;
 }
 
-
 interface IFilterCar {
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
@@ -108,7 +107,8 @@ interface IListCarDialog {
 interface IListing {
   tokenId: number;
   seller: string;
-  price: number;
+  price: bigint;
+  startingPrice: bigint;
   isActive: boolean;
   listingType: number;
   metadata?: {
@@ -139,6 +139,8 @@ interface CarStore {
   setSelectedCar: (car: any) => void;
   listings: IListing[];
   setListings: (listings: IListing[]) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
   fetchListings: () => Promise<void>;
 }
 
