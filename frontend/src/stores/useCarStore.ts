@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { multicall } from "@wagmi/core";
+import {
+  multicall,
+  readContract,
+  waitForTransactionReceipt,
+  writeContract,
+} from "@wagmi/core";
 import { config } from "@/app/wagmi";
 
 import {
@@ -136,4 +141,56 @@ export const useCarStore = create<CarStore>((set) => ({
   loading: false,
   setLoading: (loading) => set({ loading }),
   fetchListings: () => fetchActiveListings(set),
+  buyCar: async (tokenId, amount, buyer) => {
+    try {
+      if (!buyer) {
+        throw new Error("Buyer address is required");
+      }
+
+      // Check if the listing exists and is active
+      const listing: any = await readContract(config, {
+        address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
+        abi: VINTAGE_CAR_MARKETPLACE_ABI,
+        functionName: "getListing",
+        args: [tokenId],
+      });
+
+      console.log({ listing });
+
+      if (!listing || !listing.isActive) {
+        throw new Error("Listing is not active");
+      }
+
+      // if (listing.listingType !== 0) {
+      //   throw new Error("Not a fixed price listing");
+      // }
+
+      if (amount < listing.price) {
+        throw new Error("Insufficient payment");
+      }
+
+      const { hash }: any = await writeContract(config, {
+        address: VINTAGE_CAR_MARKETPLACE_ADDRESS,
+        abi: VINTAGE_CAR_MARKETPLACE_ABI,
+        functionName: "buyCar",
+        args: [tokenId],
+        value: amount,
+        account: buyer,
+      });
+
+      await waitForTransactionReceipt(config, { hash });
+      console.log(`Car purchased successfully by ${buyer}`);
+
+      if (amount > listing.price) {
+        console.log(
+          `Excess payment of ${amount - listing.price} wei will be refunded`
+        );
+      }
+
+      await fetchActiveListings(set);
+    } catch (error) {
+      console.error("Error buying car:", error);
+      throw error;
+    }
+  },
 }));

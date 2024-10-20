@@ -39,42 +39,41 @@ export const LiveAuction: React.FC = () => {
           <div className="flex justify-center items-center min-h-[10vh]">
             <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
           </div>
-        ) : (
+        ) : auctions && auctions?.length > 0 ? (
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {auctions && auctions?.length > 0 ? (
-              auctions?.map((auction) => (
-                <MotionCard
-                  key={auction.tokenId.toString()}
-                  className="overflow-hidden"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <CardHeader>
-                    <div className="flex items-center justify-between gap-3">
-                      <CardTitle className="text-base capitalize">
-                        {auction?.metadata?.name || `Car #${auction?.tokenId}`}
-                      </CardTitle>
-                      <CountdownTimer
-                        initialTime={auction.auctionEndTime.toString()}
-                      />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <Image
-                      src={auction.metadata?.image || "/placeholder-image.jpg"}
-                      alt={auction.metadata?.name || "Car image"}
-                      width={300}
-                      height={200}
-                      className="w-full h-48 object-cover mb-4"
+            {auctions?.map((auction) => (
+              <MotionCard
+                key={auction.tokenId.toString()}
+                className="overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-3">
+                    <CardTitle className="text-base capitalize">
+                      {auction?.metadata?.name || `Car #${auction?.tokenId}`}
+                    </CardTitle>
+                    <CountdownTimer
+                      initialTime={auction.auctionEndTime.toString()}
                     />
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="font-semibold">Current Bid</span>
-                      <span>
-                        {(Number(auction.highestBid) / 1e18).toFixed(2)} ETH
-                      </span>
-                    </div>
-                  </CardContent>
-                  {/* <CardFooter>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Image
+                    src={auction.metadata?.image || "/placeholder-image.jpg"}
+                    alt={auction.metadata?.name || "Car image"}
+                    width={300}
+                    height={200}
+                    className="w-full h-48 object-cover mb-4"
+                  />
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="font-semibold">Current Bid</span>
+                    <span>
+                      {(Number(auction.highestBid) / 1e18).toFixed(2)} ETH
+                    </span>
+                  </div>
+                </CardContent>
+                {/* <CardFooter>
                   <Button
                     className="w-full bg-secondary-action"
                     onClick={() =>
@@ -84,19 +83,18 @@ export const LiveAuction: React.FC = () => {
                     <Gavel className="mr-2 h-4 w-4" /> Place Bid
                   </Button>
                 </CardFooter> */}
-                  <CardFooter>
-                    <BidDialog auction={auction} />
-                  </CardFooter>
-                </MotionCard>
-              ))
-            ) : (
-              <div className="flex flex-col gap-2 items-center self-center">
-                <ArchiveX size={44} className="text-red-400" />
-                <p className="text-center text-lg font-medium text-text-body">
-                  No cars found.
-                </p>
-              </div>
-            )}
+                <CardFooter>
+                  <BidDialog auction={auction} />
+                </CardFooter>
+              </MotionCard>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2 items-center self-center">
+            <ArchiveX size={44} className="text-red-400" />
+            <p className="text-center text-lg font-medium text-text-body">
+              No cars found.
+            </p>
           </div>
         )}
       </div>

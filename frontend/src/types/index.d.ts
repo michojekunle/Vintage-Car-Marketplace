@@ -142,6 +142,11 @@ interface CarStore {
   loading: boolean;
   setLoading: (loading: boolean) => void;
   fetchListings: () => Promise<void>;
+  buyCar: (
+    tokenId: bigint,
+    amount: bigint,
+    buyer: `0x${string}`
+  ) => Promise<void>;
 }
 
 enum ListingType {

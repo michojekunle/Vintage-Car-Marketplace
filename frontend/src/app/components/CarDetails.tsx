@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Verified, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ethers } from "ethers";
+import { useAccount } from "wagmi";
 import { useCarStore } from "@/stores/useCarStore";
 import Link from "next/link";
-import carMarketplaceAbi from "../../ABIs/marketPlaceContractABI.json";
 import BidDialog from "@/components/BidDialog";
 import CountdownTimer from "@/components/CountdownTimer";
+import { toast } from "sonner";
 
 // Use the contract address from environment variables
-const CONTRACT_ADDRESS = "0x6782c1E2bb9fEeD99A4ac155F8521250601b383e";
 
 const CarDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-  const { selectedCar } = useCarStore();
+  const { selectedCar, buyCar } = useCarStore();
+  const { address } = useAccount();
   const router = useRouter();
 
   // Manage the component's mounted state and loading animation
@@ -63,38 +63,28 @@ const CarDetails: React.FC = () => {
 
   const { textColor, iconColor } = getConditionStyles(selectedCar.condition);
 
-  // Helper function to get the signer from the user's wallet
-  const getSigner = async () => {
-    if (!window.ethereum) {
-      throw new Error("MetaMask is not installed.");
-    }
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    await provider.send("eth_requestAccounts", []); // Request access to accounts
-    return provider.getSigner(); // Return the signer instance
-  };
-
-  // Buy car function with transaction handling
+  const price = selectedCar.buyoutPrice || selectedCar.price;
   const handleBuyNow = async () => {
+    if (!address) {
+      toast.error("Please connect your wallet to purchase this car.");
+      return;
+    }
+    setLoading(true);
     try {
-      const signer = await getSigner();
-      const contract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        carMarketplaceAbi,
-        signer
+      const transaction: any = await buyCar(
+        selectedCar.tokenId,
+        price,
+        address
       );
-      const tx = await contract.buyCar(selectedCar.id, {
-        value: ethers.parseEther(selectedCar.price.toString()),
-      });
-      // const gasEstimate = await contract.estimateGas.buyCar(selectedCar.id, {
-      //   value: ethers.parseEther(selectedCar.price.toString()),
-      // });
-      // console.log("Estimated Gas:", gasEstimate);
-
-      await tx.wait();
-      alert("Car purchased successfully!");
+      console.log({ price });
+      toast.success(
+        `Car purchased successfully: ${transaction.transactionHash}`
+      );
     } catch (error) {
-      console.error("Transaction Error:", error);
-      alert("Transaction failed. Please try again.");
+      console.log({ price });
+      toast.error(`Error purchasing car: ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,7 +142,9 @@ const CarDetails: React.FC = () => {
                 {selectedCar?.metadata?.name}
               </h2>
               <p className="text-2xl text-primary-action font-bold">
-                {Number(selectedCar?.startingPrice) / 1e18} ETH
+                {Number(selectedCar?.startingPrice || selectedCar?.price) /
+                  1e18}{" "}
+                ETH
               </p>
               <div className="text-sm text-gray-600">
                 <p>
@@ -176,14 +168,16 @@ const CarDetails: React.FC = () => {
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-lg font-semibold text-gray-700">
-                  Buyout Price: {Number(selectedCar?.buyoutPrice) / 1e18} ETH
-                </p>
+                {selectedCar?.buyoutPrice && (
+                  <p className="text-lg font-semibold text-gray-700">
+                    Buyout Price: {Number(selectedCar?.buyoutPrice) / 1e18} ETH
+                  </p>
+                )}
                 <Button
                   className="w-full bg-primary-action text-white"
                   onClick={handleBuyNow}
                 >
-                  Buy Now
+                  {loading ? "Purchasing..." : "Buy Now"}
                 </Button>
                 {/* auction section */}
 
