@@ -237,7 +237,7 @@ The following individuals contributed their expertise and time to make this proj
 
 9. [Michael Johnclick here](https://github.com/Micjohn01)
 
-## Deployed Smart Contract Addresses
+<!--## Deployed Smart Contract Addresses
 
 1. Marketplace Contract: [0x6782c1E2bb9fEeD99A4ac155F8521250601b383e](https://sepolia.basescan.org/address/0x6782c1E2bb9fEeD99A4ac155F8521250601b383e)
 
@@ -247,7 +247,7 @@ The following individuals contributed their expertise and time to make this proj
 
 4. Seller Verification Contract: [0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77](https://sepolia.basescan.org/address/0x8eE9d051301E8DDB26263B2F2bb2cA2EE42C7D77#code)
 
-5. Car Verification Oracle Contract: [0xa7E07d5db90FD4F5915dF139F871ADe5B430527c](https://sepolia.basescan.org/address/0xa7E07d5db90FD4F5915dF139F871ADe5B430527c)
+5. Car Verification Oracle Contract: [0xa7E07d5db90FD4F5915dF139F871ADe5B430527c](https://sepolia.basescan.org/address/0xa7E07d5db90FD4F5915dF139F871ADe5B430527c) -->
 
 ## License
 This project is licensed under the MIT License.
