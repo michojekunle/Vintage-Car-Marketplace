@@ -5,33 +5,30 @@ require("dotenv").config();
 const config: HardhatUserConfig = {
   solidity: "0.8.27",
   networks: {
-    "base-sepolia": {
-      url: "https://sepolia.base.org",
-      accounts: [process.env.PRIVATE_KEY!],
+    'lisk-sepolia': {
+      url: 'https://rpc.sepolia-api.lisk.com',
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: 1000000000,
     },
   },
   etherscan: {
-    apiKey:
-      process.env.BASESCAN_API_KEY || "Z597QN9XS29338DPDQIAHT83A42M3933P5",
+    apiKey: {
+      "lisk-sepolia": "123"
+    },
     customChains: [
       {
-        network: "base-sepolia",
-        chainId: 84532,
-        urls: {
-          apiURL: "https://api-sepolia.basescan.org/api",
-          browserURL: "https://sepolia.basescan.org",
-        },
-      },
-    ],
+          network: "lisk-sepolia",
+          chainId: 4202,
+          urls: {
+              apiURL: "https://sepolia-blockscout.lisk.com/api",
+              browserURL: "https://sepolia-blockscout.lisk.com"
+          }
+      }
+    ]
   },
-  // mocha: {
-  //   fuzz: {
-  //     runs: 1000
-  //   }
-  // }
   sourcify: {
-	enabled: true
-  }  
+    enabled: false
+  },
 };
 
 export default config;
