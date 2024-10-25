@@ -10,6 +10,8 @@ import { ethers } from "ethers";
 import { useCarStore } from "@/stores/useCarStore";
 import Link from "next/link";
 import carMarketplaceAbi from "../../ABIs/marketPlaceContractABI.json";
+import BidDialog from "@/components/BidDialog";
+import CountdownTimer from "@/components/CountdownTimer";
 
 // Use the contract address from environment variables
 const CONTRACT_ADDRESS = "0x6782c1E2bb9fEeD99A4ac155F8521250601b383e";
@@ -35,7 +37,6 @@ const CarDetails: React.FC = () => {
       </div>
     );
   }
-
 
   // Early return if not mounted or car details are missing
   if (!isMounted || !selectedCar) return null;
@@ -72,12 +73,15 @@ const CarDetails: React.FC = () => {
     return provider.getSigner(); // Return the signer instance
   };
 
-
   // Buy car function with transaction handling
   const handleBuyNow = async () => {
     try {
       const signer = await getSigner();
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, carMarketplaceAbi, signer);
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        carMarketplaceAbi,
+        signer
+      );
       const tx = await contract.buyCar(selectedCar.id, {
         value: ethers.parseEther(selectedCar.price.toString()),
       });
@@ -94,24 +98,11 @@ const CarDetails: React.FC = () => {
     }
   };
 
-  // Place a bid on the car with user input
-  const handlePlaceBid = async () => {
-    const bidAmount = prompt("Enter your bid amount in ETH:");
-    if (!bidAmount) return;
-
-    try {
-      const signer = await getSigner();
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, carMarketplaceAbi, signer);
-      const tx = await contract.placeBid(selectedCar.id, {
-        value: ethers.parseEther(bidAmount),
-      });
-
-      await tx.wait();
-      alert("Bid placed successfully!");
-    } catch (error) {
-      console.error("Failed to place a bid:", error);
-      alert("Transaction failed. Please try again.");
-    }
+  const getAttributeValue = (traitType: string) => {
+    const attribute = selectedCar?.metadata?.attributes?.find(
+      (attr: { trait_type: string }) => attr.trait_type === traitType
+    );
+    return attribute ? attribute.value : "N/A";
   };
 
   return (
@@ -145,8 +136,8 @@ const CarDetails: React.FC = () => {
               <Image
                 width={400}
                 height={300}
-                alt={selectedCar.name}
-                src={selectedCar.image}
+                alt={selectedCar?.metadata?.name}
+                src={selectedCar?.metadata?.image}
                 className="rounded-lg object-cover transition-transform duration-300"
               />
             </motion.div>
@@ -157,50 +148,82 @@ const CarDetails: React.FC = () => {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="space-y-6"
             >
-              <h2 className="text-4xl font-bold text-gray-800">{selectedCar.name}</h2>
-              <p className="text-2xl text-primary-action font-bold">{selectedCar.price} ETH</p>
+              <h2 className="text-4xl font-bold text-gray-800">
+                {selectedCar?.metadata?.name}
+              </h2>
+              <p className="text-2xl text-primary-action font-bold">
+                {Number(selectedCar?.startingPrice) / 1e18} ETH
+              </p>
               <div className="text-sm text-gray-600">
-                <p><strong>VIN:</strong> 28838392133</p>
-                <p><strong>Year:</strong> {selectedCar.year}</p>
+                <p>
+                  <strong>VIN:</strong> {getAttributeValue("VIN")}
+                </p>
+                <p>
+                  <strong>Year:</strong> {getAttributeValue("Year")}
+                </p>
                 <p className={`flex items-center gap-1`}>
                   <strong>Condition:</strong>{" "}
                   <span className={`${textColor}`}>
-                    {selectedCar.condition}
+                    {getAttributeValue("Exterior Condition")}
                   </span>
                   <Verified className={`w-4 h-4 ${iconColor}`} />
                 </p>
                 <p>
                   <strong>Service History:</strong>{" "}
-                  {selectedCar.serviceHistory
-                    ? selectedCar.serviceHistory.join(", ")
+                  {selectedCar?.serviceHistory
+                    ? selectedCar?.serviceHistory.join(", ")
                     : "No service history available"}
                 </p>
               </div>
-
               <div className="space-y-2">
-                <p className="text-lg font-semibold text-gray-700">Buyout Price: {selectedCar.price} ETH</p>
-                <Button className="w-full bg-primary-action text-white" onClick={handleBuyNow}>
+                <p className="text-lg font-semibold text-gray-700">
+                  Buyout Price: {Number(selectedCar?.buyoutPrice) / 1e18} ETH
+                </p>
+                <Button
+                  className="w-full bg-primary-action text-white"
+                  onClick={handleBuyNow}
+                >
                   Buy Now
                 </Button>
-                <div className="border-t border-gray-200 pt-2">
-                  <p className="text-lg font-semibold text-gray-700">Auction Ends In: 2 days 14 hrs</p>
-                  <Button className="w-full bg-amber-500 text-white" onClick={handlePlaceBid}>
-                    Place a Bid
-                  </Button>
-                </div>
+                {/* auction section */}
+
+                {selectedCar?.active && (
+                  <div className="border-t border-gray-200 pt-2">
+                    <div className="text-lg font-semibold text-gray-700">
+                      Auction Ends In:{" "}
+                      <CountdownTimer
+                        initialTime={selectedCar?.auctionEndTime.toString()}
+                      />
+                    </div>
+
+                    <p className="font-semibold text-lg py-3 text-gray-700">
+                      Current Bid:{" "}
+                      {(Number(selectedCar?.highestBid) / 1e18).toFixed(2)} ETH
+                    </p>
+
+                    <BidDialog auction={selectedCar} />
+                  </div>
+                )}
               </div>
               {selectedCar.listed ? (
                 <div className="border-t border-gray-200 pt-4">
-                  <h3 className="text-xl font-semibold text-gray-800">Book a Mechanic</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    Book a Mechanic
+                  </h3>
                   <p className="text-sm text-gray-600">
                     Schedule a service with a verified mechanic on{" "}
-                    <Link href={"/"} className="text-primary-action font-semibold">
+                    <Link
+                      href={"/"}
+                      className="text-primary-action font-semibold"
+                    >
                       VintageChain
                     </Link>
                   </p>
                   <Button
                     className="w-full bg-amber-700 text-white mt-2"
-                    onClick={() => router.push(`/service/request/${selectedCar.id}`)}
+                    onClick={() =>
+                      router.push(`/service/request/${selectedCar.id}`)
+                    }
                   >
                     Schedule a Service
                   </Button>
@@ -211,7 +234,8 @@ const CarDetails: React.FC = () => {
                     Service Unavailable
                   </h3>
                   <p className="text-sm text-gray-600">
-                    This car is not listed for sale, so mechanic services are unavailable.
+                    This car is not listed for sale, so mechanic services are
+                    unavailable.
                   </p>
                   <Button
                     className="mt-2 px-4 py-1 text-sm font-semibold text-primary-action border border-primary-action rounded-md hover:bg-primary-action-light"
@@ -243,9 +267,7 @@ const CarDetails: React.FC = () => {
                   Schedule a Service
                 </Button>
                 <div className="border-t border-gray-200 pt-2">
-                  <p className="text-sm text-gray-600">
-                    Available Mechanics:
-                  </p>
+                  <p className="text-sm text-gray-600">Available Mechanics:</p>
                   <ul className="list-disc list-inside">
                     <li>Mechanic A - $50/hour</li>
                     <li>Mechanic B - $60/hour</li>
@@ -253,8 +275,8 @@ const CarDetails: React.FC = () => {
                   </ul>
                 </div>
               </div>
-              : (
-              <div className="border-t border-gray-200 pt-4">
+
+              {/* <div className="border-t border-gray-200 pt-4">
                 <h3 className="text-xl font-semibold text-red-600">
                   Service Unavailable
                 </h3>
@@ -268,8 +290,7 @@ const CarDetails: React.FC = () => {
                 >
                   List Car
                 </Button>
-              </div>
-              )
+              </div> */}
             </motion.div>
           </div>
         </motion.div>

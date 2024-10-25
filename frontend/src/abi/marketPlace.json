@@ -11,11 +11,6 @@
           "type": "address"
         },
         {
-          "internalType": "address",
-          "name": "_carVerificationOracle",
-          "type": "address"
-        },
-        {
           "internalType": "uint256",
           "name": "_initialFeePercentage",
           "type": "uint256"
@@ -145,25 +140,6 @@
         }
       ],
       "name": "FeeRecipientUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "seller",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "FundsWithdrawn",
       "type": "event"
     },
     {
@@ -329,19 +305,6 @@
       "name": "cancelListing",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "carVerificationOracle",
-      "outputs": [
-        {
-          "internalType": "contract ICarVerificationOracle",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -523,11 +486,6 @@
         {
           "internalType": "address",
           "name": "_vintageCarNFT",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_carVerificationOracle",
           "type": "address"
         },
         {

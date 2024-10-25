@@ -4,25 +4,28 @@ import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { Clock } from "lucide-react";
 
-const CountdownTimer = ({ initialTime }: ICountdownTimer) => {
+interface ICountdownTimer {
+  initialTime: string;
+}
+
+const CountdownTimer: React.FC<ICountdownTimer> = ({ initialTime }) => {
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   useEffect(() => {
-    const [hours, minutes] = initialTime
-      .split(" ")
-      .map((part) => parseInt(part));
-    const totalSeconds = (hours || 0) * 3600 + (minutes || 0) * 60;
-    setTimeLeft(totalSeconds);
+    const endTime = new Date(parseInt(initialTime) * 1000);
+    const updateTimer = () => {
+      const now = new Date();
+      const difference = endTime.getTime() - now.getTime();
 
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 0) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
+      if (difference > 0) {
+        setTimeLeft(Math.floor(difference / 1000));
+      } else {
+        setTimeLeft(0);
+      }
+    };
+
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
 
     return () => clearInterval(timer);
   }, [initialTime]);
