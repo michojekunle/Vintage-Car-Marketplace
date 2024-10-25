@@ -235,7 +235,7 @@ The following individuals contributed their expertise and time to make this proj
 
 8. [Chisom Amadi](https://github.com/Tchisom17)
 
-9. [Michael Johnclick here](https://github.com/Micjohn01)
+9. [Michael John](https://github.com/Micjohn01)
 
 <!--## Deployed Smart Contract Addresses
 
